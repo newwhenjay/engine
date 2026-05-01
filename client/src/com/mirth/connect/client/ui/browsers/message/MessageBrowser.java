@@ -87,7 +87,6 @@ import com.mirth.connect.client.ui.RefreshTableModel;
 import com.mirth.connect.client.ui.UIConstants;
 import com.mirth.connect.client.ui.ViewContentDialog;
 import com.mirth.connect.client.ui.attachments.AttachmentTypeDialog;
-import com.mirth.connect.client.ui.i18n.I18n;
 import com.mirth.connect.client.ui.components.MirthDatePicker;
 import com.mirth.connect.client.ui.components.MirthFieldConstraints;
 import com.mirth.connect.client.ui.components.MirthSyntaxTextArea;
@@ -1032,7 +1031,7 @@ public class MessageBrowser extends javax.swing.JPanel {
     }
     
     protected void resetResultsText() {
-    	resultsLabel.setText(I18n.t("messages.results", "Results"));
+    	resultsLabel.setText("Results");
     }
 
     /**
@@ -2433,7 +2432,7 @@ public class MessageBrowser extends javax.swing.JPanel {
 
         RawMessageRadioButton.setBackground(new java.awt.Color(255, 255, 255));
         messagesGroup.add(RawMessageRadioButton);
-        RawMessageRadioButton.setText(I18n.t("messages.view.raw", "Raw"));
+        RawMessageRadioButton.setText("Raw");
         RawMessageRadioButton.setFocusable(false);
         RawMessageRadioButton.setRequestFocusEnabled(false);
         RawMessageRadioButton.addActionListener(new java.awt.event.ActionListener() {
@@ -2445,7 +2444,7 @@ public class MessageBrowser extends javax.swing.JPanel {
 
         ProcessedRawMessageRadioButton.setBackground(new java.awt.Color(255, 255, 255));
         messagesGroup.add(ProcessedRawMessageRadioButton);
-        ProcessedRawMessageRadioButton.setText(I18n.t("messages.view.processedRaw", "Processed Raw"));
+        ProcessedRawMessageRadioButton.setText("Processed Raw");
         ProcessedRawMessageRadioButton.setFocusable(false);
         ProcessedRawMessageRadioButton.setRequestFocusEnabled(false);
         ProcessedRawMessageRadioButton.addActionListener(new java.awt.event.ActionListener() {
@@ -2457,7 +2456,7 @@ public class MessageBrowser extends javax.swing.JPanel {
 
         TransformedMessageRadioButton.setBackground(new java.awt.Color(255, 255, 255));
         messagesGroup.add(TransformedMessageRadioButton);
-        TransformedMessageRadioButton.setText(I18n.t("messages.view.transformed", "Transformed"));
+        TransformedMessageRadioButton.setText("Transformed");
         TransformedMessageRadioButton.setFocusable(false);
         TransformedMessageRadioButton.setRequestFocusEnabled(false);
         TransformedMessageRadioButton.addActionListener(new java.awt.event.ActionListener() {
@@ -2469,7 +2468,7 @@ public class MessageBrowser extends javax.swing.JPanel {
 
         EncodedMessageRadioButton.setBackground(new java.awt.Color(255, 255, 255));
         messagesGroup.add(EncodedMessageRadioButton);
-        EncodedMessageRadioButton.setText(I18n.t("messages.view.encoded", "Encoded"));
+        EncodedMessageRadioButton.setText("Encoded");
         EncodedMessageRadioButton.setFocusable(false);
         EncodedMessageRadioButton.setRequestFocusEnabled(false);
         EncodedMessageRadioButton.addActionListener(new java.awt.event.ActionListener() {
@@ -2481,7 +2480,7 @@ public class MessageBrowser extends javax.swing.JPanel {
 
         SentMessageRadioButton.setBackground(new java.awt.Color(255, 255, 255));
         messagesGroup.add(SentMessageRadioButton);
-        SentMessageRadioButton.setText(I18n.t("messages.view.sent", "Sent"));
+        SentMessageRadioButton.setText("Sent");
         SentMessageRadioButton.setFocusable(false);
         SentMessageRadioButton.setRequestFocusEnabled(false);
         SentMessageRadioButton.addActionListener(new java.awt.event.ActionListener() {
@@ -2493,7 +2492,7 @@ public class MessageBrowser extends javax.swing.JPanel {
 
         ResponseRadioButton.setBackground(new java.awt.Color(255, 255, 255));
         messagesGroup.add(ResponseRadioButton);
-        ResponseRadioButton.setText(I18n.t("messages.view.response", "Response"));
+        ResponseRadioButton.setText("Response");
         ResponseRadioButton.setFocusable(false);
         ResponseRadioButton.setRequestFocusEnabled(false);
         ResponseRadioButton.addActionListener(new java.awt.event.ActionListener() {
@@ -2505,7 +2504,7 @@ public class MessageBrowser extends javax.swing.JPanel {
 
         ResponseTransformedRadioButton.setBackground(new java.awt.Color(255, 255, 255));
         messagesGroup.add(ResponseTransformedRadioButton);
-        ResponseTransformedRadioButton.setText(I18n.t("messages.view.responseTransformed", "Response Transformed"));
+        ResponseTransformedRadioButton.setText("Response Transformed");
         ResponseTransformedRadioButton.setFocusable(false);
         ResponseTransformedRadioButton.setRequestFocusEnabled(false);
         ResponseTransformedRadioButton.addActionListener(new java.awt.event.ActionListener() {
@@ -2517,7 +2516,7 @@ public class MessageBrowser extends javax.swing.JPanel {
 
         ProcessedResponseRadioButton.setBackground(new java.awt.Color(255, 255, 255));
         messagesGroup.add(ProcessedResponseRadioButton);
-        ProcessedResponseRadioButton.setText(I18n.t("messages.view.processedResponse", "Processed Response"));
+        ProcessedResponseRadioButton.setText("Processed Response");
         ProcessedResponseRadioButton.setFocusable(false);
         ProcessedResponseRadioButton.setRequestFocusEnabled(false);
         ProcessedResponseRadioButton.addActionListener(new java.awt.event.ActionListener() {
@@ -2552,9 +2551,9 @@ public class MessageBrowser extends javax.swing.JPanel {
 
         ResponseTextPane.setBackground(new java.awt.Color(255, 255, 255));
 
-        responseStatusLabel.setText(I18n.t("messages.status", "Status:"));
+        responseStatusLabel.setText("Status:");
 
-        responseLabel.setText(I18n.t("messages.response", "Response:"));
+        responseLabel.setText("Response:");
 
         ResponseTextArea.setBorder(javax.swing.BorderFactory.createEtchedBorder());
         ResponseTextArea.setEditable(false);
@@ -2597,9 +2596,9 @@ public class MessageBrowser extends javax.swing.JPanel {
         ProcessedResponseTextArea.setBorder(javax.swing.BorderFactory.createEtchedBorder());
         ProcessedResponseTextArea.setEditable(false);
 
-        processedResponseStatusLabel.setText(I18n.t("messages.status", "Status:"));
+        processedResponseStatusLabel.setText("Status:");
 
-        processedResponseLabel.setText(I18n.t("messages.response", "Response:"));
+        processedResponseLabel.setText("Response:");
 
         processedResponseStatusTextArea.setBorder(javax.swing.BorderFactory.createEtchedBorder());
         processedResponseStatusTextArea.setEditable(false);
@@ -2631,8 +2630,8 @@ public class MessageBrowser extends javax.swing.JPanel {
         MessagesCardPane.add(ProcessedResponseTextPane, "Processed Response");
 
         formatMessageCheckBox.setBackground(new java.awt.Color(255, 255, 255));
-        formatMessageCheckBox.setText(I18n.t("messages.formatXml", "Format XML Messages"));
-        formatMessageCheckBox.setToolTipText(I18n.t("messages.formatXml.tooltip", "Pretty print messages that are XML."));
+        formatMessageCheckBox.setText("Format XML Messages");
+        formatMessageCheckBox.setToolTipText("Pretty print messages that are XML.");
         formatMessageCheckBox.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 formatMessageCheckBoxActionPerformed(evt);
@@ -2766,11 +2765,11 @@ public class MessageBrowser extends javax.swing.JPanel {
         jPanel1.setBackground(new java.awt.Color(255, 255, 255));
 
         pageNumberLabel.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
-        pageNumberLabel.setText(I18n.t("messages.page", "Page"));
+        pageNumberLabel.setText("Page");
 
         resultsLabel.setForeground(new java.awt.Color(204, 0, 0));
         resultsLabel.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
-        resultsLabel.setText(I18n.t("messages.results", "Results"));
+        resultsLabel.setText("Results");
 
         lastSearchCriteriaPane.setBorder(null);
         lastSearchCriteriaPane.setHorizontalScrollBarPolicy(javax.swing.ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
@@ -2784,7 +2783,7 @@ public class MessageBrowser extends javax.swing.JPanel {
         lastSearchCriteria.setDisabledTextColor(new java.awt.Color(255, 255, 255));
         lastSearchCriteriaPane.setViewportView(lastSearchCriteria);
 
-        previousPageButton.setText(I18n.t("messages.prev", "< Prev"));
+        previousPageButton.setText("< Prev");
         previousPageButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 previousPageButtonActionPerformed(evt);
@@ -2792,16 +2791,16 @@ public class MessageBrowser extends javax.swing.JPanel {
         });
 
         statusBoxQueued.setBackground(new java.awt.Color(255, 255, 255));
-        statusBoxQueued.setText(I18n.t("messages.status.queued", "QUEUED"));
+        statusBoxQueued.setText("QUEUED");
         statusBoxQueued.setFont(new java.awt.Font("Lucida Grande", 0, 11)); // NOI18N
-        statusBoxQueued.setToolTipText(I18n.t("messages.status.queued.tooltip", "The message either has not been attempted to be dispatched yet, or it has failed to dispatch and is waiting in the queue to be attempted again."));
+        statusBoxQueued.setToolTipText("The message either has not been attempted to be dispatched yet, or it has failed to dispatch and is waiting in the queue to be attempted again.");
 
         pageTotalLabel.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
-        pageTotalLabel.setText(I18n.tf("messages.page.of", "of {0}", "?"));
+        pageTotalLabel.setText("of ?");
         pageTotalLabel.setAlignmentY(0.0F);
         pageTotalLabel.setHorizontalTextPosition(javax.swing.SwingConstants.RIGHT);
 
-        textSearchField.setToolTipText(I18n.t("messages.textSearch.tooltip", "<html>\nSearch all message content for the given string. This process could take a long<br/>\ntime depending on the amount of message content currently stored. Any message<br/>\ncontent that was encrypted by this channel will not be searchable.\n</html>"));
+        textSearchField.setToolTipText("<html>\nSearch all message content for the given string. This process could take a long<br/>\ntime depending on the amount of message content currently stored. Any message<br/>\ncontent that was encrypted by this channel will not be searchable.\n</html>");
         textSearchField.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 textSearchFieldActionPerformed(evt);
@@ -2809,17 +2808,17 @@ public class MessageBrowser extends javax.swing.JPanel {
         });
 
         pageNumberField.setHorizontalAlignment(javax.swing.JTextField.RIGHT);
-        pageNumberField.setToolTipText(I18n.t("messages.pageNumber.tooltip", "Enter a page number and press Enter to jump to that page."));
+        pageNumberField.setToolTipText("Enter a page number and press Enter to jump to that page.");
         pageNumberField.setPreferredSize(new java.awt.Dimension(40, 22));
 
         jLabel2.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
-        jLabel2.setText(I18n.t("messages.endTime", "End Time:"));
+        jLabel2.setText("End Time:");
         jLabel2.setMaximumSize(new java.awt.Dimension(78, 15));
 
         textSearchLabel.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
-        textSearchLabel.setText(I18n.t("messages.textSearch", "Text Search:"));
+        textSearchLabel.setText("Text Search:");
 
-        filterButton.setText(I18n.t("messages.search", "Search"));
+        filterButton.setText("Search");
         filterButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 filterButtonActionPerformed(evt);
@@ -2827,62 +2826,62 @@ public class MessageBrowser extends javax.swing.JPanel {
         });
 
         statusBoxFiltered.setBackground(new java.awt.Color(255, 255, 255));
-        statusBoxFiltered.setText(I18n.t("messages.status.filtered", "FILTERED"));
+        statusBoxFiltered.setText("FILTERED");
         statusBoxFiltered.setFont(new java.awt.Font("Lucida Grande", 0, 11)); // NOI18N
         statusBoxFiltered.setMaximumSize(new java.awt.Dimension(83, 23));
         statusBoxFiltered.setMinimumSize(new java.awt.Dimension(83, 23));
-        statusBoxFiltered.setToolTipText(I18n.t("messages.status.filtered.tooltip", "The message has been rejected by the destination filter, and will not be dispatched by this destination. Other destinations may still dispatch this message."));
+        statusBoxFiltered.setToolTipText("The message has been rejected by the destination filter, and will not be dispatched by this destination. Other destinations may still dispatch this message.");
 
         pageSizeLabel.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
-        pageSizeLabel.setText(I18n.t("messages.pageSize", "Page Size:"));
+        pageSizeLabel.setText("Page Size:");
         pageSizeLabel.setMaximumSize(new java.awt.Dimension(78, 15));
 
         statusBoxSent.setBackground(new java.awt.Color(255, 255, 255));
-        statusBoxSent.setText(I18n.t("messages.status.sent", "SENT"));
+        statusBoxSent.setText("SENT");
         statusBoxSent.setFont(new java.awt.Font("Lucida Grande", 0, 11)); // NOI18N
-        statusBoxSent.setToolTipText(I18n.t("messages.status.sent.tooltip", "The message has been successfully dispatched / written out by the destination connector."));
+        statusBoxSent.setToolTipText("The message has been successfully dispatched / written out by the destination connector.");
 
-        resetButton.setText(I18n.t("messages.reset", "Reset"));
+        resetButton.setText("Reset");
         resetButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 resetButtonActionPerformed(evt);
             }
         });
 
-        countButton.setText(I18n.t("messages.count", "Count"));
-        countButton.setToolTipText(I18n.t("messages.count.tooltip", "Count the number of overall messages for the current search criteria."));
+        countButton.setText("Count");
+        countButton.setToolTipText("Count the number of overall messages for the current search criteria.");
         countButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 countButtonActionPerformed(evt);
             }
         });
 
-        advSearchButton.setText(I18n.t("messages.advanced", "Advanced..."));
+        advSearchButton.setText("Advanced...");
         advSearchButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 advSearchButtonActionPerformed(evt);
             }
         });
 
-        pageSizeField.setToolTipText(I18n.t("messages.pageSize.tooltip", "<html>\nAfter changing the page size, a new search must be performed for the changes to<br/>\ntake effect.  The default page size can also be configured on the Settings panel.\n</html>"));
+        pageSizeField.setToolTipText("<html>\nAfter changing the page size, a new search must be performed for the changes to<br/>\ntake effect.  The default page size can also be configured on the Settings panel.\n</html>");
 
         statusBoxError.setBackground(new java.awt.Color(255, 255, 255));
-        statusBoxError.setText(I18n.t("messages.status.error", "ERROR"));
+        statusBoxError.setText("ERROR");
         statusBoxError.setFont(new java.awt.Font("Lucida Grande", 0, 11)); // NOI18N
-        statusBoxError.setToolTipText(I18n.t("messages.status.error.tooltip", "An error occurred while processing the message through the destination connector."));
+        statusBoxError.setToolTipText("An error occurred while processing the message through the destination connector.");
 
         statusBoxReceived.setBackground(new java.awt.Color(255, 255, 255));
-        statusBoxReceived.setText(I18n.t("messages.status.received", "RECEIVED"));
+        statusBoxReceived.setText("RECEIVED");
         statusBoxReceived.setFont(new java.awt.Font("Lucida Grande", 0, 11)); // NOI18N
         statusBoxReceived.setPreferredSize(new java.awt.Dimension(90, 22));
-        statusBoxReceived.setToolTipText(I18n.t("messages.status.received.tooltip", "The inbound data for the destination connector has been committed to the database, but the destination has not yet finished processing the message."));
+        statusBoxReceived.setToolTipText("The inbound data for the destination connector has been committed to the database, but the destination has not yet finished processing the message.");
 
         statusBoxPending.setBackground(new java.awt.Color(255, 255, 255));
-        statusBoxPending.setText(I18n.t("messages.status.pending", "PENDING"));
+        statusBoxPending.setText("PENDING");
         statusBoxPending.setFont(new java.awt.Font("Lucida Grande", 0, 11)); // NOI18N
-        statusBoxPending.setToolTipText(I18n.t("messages.status.pending.tooltip", "The destination was able to dispatch / write the message outbound, but has not yet finished processing the message through the response transformer."));
+        statusBoxPending.setToolTipText("The destination was able to dispatch / write the message outbound, but has not yet finished processing the message through the response transformer.");
         
-        pageGoButton.setText(I18n.t("messages.go", "Go"));
+        pageGoButton.setText("Go");
         pageGoButton.setNextFocusableComponent(messageTreeTable);
         pageGoButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -2891,18 +2890,18 @@ public class MessageBrowser extends javax.swing.JPanel {
         });
 
         statusBoxTransformed.setBackground(new java.awt.Color(255, 255, 255));
-        statusBoxTransformed.setText(I18n.t("messages.status.transformed", "TRANSFORMED"));
+        statusBoxTransformed.setText("TRANSFORMED");
         statusBoxTransformed.setFont(new java.awt.Font("Lucida Grande", 0, 11)); // NOI18N
         statusBoxTransformed.setMaximumSize(new java.awt.Dimension(83, 23));
         statusBoxTransformed.setMinimumSize(new java.awt.Dimension(83, 23));
-        statusBoxTransformed.setToolTipText(I18n.t("messages.status.transformed.tooltip", "The message has passed the source filter/transformer, and the source encoded data has been dispatched to any destinations."));
+        statusBoxTransformed.setToolTipText("The message has passed the source filter/transformer, and the source encoded data has been dispatched to any destinations.");
 
         jLabel3.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
-        jLabel3.setText(I18n.t("messages.startTime", "Start Time:"));
+        jLabel3.setText("Start Time:");
         jLabel3.setMaximumSize(new java.awt.Dimension(78, 15));
 
         allDayCheckBox.setBackground(new java.awt.Color(255, 255, 255));
-        allDayCheckBox.setText(I18n.t("messages.allDay", "All Day"));
+        allDayCheckBox.setText("All Day");
         allDayCheckBox.setFont(new java.awt.Font("Lucida Grande", 0, 11)); // NOI18N
         allDayCheckBox.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -2910,7 +2909,7 @@ public class MessageBrowser extends javax.swing.JPanel {
             }
         });
 
-        nextPageButton.setText(I18n.t("messages.next", "Next >"));
+        nextPageButton.setText("Next >");
         nextPageButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 nextPageButtonActionPerformed(evt);
@@ -2918,8 +2917,8 @@ public class MessageBrowser extends javax.swing.JPanel {
         });
 
         regexTextSearchCheckBox.setBackground(new java.awt.Color(255, 255, 255));
-        regexTextSearchCheckBox.setText(I18n.t("messages.regex", "Regex"));
-        regexTextSearchCheckBox.setToolTipText(I18n.t("messages.regex.tooltip", "<html> Search all message content for a match to the regular expression pattern.<br/> Regex matching could be a very costly operation and should be used with<br/> caution, specially with large amount of messages. Any message content<br/> that was encrypted by this channel will not be searchable. Only supported<br/> on PostgreSQL, Oracle and MySQL databases.</html> "));
+        regexTextSearchCheckBox.setText("Regex");
+        regexTextSearchCheckBox.setToolTipText("<html> Search all message content for a match to the regular expression pattern.<br/> Regex matching could be a very costly operation and should be used with<br/> caution, specially with large amount of messages. Any message content<br/> that was encrypted by this channel will not be searchable. Only supported<br/> on PostgreSQL, Oracle and MySQL databases.</html> ");
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);

@@ -63,7 +63,6 @@ import com.mirth.connect.client.ui.components.MirthFieldConstraints;
 import com.mirth.connect.client.ui.components.MirthRadioButton;
 import com.mirth.connect.client.ui.components.MirthTable;
 import com.mirth.connect.client.ui.components.MirthTextField;
-import com.mirth.connect.client.ui.i18n.I18n;
 import com.mirth.connect.client.ui.components.rsta.AutoCompleteProperties;
 import com.mirth.connect.client.ui.components.rsta.MirthRSyntaxTextArea;
 import com.mirth.connect.client.ui.components.rsta.RSTAPreferences;
@@ -99,16 +98,7 @@ public class SettingsPanelAdministrator extends AbstractSettingsPanel {
         initComponents();
         initLayout();
 
-        addTask(TaskConstants.SETTINGS_ADMIN_DEFAULTS,
-                I18n.t("settings.admin.task.restoreDefaults.title", "Restore Defaults"),
-                I18n.t("settings.admin.task.restoreDefaults.desc", "Restore all Administrator settings to defaults."),
-                "",
-                new ImageIcon(com.mirth.connect.client.ui.Frame.class.getResource("images/report_go.png")));
-    }
-
-    @Override
-    public String getTabDisplayName() {
-        return I18n.t("settings.tab.administrator", TAB_NAME);
+        addTask(TaskConstants.SETTINGS_ADMIN_DEFAULTS, "Restore Defaults", "Restore all Administrator settings to defaults.", "", new ImageIcon(com.mirth.connect.client.ui.Frame.class.getResource("images/report_go.png")));
     }
 
     public void doRefresh() {
@@ -187,7 +177,7 @@ public class SettingsPanelAdministrator extends AbstractSettingsPanel {
             exportChannelLibrariesNoRadio.setSelected(true);
         }
 
-        final String workingId = getFrame().startWorking(I18n.tf("settings.admin.working.loading", "Loading {0} settings...", getTabName()));
+        final String workingId = getFrame().startWorking("Loading " + getTabName() + " settings...");
 
         SwingWorker<Void, Void> worker = new SwingWorker<Void, Void>() {
 
@@ -248,20 +238,20 @@ public class SettingsPanelAdministrator extends AbstractSettingsPanel {
 
     public boolean doSave() {
         if (dashboardRefreshIntervalField.getText().length() == 0) {
-            getFrame().alertWarning(this, I18n.t("settings.admin.error.interval.invalid", "Please enter a valid interval time."));
+            getFrame().alertWarning(this, "Please enter a valid interval time.");
             return false;
         }
         if (messageBrowserPageSizeField.getText().length() == 0) {
-            getFrame().alertWarning(this, I18n.t("settings.admin.error.messagePageSize.invalid", "Please enter a valid message browser page size."));
+            getFrame().alertWarning(this, "Please enter a valid message browser page size.");
             return false;
         }
         if (eventBrowserPageSizeField.getText().length() == 0) {
-            getFrame().alertWarning(this, I18n.t("settings.admin.error.eventPageSize.invalid", "Please enter a valid event browser page size."));
+            getFrame().alertWarning(this, "Please enter a valid event browser page size.");
             return false;
         }
 
         if (autoCompleteDelayField.isEnabled() && StringUtils.isBlank(autoCompleteDelayField.getText())) {
-            getFrame().alertWarning(this, I18n.t("settings.admin.error.autoCompleteDelay.invalid", "Please enter a valid auto-complete activation delay."));
+            getFrame().alertWarning(this, "Please enter a valid auto-complete activation delay.");
             return false;
         }
 
@@ -270,11 +260,11 @@ public class SettingsPanelAdministrator extends AbstractSettingsPanel {
         int eventBrowserPageSize = Integer.parseInt(eventBrowserPageSizeField.getText());
 
         if (interval <= 0) {
-            getFrame().alertWarning(this, I18n.t("settings.admin.error.interval.mustBePositive", "Please enter an interval time that is larger than 0."));
+            getFrame().alertWarning(this, "Please enter an interval time that is larger than 0.");
         } else if (messageBrowserPageSize <= 0) {
-            getFrame().alertWarning(this, I18n.t("settings.admin.error.messagePageSize.mustBePositive", "Please enter an message browser page size larger than 0."));
+            getFrame().alertWarning(this, "Please enter an message browser page size larger than 0.");
         } else if (eventBrowserPageSize <= 0) {
-            getFrame().alertWarning(this, I18n.t("settings.admin.error.eventPageSize.mustBePositive", "Please enter an event browser page size larger than 0."));
+            getFrame().alertWarning(this, "Please enter an event browser page size larger than 0.");
         } else {
             userPreferences.putInt("intervalTime", interval);
             userPreferences.putInt("messageBrowserPageSize", messageBrowserPageSize);
@@ -312,7 +302,7 @@ public class SettingsPanelAdministrator extends AbstractSettingsPanel {
             getFrame().setupBackgroundPainters(PlatformUI.DEFAULT_BACKGROUND_COLOR);
         }
 
-        final String workingId = getFrame().startWorking(I18n.tf("settings.admin.working.saving", "Saving {0} settings...", getTabName()));
+        final String workingId = getFrame().startWorking("Saving " + getTabName() + " settings...");
 
         SwingWorker<Void, Void> worker = new SwingWorker<Void, Void>() {
             public Void doInBackground() {
@@ -381,7 +371,7 @@ public class SettingsPanelAdministrator extends AbstractSettingsPanel {
         MirthRSyntaxTextArea.updateKeyStrokePreferences(userPreferences);
         MirthRSyntaxTextArea.updateToggleOptionPreferences(userPreferences);
 
-        final String workingId = getFrame().startWorking(I18n.tf("settings.admin.working.resetting", "Resetting {0} settings...", getTabName()));
+        final String workingId = getFrame().startWorking("Resetting " + getTabName() + " settings...");
         SwingWorker<Void, Void> worker = new SwingWorker<Void, Void>() {
             public Void doInBackground() {
                 try {
@@ -461,210 +451,191 @@ public class SettingsPanelAdministrator extends AbstractSettingsPanel {
 
         systemSettingsPanel = new JPanel();
         systemSettingsPanel.setBackground(getBackground());
-        systemSettingsPanel.setBorder(BorderFactory.createTitledBorder(BorderFactory.createMatteBorder(1, 0, 0, 0, new Color(204, 204, 204)),
-                I18n.t("settings.admin.section.system", "System Preferences"),
-                TitledBorder.DEFAULT_JUSTIFICATION, TitledBorder.DEFAULT_POSITION, new Font("Tahoma", 1, 11)));
+        systemSettingsPanel.setBorder(BorderFactory.createTitledBorder(BorderFactory.createMatteBorder(1, 0, 0, 0, new Color(204, 204, 204)), "System Preferences", TitledBorder.DEFAULT_JUSTIFICATION, TitledBorder.DEFAULT_POSITION, new Font("Tahoma", 1, 11)));
 
-        dashboardRefreshIntervalLabel = new JLabel(I18n.t("settings.admin.label.dashboardRefreshIntervalSeconds", "Dashboard refresh interval (seconds):"));
+        dashboardRefreshIntervalLabel = new JLabel("Dashboard refresh interval (seconds):");
         dashboardRefreshIntervalField = new MirthTextField();
-        dashboardRefreshIntervalField.setToolTipText(I18n.t("settings.admin.tooltip.dashboardRefreshIntervalSeconds",
-                "<html>Interval in seconds at which to refresh the Dashboard. Decrement this for <br>faster updates, and increment it for slower servers with more channels.</html>"));
+        dashboardRefreshIntervalField.setToolTipText("<html>Interval in seconds at which to refresh the Dashboard. Decrement this for <br>faster updates, and increment it for slower servers with more channels.</html>");
 
-        String toolTipText = I18n.t("settings.admin.tooltip.defaultPageSize", "Sets the default page size for browsers (message, event, etc.)");
-        messageBrowserPageSizeLabel = new JLabel(I18n.t("settings.admin.label.messageBrowserPageSize", "Message browser page size:"));
+        String toolTipText = "Sets the default page size for browsers (message, event, etc.)";
+        messageBrowserPageSizeLabel = new JLabel("Message browser page size:");
         messageBrowserPageSizeField = new MirthTextField();
         messageBrowserPageSizeField.setToolTipText(toolTipText);
 
-        eventBrowserPageSizeLabel = new JLabel(I18n.t("settings.admin.label.eventBrowserPageSize", "Event browser page size:"));
+        eventBrowserPageSizeLabel = new JLabel("Event browser page size:");
         eventBrowserPageSizeField = new MirthTextField();
         eventBrowserPageSizeField.setToolTipText(toolTipText);
 
-        formatLabel = new JLabel(I18n.t("settings.admin.label.formatTextInMessageBrowser", "Format text in message browser:"));
+        formatLabel = new JLabel("Format text in message browser:");
         formatButtonGroup = new ButtonGroup();
 
-        toolTipText = I18n.t("settings.admin.tooltip.prettyPrintMessages", "Pretty print messages in the message browser.");
-        formatYesRadio = new MirthRadioButton(I18n.t("connectors.sourceSettings.yes", "Yes"));
+        toolTipText = "Pretty print messages in the message browser.";
+        formatYesRadio = new MirthRadioButton("Yes");
         formatYesRadio.setBackground(systemSettingsPanel.getBackground());
         formatYesRadio.setToolTipText(toolTipText);
         formatButtonGroup.add(formatYesRadio);
 
-        formatNoRadio = new MirthRadioButton(I18n.t("connectors.sourceSettings.no", "No"));
+        formatNoRadio = new MirthRadioButton("No");
         formatNoRadio.setBackground(systemSettingsPanel.getBackground());
         formatNoRadio.setToolTipText(toolTipText);
         formatButtonGroup.add(formatNoRadio);
 
-        textSearchWarningLabel = new JLabel(I18n.t("settings.admin.label.textSearchWarning", "Message browser text search confirmation:"));
+        textSearchWarningLabel = new JLabel("Message browser text search confirmation:");
         textSearchWarningButtonGroup = new ButtonGroup();
 
-        toolTipText = I18n.t("settings.admin.tooltip.textSearchWarning",
-                "<html>Show a confirmation dialog in the message browser when attempting a text search, warning users<br/>that the query may take a long time depending on the amount of messages being searched.</html>");
-        textSearchWarningYesRadio = new MirthRadioButton(I18n.t("connectors.sourceSettings.yes", "Yes"));
+        toolTipText = "<html>Show a confirmation dialog in the message browser when attempting a text search, warning users<br/>that the query may take a long time depending on the amount of messages being searched.</html>";
+        textSearchWarningYesRadio = new MirthRadioButton("Yes");
         textSearchWarningYesRadio.setBackground(systemSettingsPanel.getBackground());
         textSearchWarningYesRadio.setToolTipText(toolTipText);
         textSearchWarningButtonGroup.add(textSearchWarningYesRadio);
 
-        textSearchWarningNoRadio = new MirthRadioButton(I18n.t("connectors.sourceSettings.no", "No"));
+        textSearchWarningNoRadio = new MirthRadioButton("No");
         textSearchWarningNoRadio.setBackground(systemSettingsPanel.getBackground());
         textSearchWarningNoRadio.setToolTipText(toolTipText);
         textSearchWarningButtonGroup.add(textSearchWarningNoRadio);
         
-        multiChannelSearchWarningLabel = new JLabel(I18n.t("settings.admin.label.multiChannelSearchWarning", "Multi-channel message view confirmation:"));
+        multiChannelSearchWarningLabel = new JLabel("Multi-channel message view confirmation:");
         multiChannelSearchWarningButtonGroup = new ButtonGroup();
 
-        toolTipText = I18n.t("settings.admin.tooltip.multiChannelSearchWarning",
-                "<html>Show a confirmation dialog when attempting to view messages for multiple channels, warning users that<br/>the query may take a long time depending on the number of channels and messages being searched.</html>");
-        multiChannelSearchWarningYesRadio = new MirthRadioButton(I18n.t("connectors.sourceSettings.yes", "Yes"));
+        toolTipText = "<html>Show a confirmation dialog when attempting to view messages for multiple channels, warning users that<br/>the query may take a long time depending on the number of channels and messages being searched.</html>";
+        multiChannelSearchWarningYesRadio = new MirthRadioButton("Yes");
         multiChannelSearchWarningYesRadio.setBackground(systemSettingsPanel.getBackground());
         multiChannelSearchWarningYesRadio.setToolTipText(toolTipText);
         multiChannelSearchWarningButtonGroup.add(multiChannelSearchWarningYesRadio);
 
-        multiChannelSearchWarningNoRadio = new MirthRadioButton(I18n.t("connectors.sourceSettings.no", "No"));
+        multiChannelSearchWarningNoRadio = new MirthRadioButton("No");
         multiChannelSearchWarningNoRadio.setBackground(systemSettingsPanel.getBackground());
         multiChannelSearchWarningNoRadio.setToolTipText(toolTipText);
         multiChannelSearchWarningButtonGroup.add(multiChannelSearchWarningNoRadio);
 
-        filterTransformerShowIteratorLabel = new JLabel(I18n.t("settings.admin.label.filterTransformerIteratorDialog", "Filter/Transformer Iterator dialog:"));
+        filterTransformerShowIteratorLabel = new JLabel("Filter/Transformer Iterator dialog:");
         filterTransformerShowIteratorButtonGroup = new ButtonGroup();
 
-        toolTipText = I18n.t("settings.admin.tooltip.filterTransformerIteratorDialog",
-                "<html>Show a confirmation dialog in the filter/transformer<br/>views when dragging and dropping elements from the<br/>message tree, asking users whether to use an Iterator.</html>");
-        filterTransformerShowIteratorYesRadio = new MirthRadioButton(I18n.t("connectors.sourceSettings.yes", "Yes"));
+        toolTipText = "<html>Show a confirmation dialog in the filter/transformer<br/>views when dragging and dropping elements from the<br/>message tree, asking users whether to use an Iterator.</html>";
+        filterTransformerShowIteratorYesRadio = new MirthRadioButton("Yes");
         filterTransformerShowIteratorYesRadio.setBackground(systemSettingsPanel.getBackground());
         filterTransformerShowIteratorYesRadio.setToolTipText(toolTipText);
         filterTransformerShowIteratorButtonGroup.add(filterTransformerShowIteratorYesRadio);
 
-        filterTransformerShowIteratorNoRadio = new MirthRadioButton(I18n.t("connectors.sourceSettings.no", "No"));
+        filterTransformerShowIteratorNoRadio = new MirthRadioButton("No");
         filterTransformerShowIteratorNoRadio.setBackground(systemSettingsPanel.getBackground());
         filterTransformerShowIteratorNoRadio.setToolTipText(toolTipText);
         filterTransformerShowIteratorButtonGroup.add(filterTransformerShowIteratorNoRadio);
 
-        messageBrowserShowAttachmentTypeDialogLabel = new JLabel(I18n.t("settings.admin.label.attachmentTypeDialog", "Message browser attachment type dialog:"));
+        messageBrowserShowAttachmentTypeDialogLabel = new JLabel("Message browser attachment type dialog:");
         messageBrowserShowAttachmentTypeDialogButtonGroup = new ButtonGroup();
 
-        toolTipText = I18n.t("settings.admin.tooltip.attachmentTypeDialog",
-                "<html>Show a selection dialog in the message browser when viewing attachments<br/>to allow the user to select a specific attachment viewer. If No is selected,<br/>the attachment viewer will be automatically chosen from the MIME type.</html>");
-        messageBrowserShowAttachmentTypeDialogYesRadio = new MirthRadioButton(I18n.t("connectors.sourceSettings.yes", "Yes"));
+        toolTipText = "<html>Show a selection dialog in the message browser when viewing attachments<br/>to allow the user to select a specific attachment viewer. If No is selected,<br/>the attachment viewer will be automatically chosen from the MIME type.</html>";
+        messageBrowserShowAttachmentTypeDialogYesRadio = new MirthRadioButton("Yes");
         messageBrowserShowAttachmentTypeDialogYesRadio.setBackground(systemSettingsPanel.getBackground());
         messageBrowserShowAttachmentTypeDialogYesRadio.setToolTipText(toolTipText);
         messageBrowserShowAttachmentTypeDialogButtonGroup.add(messageBrowserShowAttachmentTypeDialogYesRadio);
 
-        messageBrowserShowAttachmentTypeDialogNoRadio = new MirthRadioButton(I18n.t("connectors.sourceSettings.no", "No"));
+        messageBrowserShowAttachmentTypeDialogNoRadio = new MirthRadioButton("No");
         messageBrowserShowAttachmentTypeDialogNoRadio.setBackground(systemSettingsPanel.getBackground());
         messageBrowserShowAttachmentTypeDialogNoRadio.setToolTipText(toolTipText);
         messageBrowserShowAttachmentTypeDialogButtonGroup.add(messageBrowserShowAttachmentTypeDialogNoRadio);
 
-        reprocessRemoveMessagesWarningLabel = new JLabel(I18n.t("settings.admin.label.reprocessRemoveConfirm", "Reprocess/remove messages confirmation:"));
+        reprocessRemoveMessagesWarningLabel = new JLabel("Reprocess/remove messages confirmation:");
         ButtonGroup reprocessRemoveMessagesWarningButtonGroup = new ButtonGroup();
-        toolTipText = I18n.t("settings.admin.tooltip.reprocessRemoveConfirm",
-                "<html>Show a confirmation dialog in the message browser when reprocessing<br/>or removing multiple messages that forces the user to type<br/>in \"REPROCESSALL\" or \"REMOVEALL\" first before proceeding.</html>");
+        toolTipText = "<html>Show a confirmation dialog in the message browser when reprocessing<br/>or removing multiple messages that forces the user to type<br/>in \"REPROCESSALL\" or \"REMOVEALL\" first before proceeding.</html>";
 
-        reprocessRemoveMessagesWarningYesRadio = new MirthRadioButton(I18n.t("connectors.sourceSettings.yes", "Yes"));
+        reprocessRemoveMessagesWarningYesRadio = new MirthRadioButton("Yes");
         reprocessRemoveMessagesWarningYesRadio.setBackground(systemSettingsPanel.getBackground());
         reprocessRemoveMessagesWarningYesRadio.setToolTipText(toolTipText);
         reprocessRemoveMessagesWarningButtonGroup.add(reprocessRemoveMessagesWarningYesRadio);
 
-        reprocessRemoveMessagesWarningNoRadio = new MirthRadioButton(I18n.t("connectors.sourceSettings.no", "No"));
+        reprocessRemoveMessagesWarningNoRadio = new MirthRadioButton("No");
         reprocessRemoveMessagesWarningNoRadio.setBackground(systemSettingsPanel.getBackground());
         reprocessRemoveMessagesWarningNoRadio.setToolTipText(toolTipText);
         reprocessRemoveMessagesWarningButtonGroup.add(reprocessRemoveMessagesWarningNoRadio);
 
-        importChannelLibrariesLabel = new JLabel(I18n.t("settings.admin.label.importCodeTemplateLibraries", "Import code template libraries with channels:"));
+        importChannelLibrariesLabel = new JLabel("Import code template libraries with channels:");
         importChannelLibrariesButtonGroup = new ButtonGroup();
 
-        toolTipText = I18n.t("settings.admin.tooltip.importCodeTemplateLibraries",
-                "<html>When attempting to import channels that have code template<br/>libraries linked to them, select Yes to always include them,<br/>No to never include them, or Ask to prompt the user each time.</html>");
-        importChannelLibrariesYesRadio = new MirthRadioButton(I18n.t("connectors.sourceSettings.yes", "Yes"));
+        toolTipText = "<html>When attempting to import channels that have code template<br/>libraries linked to them, select Yes to always include them,<br/>No to never include them, or Ask to prompt the user each time.</html>";
+        importChannelLibrariesYesRadio = new MirthRadioButton("Yes");
         importChannelLibrariesYesRadio.setBackground(systemSettingsPanel.getBackground());
         importChannelLibrariesYesRadio.setToolTipText(toolTipText);
         importChannelLibrariesButtonGroup.add(importChannelLibrariesYesRadio);
 
-        importChannelLibrariesNoRadio = new MirthRadioButton(I18n.t("connectors.sourceSettings.no", "No"));
+        importChannelLibrariesNoRadio = new MirthRadioButton("No");
         importChannelLibrariesNoRadio.setBackground(systemSettingsPanel.getBackground());
         importChannelLibrariesNoRadio.setToolTipText(toolTipText);
         importChannelLibrariesButtonGroup.add(importChannelLibrariesNoRadio);
 
-        importChannelLibrariesAskRadio = new MirthRadioButton(I18n.t("settings.admin.option.ask", "Ask"));
+        importChannelLibrariesAskRadio = new MirthRadioButton("Ask");
         importChannelLibrariesAskRadio.setBackground(systemSettingsPanel.getBackground());
         importChannelLibrariesAskRadio.setToolTipText(toolTipText);
         importChannelLibrariesButtonGroup.add(importChannelLibrariesAskRadio);
 
-        exportChannelLibrariesLabel = new JLabel(I18n.t("settings.admin.label.exportCodeTemplateLibraries", "Export code template libraries with channels:"));
+        exportChannelLibrariesLabel = new JLabel("Export code template libraries with channels:");
         exportChannelLibrariesButtonGroup = new ButtonGroup();
 
-        toolTipText = I18n.t("settings.admin.tooltip.exportCodeTemplateLibraries",
-                "<html>When attempting to export channels that have code template<br/>libraries linked to them, select Yes to always include them,<br/>No to never include them, or Ask to prompt the user each time.</html>");
-        exportChannelLibrariesYesRadio = new MirthRadioButton(I18n.t("connectors.sourceSettings.yes", "Yes"));
+        toolTipText = "<html>When attempting to export channels that have code template<br/>libraries linked to them, select Yes to always include them,<br/>No to never include them, or Ask to prompt the user each time.</html>";
+        exportChannelLibrariesYesRadio = new MirthRadioButton("Yes");
         exportChannelLibrariesYesRadio.setBackground(systemSettingsPanel.getBackground());
         exportChannelLibrariesYesRadio.setToolTipText(toolTipText);
         exportChannelLibrariesButtonGroup.add(exportChannelLibrariesYesRadio);
 
-        exportChannelLibrariesNoRadio = new MirthRadioButton(I18n.t("connectors.sourceSettings.no", "No"));
+        exportChannelLibrariesNoRadio = new MirthRadioButton("No");
         exportChannelLibrariesNoRadio.setBackground(systemSettingsPanel.getBackground());
         exportChannelLibrariesNoRadio.setToolTipText(toolTipText);
         exportChannelLibrariesButtonGroup.add(exportChannelLibrariesNoRadio);
 
-        exportChannelLibrariesAskRadio = new MirthRadioButton(I18n.t("settings.admin.option.ask", "Ask"));
+        exportChannelLibrariesAskRadio = new MirthRadioButton("Ask");
         exportChannelLibrariesAskRadio.setBackground(systemSettingsPanel.getBackground());
         exportChannelLibrariesAskRadio.setToolTipText(toolTipText);
         exportChannelLibrariesButtonGroup.add(exportChannelLibrariesAskRadio);
 
         userSettingsPanel = new JPanel();
         userSettingsPanel.setBackground(getBackground());
-        userSettingsPanel.setBorder(BorderFactory.createTitledBorder(BorderFactory.createMatteBorder(1, 0, 0, 0, new Color(204, 204, 204)),
-                I18n.t("settings.admin.section.user", "User Preferences"),
-                TitledBorder.DEFAULT_JUSTIFICATION, TitledBorder.DEFAULT_POSITION, new Font("Tahoma", 1, 11)));
+        userSettingsPanel.setBorder(BorderFactory.createTitledBorder(BorderFactory.createMatteBorder(1, 0, 0, 0, new Color(204, 204, 204)), "User Preferences", TitledBorder.DEFAULT_JUSTIFICATION, TitledBorder.DEFAULT_POSITION, new Font("Tahoma", 1, 11)));
 
-        checkForNotificationsLabel = new JLabel(I18n.t("settings.admin.label.checkNotificationsOnLogin", "Check for new notifications on login:"));
+        checkForNotificationsLabel = new JLabel("Check for new notifications on login:");
         notificationButtonGroup = new ButtonGroup();
 
-        checkForNotificationsYesRadio = new MirthRadioButton(I18n.t("connectors.sourceSettings.yes", "Yes"));
+        checkForNotificationsYesRadio = new MirthRadioButton("Yes");
         checkForNotificationsYesRadio.setBackground(userSettingsPanel.getBackground());
         checkForNotificationsYesRadio.setToolTipText(String.format(
-            I18n.t("settings.admin.tooltip.checkNotifications",
-                    "<html>Checks for notifications from %s (announcements, available updates, etc.)</html>"),
+            "<html>Checks for notifications from %s (announcements, available updates, etc.)</html>",
             BrandingConstants.COMPANY_NAME
         ));
         notificationButtonGroup.add(checkForNotificationsYesRadio);
 
-        checkForNotificationsNoRadio = new MirthRadioButton(I18n.t("connectors.sourceSettings.no", "No"));
+        checkForNotificationsNoRadio = new MirthRadioButton("No");
         checkForNotificationsNoRadio.setBackground(userSettingsPanel.getBackground());
         checkForNotificationsNoRadio.setToolTipText(String.format(
-            I18n.t("settings.admin.tooltip.checkNotifications",
-                    "<html>Checks for notifications from %s (announcements, available updates, etc.)</html>"),
+            "<html>Checks for notifications from %s (announcements, available updates, etc.)</html>",
             BrandingConstants.COMPANY_NAME
         ));
         notificationButtonGroup.add(checkForNotificationsNoRadio);
 
-        backgroundColorLabel = new JLabel(I18n.t("settings.admin.label.backgroundColor", "Administrator Background Color:"));
+        backgroundColorLabel = new JLabel("Administrator Background Color:");
         backgroundColorButtonGroup = new ButtonGroup();
 
-        backgroundColorServerDefaultRadio = new MirthRadioButton(I18n.t("settings.admin.backgroundColor.serverDefault", "Server Default"));
+        backgroundColorServerDefaultRadio = new MirthRadioButton("Server Default");
         backgroundColorServerDefaultRadio.setSelected(true);
         backgroundColorServerDefaultRadio.setBackground(userSettingsPanel.getBackground());
-        backgroundColorServerDefaultRadio.setToolTipText(I18n.t("settings.admin.tooltip.backgroundColor.serverDefault",
-                "If selected, the server default background color will be used for the Administrator GUI."));
+        backgroundColorServerDefaultRadio.setToolTipText("If selected, the server default background color will be used for the Administrator GUI.");
         backgroundColorServerDefaultRadio.addActionListener(e -> backgroundColorRadioActionPerformed(true));
         backgroundColorButtonGroup.add(backgroundColorServerDefaultRadio);
 
-        backgroundColorCustomRadio = new MirthRadioButton(I18n.t("settings.admin.backgroundColor.custom", "Custom:"));
+        backgroundColorCustomRadio = new MirthRadioButton("Custom:");
         backgroundColorCustomRadio.setBackground(userSettingsPanel.getBackground());
-        backgroundColorCustomRadio.setToolTipText(I18n.t("settings.admin.tooltip.backgroundColor.custom",
-                "If selected, the following custom color will be used for the Administrator GUI."));
+        backgroundColorCustomRadio.setToolTipText("If selected, the following custom color will be used for the Administrator GUI.");
         backgroundColorCustomRadio.addActionListener(e -> backgroundColorRadioActionPerformed(false));
         backgroundColorButtonGroup.add(backgroundColorCustomRadio);
 
         backgroundColorButton = new JButton();
         backgroundColorButton.setEnabled(false);
         backgroundColorButton.setBackground(PlatformUI.DEFAULT_BACKGROUND_COLOR);
-        backgroundColorButton.setToolTipText(I18n.t("settings.admin.tooltip.backgroundColor.button",
-                "<html>The background color to use for the Administrator GUI.</html>"));
+        backgroundColorButton.setToolTipText("<html>The background color to use for the Administrator GUI.</html>");
         backgroundColorButton.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
         backgroundColorButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent evt) {
-                Color color = JColorChooser.showDialog(PlatformUI.MIRTH_FRAME,
-                        I18n.t("settings.admin.dialog.editBackgroundColor", "Edit Background Color"),
-                        backgroundColorButton.getBackground());
+                Color color = JColorChooser.showDialog(PlatformUI.MIRTH_FRAME, "Edit Background Color", backgroundColorButton.getBackground());
                 if (color != null) {
                     backgroundColorButton.setBackground(color);
                     getFrame().setSaveEnabled(true);
@@ -674,13 +645,10 @@ public class SettingsPanelAdministrator extends AbstractSettingsPanel {
 
         codeEditorSettingsPanel = new JPanel();
         codeEditorSettingsPanel.setBackground(getBackground());
-        codeEditorSettingsPanel.setBorder(BorderFactory.createTitledBorder(BorderFactory.createMatteBorder(1, 0, 0, 0, new Color(204, 204, 204)),
-                I18n.t("settings.admin.section.codeEditor", "Code Editor Preferences"),
-                TitledBorder.DEFAULT_JUSTIFICATION, TitledBorder.DEFAULT_POSITION, new Font("Tahoma", 1, 11)));
+        codeEditorSettingsPanel.setBorder(BorderFactory.createTitledBorder(BorderFactory.createMatteBorder(1, 0, 0, 0, new Color(204, 204, 204)), "Code Editor Preferences", TitledBorder.DEFAULT_JUSTIFICATION, TitledBorder.DEFAULT_POSITION, new Font("Tahoma", 1, 11)));
 
-        toolTipText = I18n.t("settings.admin.tooltip.autoCompleteCharacters",
-                "<html>The auto-completion popup will be triggered<br/>after any of these characters are typed.</html>");
-        autoCompleteCharactersLabel = new JLabel(I18n.t("settings.admin.label.autoCompleteCharacters", "Auto-Complete Characters:"));
+        toolTipText = "<html>The auto-completion popup will be triggered<br/>after any of these characters are typed.</html>";
+        autoCompleteCharactersLabel = new JLabel("Auto-Complete Characters:");
         autoCompleteCharactersField = new MirthTextField();
         autoCompleteCharactersField.setToolTipText(toolTipText);
         autoCompleteCharactersField.getDocument().addDocumentListener(new DocumentListener() {
@@ -700,9 +668,8 @@ public class SettingsPanelAdministrator extends AbstractSettingsPanel {
             }
         });
 
-        toolTipText = I18n.t("settings.admin.tooltip.autoCompleteIncludeLetters",
-                "<html>If selected, auto-completion will be<br/>triggered after any letter is typed.</html>");
-        autoCompleteIncludeLettersCheckBox = new MirthCheckBox(I18n.t("settings.admin.checkbox.includeLetters", "Include Letters"));
+        toolTipText = "<html>If selected, auto-completion will be<br/>triggered after any letter is typed.</html>";
+        autoCompleteIncludeLettersCheckBox = new MirthCheckBox("Include Letters");
         autoCompleteIncludeLettersCheckBox.setBackground(codeEditorSettingsPanel.getBackground());
         autoCompleteIncludeLettersCheckBox.setToolTipText(toolTipText);
         autoCompleteIncludeLettersCheckBox.addActionListener(new ActionListener() {
@@ -712,21 +679,17 @@ public class SettingsPanelAdministrator extends AbstractSettingsPanel {
             }
         });
 
-        toolTipText = I18n.t("settings.admin.tooltip.autoCompleteDelay",
-                "<html>The amount of time to wait after typing<br/>an activation character before opening<br/>the auto-completion popup menu.</html>");
-        autoCompleteDelayLabel = new JLabel(I18n.t("settings.admin.label.autoCompleteDelayMs", "Activation Delay (ms):"));
+        toolTipText = "<html>The amount of time to wait after typing<br/>an activation character before opening<br/>the auto-completion popup menu.</html>";
+        autoCompleteDelayLabel = new JLabel("Activation Delay (ms):");
         autoCompleteDelayField = new MirthTextField();
         autoCompleteDelayField.setToolTipText(toolTipText);
         autoCompleteDelayField.setDocument(new MirthFieldConstraints(9, false, false, true));
 
-        shortcutKeyLabel = new JLabel(I18n.t("settings.admin.label.shortcutKeyMappings", "Shortcut Key Mappings:"));
+        shortcutKeyLabel = new JLabel("Shortcut Key Mappings:");
 
         shortcutKeyTable = new MirthTable();
-        shortcutKeyTable.setModel(new RefreshTableModel(new Object[] {
-                I18n.t("settings.admin.shortcuts.column.actionInfo", "Action Info"),
-                I18n.t("settings.admin.shortcuts.column.name", "Name"),
-                I18n.t("settings.admin.shortcuts.column.description", "Description"),
-                I18n.t("settings.admin.shortcuts.column.shortcutKey", "Shortcut Key Mapping") }, 0) {
+        shortcutKeyTable.setModel(new RefreshTableModel(new Object[] { "Action Info", "Name",
+                "Description", "Shortcut Key Mapping" }, 0) {
             @Override
             public boolean isCellEditable(int row, int column) {
                 return column == KEY_COLUMN;
@@ -765,7 +728,7 @@ public class SettingsPanelAdministrator extends AbstractSettingsPanel {
 
         shortcutKeyScrollPane = new JScrollPane(shortcutKeyTable);
 
-        restoreDefaultsButton = new JButton(I18n.t("settings.admin.button.restoreDefaults", "Restore Defaults"));
+        restoreDefaultsButton = new JButton("Restore Defaults");
         restoreDefaultsButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent evt) {

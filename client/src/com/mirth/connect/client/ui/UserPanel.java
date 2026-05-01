@@ -27,7 +27,6 @@ import org.jdesktop.swingx.decorator.HighlighterFactory;
 
 import com.mirth.connect.client.ui.components.MirthTable;
 import com.mirth.connect.client.ui.components.MirthTableTransferHandler;
-import com.mirth.connect.client.ui.i18n.I18n;
 import com.mirth.connect.model.User;
 
 public class UserPanel extends javax.swing.JPanel {
@@ -68,33 +67,6 @@ public class UserPanel extends javax.swing.JPanel {
         updateUserTable();
 
         usersTable.setSelectionMode(0);
-
-        // Keep stable identifiers (English) but localize displayed titles.
-        usersTable.getColumnExt(USERNAME_COLUMN_NAME).setIdentifier(USERNAME_COLUMN_NAME);
-        usersTable.getColumnExt(USERFIRSTNAME_COLUMN_NAME).setIdentifier(USERFIRSTNAME_COLUMN_NAME);
-        usersTable.getColumnExt(USERLASTNAME_COLUMN_NAME).setIdentifier(USERLASTNAME_COLUMN_NAME);
-        usersTable.getColumnExt(USER_EMAIL_COLUMN_NAME).setIdentifier(USER_EMAIL_COLUMN_NAME);
-        usersTable.getColumnExt(USER_COUNTRY_COLUMN_NAME).setIdentifier(USER_COUNTRY_COLUMN_NAME);
-        usersTable.getColumnExt(USER_STATETERRITORY_COLUMN_NAME).setIdentifier(USER_STATETERRITORY_COLUMN_NAME);
-        usersTable.getColumnExt(USERPHONENUMBER_COLUMN_NAME).setIdentifier(USERPHONENUMBER_COLUMN_NAME);
-        usersTable.getColumnExt(USERORGANIZATION_COLUMN_NAME).setIdentifier(USERORGANIZATION_COLUMN_NAME);
-        usersTable.getColumnExt(USER_ROLE_COLUMN_NAME).setIdentifier(USER_ROLE_COLUMN_NAME);
-        usersTable.getColumnExt(USERINDUSTRY_COLUMN_NAME).setIdentifier(USERINDUSTRY_COLUMN_NAME);
-        usersTable.getColumnExt(USERLASTLOGIN_COLUMN_NAME).setIdentifier(USERLASTLOGIN_COLUMN_NAME);
-        usersTable.getColumnExt(USERDESCRIPTION_COLUMN_NAME).setIdentifier(USERDESCRIPTION_COLUMN_NAME);
-
-        usersTable.getColumnExt(USERNAME_COLUMN_NAME).setTitle(I18n.t("user.list.column.username", USERNAME_COLUMN_NAME));
-        usersTable.getColumnExt(USERFIRSTNAME_COLUMN_NAME).setTitle(I18n.t("user.list.column.firstName", USERFIRSTNAME_COLUMN_NAME));
-        usersTable.getColumnExt(USERLASTNAME_COLUMN_NAME).setTitle(I18n.t("user.list.column.lastName", USERLASTNAME_COLUMN_NAME));
-        usersTable.getColumnExt(USER_EMAIL_COLUMN_NAME).setTitle(I18n.t("user.list.column.email", USER_EMAIL_COLUMN_NAME));
-        usersTable.getColumnExt(USER_COUNTRY_COLUMN_NAME).setTitle(I18n.t("user.list.column.country", USER_COUNTRY_COLUMN_NAME));
-        usersTable.getColumnExt(USER_STATETERRITORY_COLUMN_NAME).setTitle(I18n.t("user.list.column.stateTerritory", USER_STATETERRITORY_COLUMN_NAME));
-        usersTable.getColumnExt(USERPHONENUMBER_COLUMN_NAME).setTitle(I18n.t("user.list.column.phone", USERPHONENUMBER_COLUMN_NAME));
-        usersTable.getColumnExt(USERORGANIZATION_COLUMN_NAME).setTitle(I18n.t("user.list.column.organization", USERORGANIZATION_COLUMN_NAME));
-        usersTable.getColumnExt(USER_ROLE_COLUMN_NAME).setTitle(I18n.t("user.list.column.role", USER_ROLE_COLUMN_NAME));
-        usersTable.getColumnExt(USERINDUSTRY_COLUMN_NAME).setTitle(I18n.t("user.list.column.business", USERINDUSTRY_COLUMN_NAME));
-        usersTable.getColumnExt(USERLASTLOGIN_COLUMN_NAME).setTitle(I18n.t("user.list.column.lastLogin", USERLASTLOGIN_COLUMN_NAME));
-        usersTable.getColumnExt(USERDESCRIPTION_COLUMN_NAME).setTitle(I18n.t("user.list.column.description", USERDESCRIPTION_COLUMN_NAME));
 
         usersTable.getColumnExt(USERNAME_COLUMN_NAME).setCellRenderer(new ImageCellRenderer());
 

@@ -57,7 +57,6 @@ import com.mirth.connect.client.ui.components.MirthCheckBox;
 import com.mirth.connect.client.ui.components.MirthComboBoxTableCellEditor;
 import com.mirth.connect.client.ui.components.MirthComboBoxTableCellRenderer;
 import com.mirth.connect.client.ui.components.MirthTable;
-import com.mirth.connect.client.ui.i18n.I18n;
 import com.mirth.connect.model.InvalidResourceProperties;
 import com.mirth.connect.model.ResourceProperties;
 import com.mirth.connect.plugins.ResourceClientPlugin;
@@ -90,30 +89,13 @@ public class SettingsPanelResources extends AbstractSettingsPanel implements Lis
         super(tabName);
         initComponents();
 
-        addResourceTaskIndex = addTask(TaskConstants.SETTINGS_ADD_RESOURCE,
-                I18n.t("settings.resources.task.add.title", "Add Resource"),
-                I18n.t("settings.resources.task.add.desc", "Add new resource."),
-                "",
-                new ImageIcon(Frame.class.getResource("images/add.png")));
-        removeResourceTaskIndex = addTask(TaskConstants.SETTINGS_REMOVE_RESOURCE,
-                I18n.t("settings.resources.task.remove.title", "Remove Resource"),
-                I18n.t("settings.resources.task.remove.desc", "Remove selected resource."),
-                "",
-                new ImageIcon(Frame.class.getResource("images/delete.png")));
-        reloadResourceTaskIndex = addTask(TaskConstants.SETTINGS_RELOAD_RESOURCE,
-                I18n.t("settings.resources.task.reload.title", "Reload Resource"),
-                I18n.t("settings.resources.task.reload.desc", "Reloads the selected resource on the server."),
-                "",
-                new ImageIcon(Frame.class.getResource("images/arrow_rotate_clockwise.png")));
+        addResourceTaskIndex = addTask(TaskConstants.SETTINGS_ADD_RESOURCE, "Add Resource", "Add new resource.", "", new ImageIcon(Frame.class.getResource("images/add.png")));
+        removeResourceTaskIndex = addTask(TaskConstants.SETTINGS_REMOVE_RESOURCE, "Remove Resource", "Remove selected resource.", "", new ImageIcon(Frame.class.getResource("images/delete.png")));
+        reloadResourceTaskIndex = addTask(TaskConstants.SETTINGS_RELOAD_RESOURCE, "Reload Resource", "Reloads the selected resource on the server.", "", new ImageIcon(Frame.class.getResource("images/arrow_rotate_clockwise.png")));
 
         setVisibleTasks(addResourceTaskIndex, reloadResourceTaskIndex, false);
         setVisibleTasks(addResourceTaskIndex, addResourceTaskIndex, true);
         setVisibleTasks(reloadResourceTaskIndex, reloadResourceTaskIndex, true);
-    }
-
-    @Override
-    public String getTabDisplayName() {
-        return I18n.t("settings.tab.resources", TAB_NAME);
     }
 
     public List<ResourceProperties> getCachedResources() {
@@ -126,7 +108,7 @@ public class SettingsPanelResources extends AbstractSettingsPanel implements Lis
             return;
         }
 
-        final String workingId = getFrame().startWorking(I18n.t("settings.resources.working.loading", "Loading resources..."));
+        final String workingId = getFrame().startWorking("Loading resources...");
         final int selectedRow = resourceTable.getSelectedRow();
 
         SwingWorker<List<ResourceProperties>, Void> worker = new SwingWorker<List<ResourceProperties>, Void>() {
@@ -144,7 +126,7 @@ public class SettingsPanelResources extends AbstractSettingsPanel implements Lis
                     if (t instanceof ExecutionException) {
                         t = t.getCause();
                     }
-                    getFrame().alertThrowable(getFrame(), t, I18n.tf("settings.resources.error.loadingWithReason", "Error loading resources: {0}", t.toString()));
+                    getFrame().alertThrowable(getFrame(), t, "Error loading resources: " + t.toString());
                 } finally {
                     getFrame().stopWorking(workingId);
                 }
@@ -158,7 +140,7 @@ public class SettingsPanelResources extends AbstractSettingsPanel implements Lis
         try {
             updateResourcesTable(getFrame().mirthClient.getResources(), resourceTable.getSelectedRow(), false);
         } catch (Throwable t) {
-            getFrame().alertThrowable(getFrame(), t, I18n.tf("settings.resources.error.loadingWithReason", "Error loading resources: {0}", t.toString()), false);
+            getFrame().alertThrowable(getFrame(), t, "Error loading resources: " + t.toString(), false);
         }
     }
 
@@ -221,7 +203,7 @@ public class SettingsPanelResources extends AbstractSettingsPanel implements Lis
             if (t instanceof ExecutionException) {
                 t = t.getCause();
             }
-            getFrame().alertThrowable(getFrame(), t, I18n.tf("settings.resources.error.loadingWithReason", "Error loading resources: {0}", t.toString()));
+            getFrame().alertThrowable(getFrame(), t, "Error loading resources: " + t.toString());
         }
     }
 
@@ -230,18 +212,17 @@ public class SettingsPanelResources extends AbstractSettingsPanel implements Lis
         resetInvalidProperties();
         final String errors = checkProperties().trim();
         if (StringUtils.isNotEmpty(errors)) {
-            getFrame().alertError(getFrame(), I18n.tf("settings.resources.error.validatingWithDetails", "Error validating resource settings:\n\n{0}", errors));
+            getFrame().alertError(getFrame(), "Error validating resource settings:\n\n" + errors);
             return false;
         }
 
-        if (!getFrame().alertOption(getFrame(), I18n.t("settings.resources.confirm.saveHtml",
-                "<html>Libraries associated with any changed resources will be reloaded.<br/>Any channels / connectors using those libraries will be affected.<br/>Also, a maximum of 1000 files may be loaded into a directory<br/>resource, with additional files being skipped.<br/>Are you sure you wish to continue?</html>"))) {
+        if (!getFrame().alertOption(getFrame(), "<html>Libraries associated with any changed resources will be reloaded.<br/>Any channels / connectors using those libraries will be affected.<br/>Also, a maximum of 1000 files may be loaded into a directory<br/>resource, with additional files being skipped.<br/>Are you sure you wish to continue?</html>")) {
             return false;
         }
 
         updateResource(resourceTable.getSelectedRow());
 
-        final String workingId = getFrame().startWorking(I18n.t("settings.resources.working.saving", "Saving resources..."));
+        final String workingId = getFrame().startWorking("Saving resources...");
         final List<ResourceProperties> resources = new ArrayList<ResourceProperties>();
 
         for (int row = 0; row < resourceTable.getRowCount(); row++) {
@@ -265,7 +246,7 @@ public class SettingsPanelResources extends AbstractSettingsPanel implements Lis
                     if (t instanceof ExecutionException) {
                         t = t.getCause();
                     }
-                    getFrame().alertThrowable(getFrame(), t, I18n.tf("settings.resources.error.savingWithReason", "Error saving resources: {0}", t.toString()));
+                    getFrame().alertThrowable(getFrame(), t, "Error saving resources: " + t.toString());
                 } finally {
                     getFrame().stopWorking(workingId);
                 }
@@ -283,7 +264,7 @@ public class SettingsPanelResources extends AbstractSettingsPanel implements Lis
             resetInvalidProperties();
             final String errors = StringUtils.defaultString(checkProperties()).trim();
             if (StringUtils.isNotEmpty(errors)) {
-                getFrame().alertError(getFrame(), I18n.tf("settings.resources.error.validatingWithDetails", "Error validating resource settings:\n\n{0}", errors));
+                getFrame().alertError(getFrame(), "Error validating resource settings:\n\n" + errors);
                 return;
             }
 
@@ -297,7 +278,7 @@ public class SettingsPanelResources extends AbstractSettingsPanel implements Lis
 
             int num = 1;
             do {
-                properties.setName(I18n.tf("settings.resources.defaultName", "Resource {0}", num++));
+                properties.setName("Resource " + num++);
             } while (!checkUniqueName(properties.getName()));
 
             this.selectedRow = -1;
@@ -345,16 +326,15 @@ public class SettingsPanelResources extends AbstractSettingsPanel implements Lis
 
         if (selectedRow >= 0) {
             if (getFrame().isSaveEnabled()) {
-                getFrame().alertWarning(getFrame(), I18n.t("settings.resources.reload.mustSaveFirst", "You must save before reloading any resources."));
+                getFrame().alertWarning(getFrame(), "You must save before reloading any resources.");
                 return;
             }
 
-            if (!getFrame().alertOption(getFrame(), I18n.t("settings.resources.confirm.reloadHtml",
-                    "<html>Libraries associated with this resource will be reloaded.<br/>Any channels / connectors using those libraries will be<br/>affected. Also, a maximum of 1000 files may be loaded into<br/>a directory resource, with additional files being skipped.<br/>Are you sure you wish to continue?</html>"))) {
+            if (!getFrame().alertOption(getFrame(), "<html>Libraries associated with this resource will be reloaded.<br/>Any channels / connectors using those libraries will be<br/>affected. Also, a maximum of 1000 files may be loaded into<br/>a directory resource, with additional files being skipped.<br/>Are you sure you wish to continue?</html>")) {
                 return;
             }
 
-            final String workingId = getFrame().startWorking(I18n.t("settings.resources.working.reloading", "Reloading resource..."));
+            final String workingId = getFrame().startWorking("Reloading resource...");
             final String resourceId = ((ResourceProperties) resourceTable.getModel().getValueAt(selectedRow, PROPERTIES_COLUMN)).getId();
 
             SwingWorker<Void, Void> worker = new SwingWorker<Void, Void>() {
@@ -384,7 +364,7 @@ public class SettingsPanelResources extends AbstractSettingsPanel implements Lis
                         if (t instanceof ExecutionException) {
                             t = t.getCause();
                         }
-                        getFrame().alertThrowable(getFrame(), t, I18n.tf("settings.resources.error.reloadingWithReason", "Error reloading resource: {0}", t.toString()));
+                        getFrame().alertThrowable(getFrame(), t, "Error reloading resource: " + t.toString());
                     } finally {
                         getFrame().stopWorking(workingId);
                     }
@@ -424,17 +404,11 @@ public class SettingsPanelResources extends AbstractSettingsPanel implements Lis
 
         JPanel resourceListPanel = new JPanel(new MigLayout("insets 0, novisualpadding, hidemode 3, fill"));
         resourceListPanel.setBackground(getBackground());
-        resourceListPanel.setBorder(BorderFactory.createTitledBorder(BorderFactory.createMatteBorder(1, 0, 0, 0, new Color(204, 204, 204)),
-                I18n.t("settings.resources.section.list", "Resources"),
-                TitledBorder.DEFAULT_JUSTIFICATION, TitledBorder.DEFAULT_POSITION, new Font("Tahoma", 1, 11)));
+        resourceListPanel.setBorder(BorderFactory.createTitledBorder(BorderFactory.createMatteBorder(1, 0, 0, 0, new Color(204, 204, 204)), "Resources", TitledBorder.DEFAULT_JUSTIFICATION, TitledBorder.DEFAULT_POSITION, new Font("Tahoma", 1, 11)));
 
         resourceTable = new MirthTable();
-        resourceTable.setModel(new RefreshTableModel(new Object[] {
-                I18n.t("settings.resources.column.properties", "Properties"),
-                I18n.t("settings.resources.column.name", "Name"),
-                I18n.t("settings.resources.column.type", "Type"),
-                I18n.t("settings.resources.column.globalScripts", "Global Scripts"),
-                I18n.t("settings.resources.column.loadParentFirst", "Load Parent-First") }, 0) {
+        resourceTable.setModel(new RefreshTableModel(new Object[] { "Properties", "Name", "Type",
+                "Global Scripts", "Load Parent-First" }, 0) {
             @Override
             public boolean isCellEditable(int row, int column) {
                 if (row == 0) {
@@ -463,7 +437,7 @@ public class SettingsPanelResources extends AbstractSettingsPanel implements Lis
         }
 
         resourceTable.getColumnModel().getColumn(NAME_COLUMN).setCellEditor(new NameEditor());
-        resourceTable.getColumnExt(NAME_COLUMN).setToolTipText(I18n.t("settings.resources.tooltip.name", "The unique name of the resource."));
+        resourceTable.getColumnExt(NAME_COLUMN).setToolTipText("The unique name of the resource.");
 
         resourceTable.getColumnModel().getColumn(TYPE_COLUMN).setMinWidth(100);
         resourceTable.getColumnModel().getColumn(TYPE_COLUMN).setMaxWidth(200);
@@ -474,28 +448,25 @@ public class SettingsPanelResources extends AbstractSettingsPanel implements Lis
                 typeComboBoxActionPerformed(evt);
             }
         }));
-        resourceTable.getColumnExt(TYPE_COLUMN).setToolTipText(I18n.t("settings.resources.tooltip.type", "The type of resource."));
+        resourceTable.getColumnExt(TYPE_COLUMN).setToolTipText("The type of resource.");
 
         resourceTable.getColumnModel().getColumn(GLOBAL_SCRIPTS_COLUMN).setMinWidth(80);
         resourceTable.getColumnModel().getColumn(GLOBAL_SCRIPTS_COLUMN).setMaxWidth(80);
         resourceTable.getColumnModel().getColumn(GLOBAL_SCRIPTS_COLUMN).setCellRenderer(new CheckBoxRenderer());
         resourceTable.getColumnModel().getColumn(GLOBAL_SCRIPTS_COLUMN).setCellEditor(new CheckBoxEditor());
-        resourceTable.getColumnExt(GLOBAL_SCRIPTS_COLUMN).setToolTipText(I18n.t("settings.resources.tooltip.globalScripts",
-                "<html>If checked, libraries associated with the corresponding<br/>resource will be included in global script contexts.</html>"));
+        resourceTable.getColumnExt(GLOBAL_SCRIPTS_COLUMN).setToolTipText("<html>If checked, libraries associated with the corresponding<br/>resource will be included in global script contexts.</html>");
 
         resourceTable.getColumnModel().getColumn(LOAD_PARENT_FIRST_COLUMN).setMinWidth(100);
         resourceTable.getColumnModel().getColumn(LOAD_PARENT_FIRST_COLUMN).setMaxWidth(100);
         resourceTable.getColumnModel().getColumn(LOAD_PARENT_FIRST_COLUMN).setCellRenderer(new CheckBoxRenderer());
         resourceTable.getColumnModel().getColumn(LOAD_PARENT_FIRST_COLUMN).setCellEditor(new CheckBoxEditor());
-        resourceTable.getColumnExt(LOAD_PARENT_FIRST_COLUMN).setToolTipText(I18n.t("settings.resources.tooltip.loadParentFirst",
-                "<html>If checked, classes already included in the overall server<br/>classpath will not be able to be overwritten. Classes will<br/>attempt to be loaded from the parent ClassLoader first.<br/><br/>Also, if this resource is included on a channel with other<br/>resources that have this option disabled, you will still<br/>not be able to overwrite classes in the parent classpath.</html>"));
+        resourceTable.getColumnExt(LOAD_PARENT_FIRST_COLUMN).setToolTipText("<html>If checked, classes already included in the overall server<br/>classpath will not be able to be overwritten. Classes will<br/>attempt to be loaded from the parent ClassLoader first.<br/><br/>Also, if this resource is included on a channel with other<br/>resources that have this option disabled, you will still<br/>not be able to overwrite classes in the parent classpath.</html>");
 
         resourceTable.removeColumn(resourceTable.getColumnModel().getColumn(PROPERTIES_COLUMN));
 
         resourceTable.getSelectionModel().addListSelectionListener(this);
 
-        resourceTable.setToolTipText(I18n.t("settings.resources.tooltip.table",
-                "<html>Add or remove resources to use<br/>in specific channels/connectors.</html>"));
+        resourceTable.setToolTipText("<html>Add or remove resources to use<br/>in specific channels/connectors.</html>");
 
         resourceTable.getInputMap(JComponent.WHEN_ANCESTOR_OF_FOCUSED_COMPONENT).put(KeyStroke.getKeyStroke(KeyEvent.VK_ENTER, 0), "selectNextColumnCell");
 
@@ -509,10 +480,8 @@ public class SettingsPanelResources extends AbstractSettingsPanel implements Lis
 
         fillerPanel = new JPanel(new MigLayout("insets 5, novisualpadding, hidemode 3, fill", "", "[][grow]"));
         fillerPanel.setBackground(getBackground());
-        fillerPanel.setBorder(BorderFactory.createTitledBorder(BorderFactory.createMatteBorder(1, 0, 0, 0, new Color(204, 204, 204)),
-                I18n.t("settings.resources.section.settings", "Resource Settings"),
-                TitledBorder.DEFAULT_JUSTIFICATION, TitledBorder.DEFAULT_POSITION, new Font("Tahoma", 1, 11)));
-        fillerLabel = new JLabel(I18n.t("settings.resources.hint.selectFromTable", "Select a resource from the table above."));
+        fillerPanel.setBorder(BorderFactory.createTitledBorder(BorderFactory.createMatteBorder(1, 0, 0, 0, new Color(204, 204, 204)), "Resource Settings", TitledBorder.DEFAULT_JUSTIFICATION, TitledBorder.DEFAULT_POSITION, new Font("Tahoma", 1, 11)));
+        fillerLabel = new JLabel("Select a resource from the table above.");
         fillerPanel.add(fillerLabel);
 
         exceptionTextPane = new JTextPane();
@@ -555,7 +524,7 @@ public class SettingsPanelResources extends AbstractSettingsPanel implements Lis
                         @Override
                         public void run() {
                             resourceTable.getSelectionModel().setSelectionInterval(previousSelectedRow, previousSelectedRow);
-                            getFrame().alertError(getFrame(), I18n.tf("settings.resources.error.validatingWithDetails", "Error validating resource settings:\n\n{0}", errors));
+                            getFrame().alertError(getFrame(), "Error validating resource settings:\n\n" + errors);
                             resourceTable.getSelectionModel().addListSelectionListener(SettingsPanelResources.this);
                         }
                     });
@@ -573,8 +542,7 @@ public class SettingsPanelResources extends AbstractSettingsPanel implements Lis
                     for (Entry<String, ResourcePropertiesPanel> entry : propertiesPanelMap.entrySet()) {
                         entry.getValue().setVisible(false);
                     }
-                    fillerLabel.setText(I18n.t("settings.resources.hint.invalidResource",
-                            "The currently selected resource is invalid. Check to make sure all resource extensions are correctly loaded."));
+                    fillerLabel.setText("The currently selected resource is invalid. Check to make sure all resource extensions are correctly loaded.");
                     fillerPanel.setVisible(true);
 
                     Throwable cause = ((InvalidResourceProperties) properties).getCause();
@@ -608,7 +576,7 @@ public class SettingsPanelResources extends AbstractSettingsPanel implements Lis
         }
 
         if (currentPropertiesPanel == null) {
-            fillerLabel.setText(I18n.t("settings.resources.hint.selectFromTable", "Select a resource from the table above."));
+            fillerLabel.setText("Select a resource from the table above.");
             fillerPanel.setVisible(true);
         } else {
             fillerPanel.setVisible(false);

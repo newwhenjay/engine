@@ -20,7 +20,6 @@ import org.apache.commons.lang3.StringUtils;
 
 import com.mirth.connect.client.ui.MirthDialog;
 import com.mirth.connect.client.ui.UIConstants;
-import com.mirth.connect.client.ui.i18n.I18n;
 import com.mirth.connect.client.ui.util.DisplayUtil;
 import com.mirth.connect.model.ServerEvent.Outcome;
 
@@ -34,7 +33,6 @@ public class EventBrowserAdvancedFilter extends MirthDialog {
         super(parent, title, modal);
 
         initComponents();
-        localize();
         getContentPane().setBackground(new java.awt.Color(255, 255, 255));
 
         pack();
@@ -72,17 +70,6 @@ public class EventBrowserAdvancedFilter extends MirthDialog {
         outcomeComboBox.setModel(new javax.swing.DefaultComboBoxModel(outcomeValues));
 
         reset();
-    }
-
-    private void localize() {
-        userLabel.setText(I18n.t("eventBrowser.advanced.user", "User:"));
-        outcomeLabel.setText(I18n.t("eventBrowser.advanced.outcome", "Outcome:"));
-        attributeSearchLabel.setText(I18n.t("eventBrowser.advanced.attributes", "Attributes:"));
-        ipAddressLabel.setText(I18n.t("eventBrowser.advanced.ipAddress", "IP Address:"));
-        serverIdLabel.setText(I18n.t("eventBrowser.advanced.serverId", "Server ID:"));
-
-        okButton1.setText(I18n.t("eventBrowser.advanced.ok", "OK"));
-        cancelButton.setText(I18n.t("eventBrowser.advanced.cancel", "Cancel"));
     }
 
     public void reset() {

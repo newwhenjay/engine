@@ -37,7 +37,6 @@ import com.mirth.connect.client.ui.LoadedExtensions;
 import com.mirth.connect.client.ui.PlatformUI;
 import com.mirth.connect.client.ui.components.rsta.ac.MirthCompletionCacheInterface;
 import com.mirth.connect.client.ui.components.rsta.ac.MirthLanguageSupport;
-import com.mirth.connect.client.ui.i18n.I18n;
 import com.mirth.connect.client.ui.reference.Reference.Type;
 import com.mirth.connect.model.Parameters;
 import com.mirth.connect.model.codetemplates.CodeTemplate;
@@ -428,82 +427,25 @@ public class ReferenceListFactory {
     }
 
     private void addMiscellaneousReferences() {
-        addReference(new VariableReference(CONTEXT_CONNECTOR, null,
-                I18n.t("reference.variable.connectorMessage", "Connector Message"),
-                I18n.t("reference.variable.connectorMessage.desc", "The current connector's ImmutableConnectorMessage object."),
-                "connectorMessage"));
-        addReference(new VariableReference(CONTEXT_FILTER_TRANSFORMER, null,
-                I18n.t("reference.variable.outboundMessageTransformed", "Outbound Message (Transformed)"),
-                I18n.t("reference.variable.outboundMessageTransformed.desc", "In a filter/transformer script, this represents the outbound template, serialized to an E4X XML object. If the outbound data type is Raw, this will instead be a string. If the outbound data type is JSON, this will be a JavaScript object."),
-                "tmp"));
-        addReference(new VariableReference(CONTEXT_RESPONSE_TRANSFORMER, null,
-                I18n.t("reference.variable.responseObject", "Response Object"),
-                I18n.t("reference.variable.responseObject.desc", "In a response transformer script, this is the ImmutableResponse object associated with the response data."),
-                "response"));
-        addReference(new VariableReference(CONTEXT_RESPONSE_TRANSFORMER, null,
-                I18n.t("reference.variable.responseStatus", "Response Status"),
-                I18n.t("reference.variable.responseStatus.desc", "In a response transformer script, this is the status which will be used to set the status of the corresponding connector message."),
-                "responseStatus"));
-        addReference(new VariableReference(CONTEXT_RESPONSE_TRANSFORMER, null,
-                I18n.t("reference.variable.responseErrorMessage", "Response Error Message"),
-                I18n.t("reference.variable.responseErrorMessage.desc", "In a response transformer script, this is the error message which will be used to set the error content of the corresponding connector message."),
-                "responseErrorMessage"));
-        addReference(new VariableReference(CONTEXT_RESPONSE_TRANSFORMER, null,
-                I18n.t("reference.variable.responseStatusMessage", "Response Status Message"),
-                I18n.t("reference.variable.responseStatusMessage.desc", "In a response transformer script, this is a brief message explaning the reason for the current status."),
-                "responseStatusMessage"));
-        addReference(new VariableReference(CONTEXT_CONNECTOR, null,
-                I18n.t("reference.map.connectorMap", "Connector Map"),
-                I18n.t("reference.map.connectorMap.desc", "The variable map associated with the current connector. Values placed in this map will not persist to other connectors."),
-                "connectorMap"));
-        addReference(new VariableReference(CONTEXT_CHANNEL, null,
-                I18n.t("reference.map.channelMap", "Channel Map"),
-                I18n.t("reference.map.channelMap.desc", "The variable map associated with the current message. Values placed in this map will be accessible to downstream connectors and the postprocessor, but will not be accessible to subsequent messages."),
-                "channelMap"));
-        addReference(new VariableReference(CONTEXT_CHANNEL, null,
-                I18n.t("reference.map.sourceMap", "Source Map"),
-                I18n.t("reference.map.sourceMap.desc", "The read-only variable map associated with the current message. Values are placed in this map at the beginning of the message lifecycle (e.g. \"originalFilename\")."),
-                "sourceMap"));
-        addReference(new VariableReference(CONTEXT_GLOBAL, null,
-                I18n.t("reference.map.globalMap", "Global Map"),
-                I18n.t("reference.map.globalMap.desc", "The global variable map. Values placed in this map will be accessible throughout the entire server."),
-                "globalMap"));
-        addReference(new VariableReference(CONTEXT_CHANNEL, null,
-                I18n.t("reference.map.globalChannelMap", "Global Channel Map"),
-                I18n.t("reference.map.globalChannelMap.desc", "The variable map associated with the current channel. Values placed in this map will be accessible throughout the entire channel, and across multiple messages."),
-                "globalChannelMap"));
-        addReference(new VariableReference(CONTEXT_GLOBAL, null,
-                I18n.t("reference.map.configurationMap", "Configuration Map"),
-                I18n.t("reference.map.configurationMap.desc", "The variable map associated with the current server instance. Values placed in this map will be accessible thoughout the entire server. These values can also be edited on the corresponding settings view."),
-                "configurationMap"));
-        addReference(new VariableReference(CONTEXT_RESPONSE_MAP, null,
-                I18n.t("reference.map.responseMap", "Response Map"),
-                I18n.t("reference.map.responseMap.desc", "The variable map used to store Response objects for the current message. Values placed in this map may be used to respond to an originating system with. Subsequent destination connectors may also reference these values."),
-                "responseMap"));
-        addReference(new VariableReference(CONTEXT_GLOBAL, null,
-                I18n.t("reference.variable.logger", "log4j Logger"),
-                I18n.t("reference.variable.logger.desc", "This object can be used to send messages to the server log."),
-                "logger"));
-        addReference(new VariableReference(CONTEXT_CONNECTOR, null,
-                I18n.t("reference.variable.alertSender", "AlertSender"),
-                I18n.t("reference.variable.alertSender.desc", "An instance of AlertSender that can be used to trigger User Defined Transformer events which can be captured by alerts."),
-                "alerts"));
-        addReference(new VariableReference(CONTEXT_GLOBAL, null,
-                I18n.t("reference.variable.router", "VMRouter"),
-                I18n.t("reference.variable.router.desc", "An instance of VMRouter that can be used to dispatch messages to other channels."),
-                "router"));
-        addReference(new VariableReference(CONTEXT_CONNECTOR, null,
-                I18n.t("reference.variable.replacer", "TemplateValueReplacer"),
-                I18n.t("reference.variable.replacer.desc", "An instance of TemplateValueReplacer that can be used to perform Velocity template replacement."),
-                "replacer"));
-        addReference(new VariableReference(CONTEXT_BATCH, null,
-                I18n.t("reference.variable.reader", "Batch Reader"),
-                I18n.t("reference.variable.reader.desc", "In a JavaScript batch script, this BufferedReader object is used to read the incoming data stream."),
-                "reader"));
-        addReference(new VariableReference(CONTEXT_GLOBAL, null,
-                I18n.t("reference.variable.contextFactory", "JavaScript Context Factory"),
-                I18n.t("reference.variable.contextFactory.desc", "This object can be used to retrieve the resource IDs and classloaders used by the current JavaScript context."),
-                "contextFactory"));
+        addReference(new VariableReference(CONTEXT_CONNECTOR, null, "Connector Message", "The current connector's ImmutableConnectorMessage object.", "connectorMessage"));
+        addReference(new VariableReference(CONTEXT_FILTER_TRANSFORMER, null, "Outbound Message (Transformed)", "In a filter/transformer script, this represents the outbound template, serialized to an E4X XML object. If the outbound data type is Raw, this will instead be a string. If the outbound data type is JSON, this will be a JavaScript object.", "tmp"));
+        addReference(new VariableReference(CONTEXT_RESPONSE_TRANSFORMER, null, "Response Object", "In a response transformer script, this is the ImmutableResponse object associated with the response data.", "response"));
+        addReference(new VariableReference(CONTEXT_RESPONSE_TRANSFORMER, null, "Response Status", "In a response transformer script, this is the status which will be used to set the status of the corresponding connector message.", "responseStatus"));
+        addReference(new VariableReference(CONTEXT_RESPONSE_TRANSFORMER, null, "Response Error Message", "In a response transformer script, this is the error message which will be used to set the error content of the corresponding connector message.", "responseErrorMessage"));
+        addReference(new VariableReference(CONTEXT_RESPONSE_TRANSFORMER, null, "Response Status Message", "In a response transformer script, this is a brief message explaning the reason for the current status.", "responseStatusMessage"));
+        addReference(new VariableReference(CONTEXT_CONNECTOR, null, "Connector Map", "The variable map associated with the current connector. Values placed in this map will not persist to other connectors.", "connectorMap"));
+        addReference(new VariableReference(CONTEXT_CHANNEL, null, "Channel Map", "The variable map associated with the current message. Values placed in this map will be accessible to downstream connectors and the postprocessor, but will not be accessible to subsequent messages.", "channelMap"));
+        addReference(new VariableReference(CONTEXT_CHANNEL, null, "Source Map", "The read-only variable map associated with the current message. Values are placed in this map at the beginning of the message lifecycle (e.g. \"originalFilename\").", "sourceMap"));
+        addReference(new VariableReference(CONTEXT_GLOBAL, null, "Global Map", "The global variable map. Values placed in this map will be accessible throughout the entire server.", "globalMap"));
+        addReference(new VariableReference(CONTEXT_CHANNEL, null, "Global Channel Map", "The variable map associated with the current channel. Values placed in this map will be accessible throughout the entire channel, and across multiple messages.", "globalChannelMap"));
+        addReference(new VariableReference(CONTEXT_GLOBAL, null, "Configuration Map", "The variable map associated with the current server instance. Values placed in this map will be accessible thoughout the entire server. These values can also be edited on the corresponding settings view.", "configurationMap"));
+        addReference(new VariableReference(CONTEXT_RESPONSE_MAP, null, "Response Map", "The variable map used to store Response objects for the current message. Values placed in this map may be used to respond to an originating system with. Subsequent destination connectors may also reference these values.", "responseMap"));
+        addReference(new VariableReference(CONTEXT_GLOBAL, null, "log4j Logger", "This object can be used to send messages to the server log.", "logger"));
+        addReference(new VariableReference(CONTEXT_CONNECTOR, null, "AlertSender", "An instance of AlertSender that can be used to trigger User Defined Transformer events which can be captured by alerts.", "alerts"));
+        addReference(new VariableReference(CONTEXT_GLOBAL, null, "VMRouter", "An instance of VMRouter that can be used to dispatch messages to other channels.", "router"));
+        addReference(new VariableReference(CONTEXT_CONNECTOR, null, "TemplateValueReplacer", "An instance of TemplateValueReplacer that can be used to perform Velocity template replacement.", "replacer"));
+        addReference(new VariableReference(CONTEXT_BATCH, null, "Batch Reader", "In a JavaScript batch script, this BufferedReader object is used to read the incoming data stream.", "reader"));
+        addReference(new VariableReference(CONTEXT_GLOBAL, null, "JavaScript Context Factory", "This object can be used to retrieve the resource IDs and classloaders used by the current JavaScript context.", "contextFactory"));
 
         addReference(new FunctionReference(CONTEXT_GLOBAL, null, null, "Get Map Value", "Returns the value of the key if it exists in any map.", null, new CodeTemplateFunctionDefinition("$", new Parameters("key", "String", "The key of the entry to retrieve."), "Object", "The value, or null if no value exists.")));
         addReference(new FunctionReference(CONTEXT_GLOBAL, null, null, "Get Configuration Map Value", "Get a value from the configuration map.", null, new CodeTemplateFunctionDefinition("$cfg", new Parameters("key", "String", "The key of the entry to retrieve."), "Object", "The value contained in the map, or null if no value exists.")));

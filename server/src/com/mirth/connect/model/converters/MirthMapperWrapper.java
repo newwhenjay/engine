@@ -9,17 +9,17 @@
 
 package com.mirth.connect.model.converters;
 
+import org.mozilla.javascript.NativeArray;
+import org.mozilla.javascript.NativeBoolean;
+import org.mozilla.javascript.NativeDate;
+import org.mozilla.javascript.NativeObject;
+
 import com.mirth.connect.donkey.util.xstream.DonkeyMapperWrapper;
 import com.mirth.connect.model.Channel;
 import com.mirth.connect.model.InvalidChannel;
 import com.thoughtworks.xstream.mapper.MapperWrapper;
 
 public class MirthMapperWrapper implements DonkeyMapperWrapper {
-
-    private static final String RHINO_NATIVE_OBJECT = "org.mozilla.javascript.NativeObject";
-    private static final String RHINO_NATIVE_ARRAY = "org.mozilla.javascript.NativeArray";
-    private static final String RHINO_NATIVE_DATE = "org.mozilla.javascript.NativeDate";
-    private static final String RHINO_NATIVE_BOOLEAN = "org.mozilla.javascript.NativeBoolean";
 
     @Override
     public MapperWrapper wrapMapper(MapperWrapper next) {
@@ -28,19 +28,11 @@ public class MirthMapperWrapper implements DonkeyMapperWrapper {
             public String serializedClass(Class type) {
                 if (type == InvalidChannel.class) {
                     return super.serializedClass(Channel.class);
-                } else if (isRhinoNativeType(type)) {
+                } else if (type == NativeObject.class || type == NativeArray.class || type == NativeDate.class || type == NativeBoolean.class) {
                     return super.serializedClass(String.class);
                 }
                 return super.serializedClass(type);
             }
         };
-    }
-
-    private static boolean isRhinoNativeType(Class type) {
-        if (type == null) {
-            return false;
-        }
-        String name = type.getName();
-        return RHINO_NATIVE_OBJECT.equals(name) || RHINO_NATIVE_ARRAY.equals(name) || RHINO_NATIVE_DATE.equals(name) || RHINO_NATIVE_BOOLEAN.equals(name);
     }
 }

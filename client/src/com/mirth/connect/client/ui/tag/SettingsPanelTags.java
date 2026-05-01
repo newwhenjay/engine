@@ -86,7 +86,6 @@ import com.mirth.connect.client.ui.components.MirthButton;
 import com.mirth.connect.client.ui.components.MirthFieldConstraints;
 import com.mirth.connect.client.ui.components.MirthTable;
 import com.mirth.connect.client.ui.components.MirthTriStateCheckBox;
-import com.mirth.connect.client.ui.i18n.I18n;
 import com.mirth.connect.model.ChannelTag;
 import com.mirth.connect.util.ColorUtil;
 
@@ -113,11 +112,6 @@ public class SettingsPanelTags extends AbstractSettingsPanel {
         initLayout();
     }
 
-    @Override
-    public String getTabDisplayName() {
-        return I18n.t("settings.tab.tags", TAB_NAME);
-    }
-
     public Set<ChannelTag> getCachedChannelTags() {
         return cachedChannelTags;
     }
@@ -128,7 +122,7 @@ public class SettingsPanelTags extends AbstractSettingsPanel {
             return;
         }
 
-        final String workingId = getFrame().startWorking(I18n.t("settings.tags.working.loading", "Loading tags..."));
+        final String workingId = getFrame().startWorking("Loading tags...");
         final int[] selectedRows = tagsTable.getSelectedRows();
 
         SwingWorker<Set<ChannelTag>, Void> worker = new SwingWorker<Set<ChannelTag>, Void>() {
@@ -149,7 +143,7 @@ public class SettingsPanelTags extends AbstractSettingsPanel {
                     if (t instanceof ExecutionException) {
                         t = t.getCause();
                     }
-                    getFrame().alertThrowable(getFrame(), t, I18n.tf("settings.tags.error.loadingWithReason", "Error loading tags: {0}", t.toString()));
+                    getFrame().alertThrowable(getFrame(), t, "Error loading tags: " + t.toString());
                 } finally {
                     getFrame().stopWorking(workingId);
                 }
@@ -163,7 +157,7 @@ public class SettingsPanelTags extends AbstractSettingsPanel {
         try {
             updateTagsTable(getFrame().mirthClient.getChannelTags(), tagsTable.getSelectedRows(), false);
         } catch (Throwable t) {
-            getFrame().alertThrowable(getFrame(), t, I18n.tf("settings.tags.error.loadingWithReason", "Error loading tags: {0}", t.toString()), false);
+            getFrame().alertThrowable(getFrame(), t, "Error loading tags: " + t.toString(), false);
         }
     }
 
@@ -232,7 +226,7 @@ public class SettingsPanelTags extends AbstractSettingsPanel {
 
     @Override
     public boolean doSave() {
-        final String workingId = getFrame().startWorking(I18n.t("settings.tags.working.saving", "Saving tags..."));
+        final String workingId = getFrame().startWorking("Saving tags...");
         final Set<ChannelTag> tags = new HashSet<ChannelTag>();
 
         for (int row = 0; row < tagsTable.getModel().getRowCount(); row++) {
@@ -259,7 +253,7 @@ public class SettingsPanelTags extends AbstractSettingsPanel {
                     if (t instanceof ExecutionException) {
                         t = t.getCause();
                     }
-                    getFrame().alertThrowable(getFrame(), t, I18n.tf("settings.tags.error.savingWithReason", "Error saving tags: {0}", t.toString()));
+                    getFrame().alertThrowable(getFrame(), t, "Error saving tags: " + t.toString());
                 } finally {
                     getFrame().stopWorking(workingId);
                 }
@@ -276,18 +270,13 @@ public class SettingsPanelTags extends AbstractSettingsPanel {
 
         container = new JPanel();
         container.setBackground(getBackground());
-        container.setBorder(BorderFactory.createTitledBorder(BorderFactory.createMatteBorder(1, 0, 0, 0, new Color(204, 204, 204)),
-                I18n.t("settings.tags.section.tags", "Tags"),
-                TitledBorder.DEFAULT_JUSTIFICATION, TitledBorder.DEFAULT_POSITION, new Font("Tahoma", 1, 11)));
+        container.setBorder(BorderFactory.createTitledBorder(BorderFactory.createMatteBorder(1, 0, 0, 0, new Color(204, 204, 204)), "Tags", TitledBorder.DEFAULT_JUSTIFICATION, TitledBorder.DEFAULT_POSITION, new Font("Tahoma", 1, 11)));
 
         leftPanel = new JPanel();
         leftPanel.setBackground(getBackground());
 
         tagsTable = new MirthTable();
-        tagsTable.setModel(new RefreshTableModel(new Object[] {
-                I18n.t("settings.tags.column.name", "Name"),
-                I18n.t("settings.tags.column.color", "Color"),
-                I18n.t("settings.tags.column.channelCount", "Channel Count"),
+        tagsTable.setModel(new RefreshTableModel(new Object[] { "Name", "Color", "Channel Count",
                 "Tag" }, 0) {
             @Override
             public boolean isCellEditable(int row, int column) {
@@ -367,7 +356,7 @@ public class SettingsPanelTags extends AbstractSettingsPanel {
 
         tagsScrollPane = new JScrollPane(tagsTable);
 
-        tagsAddButton = new MirthButton(I18n.t("settings.tags.button.add", "Add"));
+        tagsAddButton = new MirthButton("Add");
         tagsAddButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent evt) {
@@ -375,7 +364,7 @@ public class SettingsPanelTags extends AbstractSettingsPanel {
             }
         });
 
-        tagsRemoveButton = new MirthButton(I18n.t("settings.tags.button.remove", "Remove"));
+        tagsRemoveButton = new MirthButton("Remove");
         tagsRemoveButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent evt) {
@@ -385,13 +374,11 @@ public class SettingsPanelTags extends AbstractSettingsPanel {
 
         channelsSeparator = new JPanel();
         channelsSeparator.setBackground(getBackground());
-        channelsSeparator.setBorder(BorderFactory.createTitledBorder(BorderFactory.createMatteBorder(1, 0, 0, 0, new Color(204, 204, 204)),
-                I18n.t("settings.tags.section.channels", "Channels"),
-                TitledBorder.DEFAULT_JUSTIFICATION, TitledBorder.DEFAULT_POSITION, new Font("Tahoma", 1, 11)));
+        channelsSeparator.setBorder(BorderFactory.createTitledBorder(BorderFactory.createMatteBorder(1, 0, 0, 0, new Color(204, 204, 204)), "Channels", TitledBorder.DEFAULT_JUSTIFICATION, TitledBorder.DEFAULT_POSITION, new Font("Tahoma", 1, 11)));
 
-        channelsLabel = new JLabel(I18n.t("settings.tags.hint.channelsAppliedToSelectedTags", "Channel selections will be applied to the currently selected tags."));
+        channelsLabel = new JLabel("Channel selections will be applied to the currently selected tags.");
 
-        channelsFilterLabel = new JLabel(I18n.t("settings.tags.label.filter", "Filter:"));
+        channelsFilterLabel = new JLabel("Filter:");
 
         channelFilterField = new JTextField();
         channelFilterField.getDocument().addDocumentListener(new DocumentListener() {
@@ -415,7 +402,7 @@ public class SettingsPanelTags extends AbstractSettingsPanel {
             }
         });
 
-        channelsSelectAllLabel = new JLabel(I18n.t("settings.tags.link.selectAllHtml", "<html><u>Select All</u></html>"));
+        channelsSelectAllLabel = new JLabel("<html><u>Select All</u></html>");
         channelsSelectAllLabel.setForeground(Color.BLUE);
         channelsSelectAllLabel.setCursor(new Cursor(Cursor.HAND_CURSOR));
         channelsSelectAllLabel.addMouseListener(new MouseAdapter() {
@@ -432,7 +419,7 @@ public class SettingsPanelTags extends AbstractSettingsPanel {
 
         channelsSelectSeparator = new JLabel("|");
 
-        channelsDeselectAllLabel = new JLabel(I18n.t("settings.tags.link.deselectAllHtml", "<html><u>Deselect All</u></html>"));
+        channelsDeselectAllLabel = new JLabel("<html><u>Deselect All</u></html>");
         channelsDeselectAllLabel.setForeground(Color.BLUE);
         channelsDeselectAllLabel.setCursor(new Cursor(Cursor.HAND_CURSOR));
         channelsDeselectAllLabel.addMouseListener(new MouseAdapter() {
@@ -615,7 +602,7 @@ public class SettingsPanelTags extends AbstractSettingsPanel {
         String name;
         int num = 1;
         do {
-            name = I18n.tf("settings.tags.defaultName", "Tag {0}", num++);
+            name = "Tag " + num++;
         } while (tagNameExists(name));
 
         return name;
@@ -685,9 +672,7 @@ public class SettingsPanelTags extends AbstractSettingsPanel {
             colorPanel = new ColorPanel();
             colorPanel.addMouseListener(new MouseAdapter() {
                 public void mouseReleased(MouseEvent evt) {
-                    Color color = JColorChooser.showDialog(PlatformUI.MIRTH_FRAME,
-                            I18n.t("settings.tags.dialog.editBackgroundColor", "Edit Background Color"),
-                            originalColor);
+                    Color color = JColorChooser.showDialog(PlatformUI.MIRTH_FRAME, "Edit Background Color", originalColor);
                     changeColor(color);
                     stopCellEditing();
                 }

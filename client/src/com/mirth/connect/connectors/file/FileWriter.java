@@ -38,7 +38,6 @@ import com.mirth.connect.client.ui.components.MirthPasswordField;
 import com.mirth.connect.client.ui.components.MirthRadioButton;
 import com.mirth.connect.client.ui.components.MirthSyntaxTextArea;
 import com.mirth.connect.client.ui.components.MirthTextField;
-import com.mirth.connect.client.ui.i18n.I18n;
 import com.mirth.connect.client.ui.panels.connectors.ConnectorSettingsPanel;
 import com.mirth.connect.client.ui.panels.connectors.ResponseHandler;
 import com.mirth.connect.donkey.model.channel.ConnectorProperties;
@@ -294,7 +293,7 @@ public class FileWriter extends ConnectorSettingsPanel {
         } else {
             summaryLabel.setEnabled(false);
             summaryField.setEnabled(false);
-            summaryField.setText(I18n.t("connectors.fileWriter.none", "<None>"));
+            summaryField.setText("<None>");
         }
     }
 
@@ -386,7 +385,7 @@ public class FileWriter extends ConnectorSettingsPanel {
 
     private void initComponents() {
         schemeLabel = new JLabel();
-        schemeLabel.setText(I18n.t("connectors.fileWriter.method", "Method:"));
+        schemeLabel.setText("Method:");
         schemeComboBox = new MirthComboBox<FileScheme>();
         schemeComboBox.setModel(new DefaultComboBoxModel<FileScheme>(FileScheme.values()));
         schemeComboBox.addActionListener(new ActionListener() {
@@ -396,7 +395,7 @@ public class FileWriter extends ConnectorSettingsPanel {
         });
 
         testConnectionButton = new JButton();
-        testConnectionButton.setText(I18n.t("connectors.fileWriter.testWrite", "Test Write"));
+        testConnectionButton.setText("Test Write");
         testConnectionButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent evt) {
                 testConnectionActionPerformed(evt);
@@ -411,11 +410,11 @@ public class FileWriter extends ConnectorSettingsPanel {
             }
         });
 
-        summaryLabel = new JLabel(I18n.t("connectors.fileWriter.advancedOptions", "Advanced Options:"));
+        summaryLabel = new JLabel("Advanced Options:");
         summaryField = new JLabel("");
 
         directoryLabel = new JLabel();
-        directoryLabel.setText(I18n.t("connectors.fileWriter.directory", "Directory:"));
+        directoryLabel.setText("Directory:");
         directoryField = new MirthTextField();
 
         hostLabel = new JLabel();
@@ -426,17 +425,17 @@ public class FileWriter extends ConnectorSettingsPanel {
         pathField = new MirthTextField();
 
         fileNameLabel = new JLabel();
-        fileNameLabel.setText(I18n.t("connectors.fileWriter.fileName", "File Name:"));
+        fileNameLabel.setText("File Name:");
 
         fileNameField = new MirthTextField();
 
         anonymousLabel = new JLabel();
-        anonymousLabel.setText(I18n.t("connectors.fileWriter.anonymous", "Anonymous:"));
+        anonymousLabel.setText("Anonymous:");
 
         anonymousYesRadio = new MirthRadioButton();
         anonymousYesRadio.setBackground(UIConstants.BACKGROUND_COLOR);
         anonymousYesRadio.setBorder(BorderFactory.createEmptyBorder(0, 0, 0, 0));
-        anonymousYesRadio.setText(I18n.t("connectors.sourceSettings.yes", "Yes"));
+        anonymousYesRadio.setText("Yes");
         anonymousYesRadio.setMargin(new Insets(0, 0, 0, 0));
         anonymousYesRadio.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent evt) {
@@ -448,7 +447,7 @@ public class FileWriter extends ConnectorSettingsPanel {
         anonymousNoRadio.setBackground(UIConstants.BACKGROUND_COLOR);
         anonymousNoRadio.setBorder(BorderFactory.createEmptyBorder(0, 0, 0, 0));
         anonymousNoRadio.setSelected(true);
-        anonymousNoRadio.setText(I18n.t("connectors.sourceSettings.no", "No"));
+        anonymousNoRadio.setText("No");
         anonymousNoRadio.setMargin(new Insets(0, 0, 0, 0));
         anonymousNoRadio.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent evt) {
@@ -461,25 +460,25 @@ public class FileWriter extends ConnectorSettingsPanel {
         anonymousButtonGroup.add(anonymousNoRadio);
 
         usernameLabel = new JLabel();
-        usernameLabel.setText(I18n.t("connectors.fileWriter.username", "Username:"));
+        usernameLabel.setText("Username:");
         usernameField = new MirthTextField();
 
         passwordLabel = new JLabel();
-        passwordLabel.setText(I18n.t("connectors.fileWriter.password", "Password:"));
+        passwordLabel.setText("Password:");
         passwordField = new MirthPasswordField();
 
         timeoutLabel = new JLabel();
-        timeoutLabel.setText(I18n.t("connectors.fileWriter.timeoutMs", "Timeout (ms):"));
+        timeoutLabel.setText("Timeout (ms):");
         timeoutField = new MirthTextField();
 
         keepConnectionOpenLabel = new JLabel();
-        keepConnectionOpenLabel.setText(I18n.t("connectors.fileWriter.keepConnectionOpen", "Keep Connection Open: "));
+        keepConnectionOpenLabel.setText("Keep Connection Open: ");
 
         keepConnectionOpenYesRadio = new MirthRadioButton();
         keepConnectionOpenYesRadio.setBackground(UIConstants.BACKGROUND_COLOR);
         keepConnectionOpenYesRadio.setBorder(BorderFactory.createEmptyBorder(0, 0, 0, 0));
         keepConnectionOpenYesRadio.setSelected(true);
-        keepConnectionOpenYesRadio.setText(I18n.t("connectors.sourceSettings.yes", "Yes"));
+        keepConnectionOpenYesRadio.setText("Yes");
         keepConnectionOpenYesRadio.setMargin(new Insets(0, 0, 0, 0));
         keepConnectionOpenYesRadio.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent evt) {
@@ -490,7 +489,7 @@ public class FileWriter extends ConnectorSettingsPanel {
         keepConnectionOpenNoRadio = new MirthRadioButton();
         keepConnectionOpenNoRadio.setBackground(UIConstants.BACKGROUND_COLOR);
         keepConnectionOpenNoRadio.setBorder(BorderFactory.createEmptyBorder(0, 0, 0, 0));
-        keepConnectionOpenNoRadio.setText(I18n.t("connectors.sourceSettings.no", "No"));
+        keepConnectionOpenNoRadio.setText("No");
         keepConnectionOpenNoRadio.setMargin(new Insets(0, 0, 0, 0));
         keepConnectionOpenNoRadio.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent evt) {
@@ -503,16 +502,16 @@ public class FileWriter extends ConnectorSettingsPanel {
         keepConnectionOpenButtonGroup.add(keepConnectionOpenNoRadio);
 
         maxIdleTimeLabel = new JLabel();
-        maxIdleTimeLabel.setText(I18n.t("connectors.fileWriter.maxIdleTimeMs", "Max Idle Time (ms): "));
+        maxIdleTimeLabel.setText("Max Idle Time (ms): ");
         maxIdleTimeField = new MirthTextField();
 
         secureModeLabel = new JLabel();
-        secureModeLabel.setText(I18n.t("connectors.fileWriter.secureMode", "Secure Mode:"));
+        secureModeLabel.setText("Secure Mode:");
 
         secureModeYesRadio = new MirthRadioButton();
         secureModeYesRadio.setBackground(UIConstants.BACKGROUND_COLOR);
         secureModeYesRadio.setBorder(BorderFactory.createEmptyBorder(0, 0, 0, 0));
-        secureModeYesRadio.setText(I18n.t("connectors.sourceSettings.yes", "Yes"));
+        secureModeYesRadio.setText("Yes");
         secureModeYesRadio.setMargin(new Insets(0, 0, 0, 0));
         secureModeYesRadio.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent evt) {
@@ -524,7 +523,7 @@ public class FileWriter extends ConnectorSettingsPanel {
         secureModeNoRadio.setBackground(UIConstants.BACKGROUND_COLOR);
         secureModeNoRadio.setBorder(BorderFactory.createEmptyBorder(0, 0, 0, 0));
         secureModeNoRadio.setSelected(true);
-        secureModeNoRadio.setText(I18n.t("connectors.sourceSettings.no", "No"));
+        secureModeNoRadio.setText("No");
         secureModeNoRadio.setMargin(new Insets(0, 0, 0, 0));
         secureModeNoRadio.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent evt) {
@@ -537,19 +536,19 @@ public class FileWriter extends ConnectorSettingsPanel {
         secureModeButtonGroup.add(secureModeNoRadio);
 
         passiveModeLabel = new JLabel();
-        passiveModeLabel.setText(I18n.t("connectors.fileWriter.passiveMode", "Passive Mode:"));
+        passiveModeLabel.setText("Passive Mode:");
 
         passiveModeYesRadio = new MirthRadioButton();
         passiveModeYesRadio.setBackground(UIConstants.BACKGROUND_COLOR);
         passiveModeYesRadio.setBorder(BorderFactory.createEmptyBorder(0, 0, 0, 0));
-        passiveModeYesRadio.setText(I18n.t("connectors.sourceSettings.yes", "Yes"));
+        passiveModeYesRadio.setText("Yes");
         passiveModeYesRadio.setMargin(new Insets(0, 0, 0, 0));
 
         passiveModeNoRadio = new MirthRadioButton();
         passiveModeNoRadio.setBackground(UIConstants.BACKGROUND_COLOR);
         passiveModeNoRadio.setBorder(BorderFactory.createEmptyBorder(0, 0, 0, 0));
         passiveModeNoRadio.setSelected(true);
-        passiveModeNoRadio.setText(I18n.t("connectors.sourceSettings.no", "No"));
+        passiveModeNoRadio.setText("No");
         passiveModeNoRadio.setMargin(new Insets(0, 0, 0, 0));
 
         passiveModeButtonGroup = new ButtonGroup();
@@ -557,18 +556,18 @@ public class FileWriter extends ConnectorSettingsPanel {
         passiveModeButtonGroup.add(passiveModeNoRadio);
 
         validateConnectionLabel = new JLabel();
-        validateConnectionLabel.setText(I18n.t("connectors.fileWriter.validateConnection", "Validate Connection:"));
+        validateConnectionLabel.setText("Validate Connection:");
 
         validateConnectionYesRadio = new MirthRadioButton();
         validateConnectionYesRadio.setBackground(UIConstants.BACKGROUND_COLOR);
         validateConnectionYesRadio.setBorder(BorderFactory.createEmptyBorder(0, 0, 0, 0));
-        validateConnectionYesRadio.setText(I18n.t("connectors.sourceSettings.yes", "Yes"));
+        validateConnectionYesRadio.setText("Yes");
         validateConnectionYesRadio.setMargin(new Insets(0, 0, 0, 0));
 
         validateConnectionNoRadio = new MirthRadioButton();
         validateConnectionNoRadio.setBackground(UIConstants.BACKGROUND_COLOR);
         validateConnectionNoRadio.setBorder(BorderFactory.createEmptyBorder(0, 0, 0, 0));
-        validateConnectionNoRadio.setText(I18n.t("connectors.sourceSettings.no", "No"));
+        validateConnectionNoRadio.setText("No");
         validateConnectionNoRadio.setMargin(new Insets(0, 0, 0, 0));
 
         validateConnectionButtonGroup = new ButtonGroup();
@@ -576,12 +575,12 @@ public class FileWriter extends ConnectorSettingsPanel {
         validateConnectionButtonGroup.add(validateConnectionNoRadio);
 
         fileExistsLabel = new JLabel();
-        fileExistsLabel.setText(I18n.t("connectors.fileWriter.fileExists", "File Exists:"));
+        fileExistsLabel.setText("File Exists:");
 
         fileExistsAppendRadio = new MirthRadioButton();
         fileExistsAppendRadio.setBackground(new java.awt.Color(255, 255, 255));
         fileExistsAppendRadio.setBorder(BorderFactory.createEmptyBorder(0, 0, 0, 0));
-        fileExistsAppendRadio.setText(I18n.t("connectors.fileWriter.fileExists.append", "Append"));
+        fileExistsAppendRadio.setText("Append");
         fileExistsAppendRadio.setMargin(new java.awt.Insets(0, 0, 0, 0));
         fileExistsAppendRadio.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent evt) {
@@ -592,7 +591,7 @@ public class FileWriter extends ConnectorSettingsPanel {
         fileExistsOverwriteRadio = new MirthRadioButton();
         fileExistsOverwriteRadio.setBackground(new java.awt.Color(255, 255, 255));
         fileExistsOverwriteRadio.setBorder(BorderFactory.createEmptyBorder(0, 0, 0, 0));
-        fileExistsOverwriteRadio.setText(I18n.t("connectors.fileWriter.fileExists.overwrite", "Overwrite"));
+        fileExistsOverwriteRadio.setText("Overwrite");
         fileExistsOverwriteRadio.setMargin(new java.awt.Insets(0, 0, 0, 0));
         fileExistsOverwriteRadio.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent evt) {
@@ -604,7 +603,7 @@ public class FileWriter extends ConnectorSettingsPanel {
         fileExistsErrorRadio.setBackground(new java.awt.Color(255, 255, 255));
         fileExistsErrorRadio.setBorder(BorderFactory.createEmptyBorder(0, 0, 0, 0));
         fileExistsErrorRadio.setSelected(true);
-        fileExistsErrorRadio.setText(I18n.t("connectors.fileWriter.fileExists.error", "Error"));
+        fileExistsErrorRadio.setText("Error");
         fileExistsErrorRadio.setMargin(new java.awt.Insets(0, 0, 0, 0));
         fileExistsErrorRadio.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent evt) {
@@ -618,19 +617,19 @@ public class FileWriter extends ConnectorSettingsPanel {
         fileExistsButtonGroup.add(fileExistsErrorRadio);
 
         tempFileLabel = new JLabel();
-        tempFileLabel.setText(I18n.t("connectors.fileWriter.createTempFile", "Create Temp File:"));
+        tempFileLabel.setText("Create Temp File:");
 
         tempFileYesRadio = new MirthRadioButton();
         tempFileYesRadio.setBackground(new java.awt.Color(255, 255, 255));
         tempFileYesRadio.setBorder(BorderFactory.createEmptyBorder(0, 0, 0, 0));
-        tempFileYesRadio.setText(I18n.t("connectors.sourceSettings.yes", "Yes"));
+        tempFileYesRadio.setText("Yes");
         tempFileYesRadio.setMargin(new java.awt.Insets(0, 0, 0, 0));
 
         tempFileNoRadio = new MirthRadioButton();
         tempFileNoRadio.setBackground(new java.awt.Color(255, 255, 255));
         tempFileNoRadio.setBorder(BorderFactory.createEmptyBorder(0, 0, 0, 0));
         tempFileNoRadio.setSelected(true);
-        tempFileNoRadio.setText(I18n.t("connectors.sourceSettings.no", "No"));
+        tempFileNoRadio.setText("No");
         tempFileNoRadio.setMargin(new java.awt.Insets(0, 0, 0, 0));
 
         tempFileButtonGroup = new ButtonGroup();
@@ -638,12 +637,12 @@ public class FileWriter extends ConnectorSettingsPanel {
         tempFileButtonGroup.add(tempFileNoRadio);
 
         fileTypeLabel = new JLabel();
-        fileTypeLabel.setText(I18n.t("connectors.fileWriter.fileType", "File Type:"));
+        fileTypeLabel.setText("File Type:");
 
         fileTypeBinary = new MirthRadioButton();
         fileTypeBinary.setBackground(UIConstants.BACKGROUND_COLOR);
         fileTypeBinary.setBorder(BorderFactory.createEmptyBorder(0, 0, 0, 0));
-        fileTypeBinary.setText(I18n.t("connectors.fileWriter.fileType.binary", "Binary"));
+        fileTypeBinary.setText("Binary");
         fileTypeBinary.setMargin(new Insets(0, 0, 0, 0));
         fileTypeBinary.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent evt) {
@@ -655,7 +654,7 @@ public class FileWriter extends ConnectorSettingsPanel {
         fileTypeText.setBackground(UIConstants.BACKGROUND_COLOR);
         fileTypeText.setBorder(BorderFactory.createEmptyBorder(0, 0, 0, 0));
         fileTypeText.setSelected(true);
-        fileTypeText.setText(I18n.t("connectors.fileWriter.fileType.text", "Text"));
+        fileTypeText.setText("Text");
         fileTypeText.setMargin(new Insets(0, 0, 0, 0));
         fileTypeText.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent evt) {
@@ -668,59 +667,59 @@ public class FileWriter extends ConnectorSettingsPanel {
         fileTypeButtonGroup.add(fileTypeText);
 
         encodingLabel = new JLabel();
-        encodingLabel.setText(I18n.t("connectors.fileWriter.encoding", "Encoding:"));
+        encodingLabel.setText("Encoding:");
 
         charsetEncodingComboBox = new MirthComboBox();
         charsetEncodingComboBox.setModel(new DefaultComboBoxModel(new String[] { "Default", "UTF-8",
                 "ISO-8859-1", "UTF-16 (le)", "UTF-16 (be)", "UTF-16 (bom)", "US-ASCII" }));
 
         templateLabel = new JLabel();
-        templateLabel.setText(I18n.t("connectors.fileWriter.template", "Template:"));
+        templateLabel.setText("Template:");
 
         fileContentsTextPane = new MirthSyntaxTextArea();
         fileContentsTextPane.setBorder(BorderFactory.createEtchedBorder());
     }
 
     private void initToolTips() {
-        schemeComboBox.setToolTipText(I18n.t("connectors.fileWriter.tooltip.method", "The basic method used to write files with - file (local filesystem), FTP, SFTP, SMB, or WebDAV"));
-        directoryField.setToolTipText(I18n.t("connectors.fileWriter.tooltip.directory", "The directory (folder) to write the files to."));
-        hostField.setToolTipText(I18n.t("connectors.fileWriter.tooltip.host", "The name or IP address of the host (computer) on which the files can be written."));
-        pathField.setToolTipText(I18n.t("connectors.fileWriter.tooltip.path", "The directory (folder) to write the files to."));
-        anonymousYesRadio.setToolTipText(I18n.t("connectors.fileWriter.tooltip.anonymousYes", "Connects to the file anonymously instead of using a username and password."));
-        anonymousNoRadio.setToolTipText(I18n.t("connectors.fileWriter.tooltip.anonymousNo", "Connects to the file using a username and password instead of anonymously."));
-        usernameField.setToolTipText(I18n.t("connectors.fileWriter.tooltip.username", "The user name used to gain access to the server."));
-        passwordField.setToolTipText(I18n.t("connectors.fileWriter.tooltip.password", "The password used to gain access to the server."));
-        timeoutField.setToolTipText(I18n.t("connectors.fileWriter.tooltip.timeout", "The socket timeout (in ms) for connecting to the server."));
+        schemeComboBox.setToolTipText("The basic method used to write files with - file (local filesystem), FTP, SFTP, SMB, or WebDAV");
+        directoryField.setToolTipText("The directory (folder) to write the files to.");
+        hostField.setToolTipText("The name or IP address of the host (computer) on which the files can be written.");
+        pathField.setToolTipText("The directory (folder) to write the files to.");
+        anonymousYesRadio.setToolTipText("Connects to the file anonymously instead of using a username and password.");
+        anonymousNoRadio.setToolTipText("Connects to the file using a username and password instead of anonymously.");
+        usernameField.setToolTipText("The user name used to gain access to the server.");
+        passwordField.setToolTipText("The password used to gain access to the server.");
+        timeoutField.setToolTipText("The socket timeout (in ms) for connecting to the server.");
 
-        String toolTipText = I18n.t("connectors.fileWriter.tooltip.keepConnectionOpen", "Select yes to keep the connection to the file system open after writing to it.");
+        String toolTipText = "Select yes to keep the connection to the file system open after writing to it.";
         keepConnectionOpenYesRadio.setToolTipText(toolTipText);
         keepConnectionOpenNoRadio.setToolTipText(toolTipText);
-        toolTipText = I18n.t("connectors.fileWriter.tooltip.maxIdleTime", "<html>Sets the max idle timeout, in milliseconds, before closing a connection.<br>A timeout value of zero is interpreted as an infinite timeout.</html>");
+        toolTipText = "<html>Sets the max idle timeout, in milliseconds, before closing a connection.<br>A timeout value of zero is interpreted as an infinite timeout.</html>";
         maxIdleTimeField.setToolTipText(toolTipText);
 
-        toolTipText = I18n.t("connectors.fileWriter.tooltip.secureMode", "<html>Select Yes to connect to the server via HTTPS.<br>Select No to connect via HTTP.</html>");
+        toolTipText = "<html>Select Yes to connect to the server via HTTPS.<br>Select No to connect via HTTP.</html>";
         secureModeYesRadio.setToolTipText(toolTipText);
         secureModeNoRadio.setToolTipText(toolTipText);
 
-        passiveModeYesRadio.setToolTipText(I18n.t("connectors.fileWriter.tooltip.passiveYes", "<html>Select Yes to connect to the server in \"passive mode\".<br>Passive mode sometimes allows a connection through a firewall that normal mode does not.</html>"));
-        passiveModeNoRadio.setToolTipText(I18n.t("connectors.fileWriter.tooltip.passiveNo", "Select Yes to connect to the server in \"normal mode\" as opposed to passive mode."));
-        validateConnectionYesRadio.setToolTipText(I18n.t("connectors.fileWriter.tooltip.validateConnectionYes", "Select Yes to test the connection to the server before each operation."));
-        validateConnectionNoRadio.setToolTipText(I18n.t("connectors.fileWriter.tooltip.validateConnectionNo", "Select No to skip testing the connection to the server before each operation."));
+        passiveModeYesRadio.setToolTipText("<html>Select Yes to connect to the server in \"passive mode\".<br>Passive mode sometimes allows a connection through a firewall that normal mode does not.</html>");
+        passiveModeNoRadio.setToolTipText("Select Yes to connect to the server in \"normal mode\" as opposed to passive mode.");
+        validateConnectionYesRadio.setToolTipText("Select Yes to test the connection to the server before each operation.");
+        validateConnectionNoRadio.setToolTipText("Select No to skip testing the connection to the server before each operation.");
 
-        toolTipText = I18n.t("connectors.fileWriter.tooltip.fileExists", "<html>If 'append' is selected, messages accepted by this destination will be appended to the file specified in the File Name.<br>If 'overwrite' is selected, messages accepted by this destination will replace any existing file of the same name.<br>If 'error' is selected and a file with the specified file name already exists, the message will error.</html>");
+        toolTipText = "<html>If 'append' is selected, messages accepted by this destination will be appended to the file specified in the File Name.<br>If 'overwrite' is selected, messages accepted by this destination will replace any existing file of the same name.<br>If 'error' is selected and a file with the specified file name already exists, the message will error.</html>";
         fileExistsAppendRadio.setToolTipText(toolTipText);
         fileExistsOverwriteRadio.setToolTipText(toolTipText);
         fileExistsErrorRadio.setToolTipText(toolTipText);
 
-        toolTipText = I18n.t("connectors.fileWriter.tooltip.tempFile", "<html>If 'yes' is selected, the file contents will first be written to a temp file and then renamed to the specified file name.<br>If 'no' is selected, the file contents will be written directly to the destination file.<br>Using a temp file is not an option if the specified file is being appended to.</html>");
+        toolTipText = "<html>If 'yes' is selected, the file contents will first be written to a temp file and then renamed to the specified file name.<br>If 'no' is selected, the file contents will be written directly to the destination file.<br>Using a temp file is not an option if the specified file is being appended to.</html>";
         tempFileYesRadio.setToolTipText(toolTipText);
         tempFileNoRadio.setToolTipText(toolTipText);
 
-        toolTipText = I18n.t("connectors.fileWriter.tooltip.fileType", "<html>Select Binary if files contain binary data; the contents will be Base64 decoded before being written out.<br>Select Text if files contain text data; the contents will be written out using the specified character set encoding.</html>");
+        toolTipText = "<html>Select Binary if files contain binary data; the contents will be Base64 decoded before being written out.<br>Select Text if files contain text data; the contents will be written out using the specified character set encoding.</html>";
         fileTypeBinary.setToolTipText(toolTipText);
         fileTypeText.setToolTipText(toolTipText);
 
-        charsetEncodingComboBox.setToolTipText(I18n.t("connectors.fileWriter.tooltip.charsetEncoding", "If File Type Text is selected, select the character set encoding (ASCII, UTF-8, etc.) to be used in writing the contents of each file."));
+        charsetEncodingComboBox.setToolTipText("If File Type Text is selected, select the character set encoding (ASCII, UTF-8, etc.) to be used in writing the contents of each file.");
     }
 
     private void initLayout() {
@@ -867,10 +866,10 @@ public class FileWriter extends ConnectorSettingsPanel {
         timeoutField.setEnabled(false);
         advancedSettingsButton.setEnabled(false);
         advancedProperties = null;
-        usernameLabel.setText(I18n.t("connectors.fileWriter.username", "Username:"));
-        passwordLabel.setText(I18n.t("connectors.fileWriter.password", "Password:"));
-        usernameField.setToolTipText(I18n.t("connectors.fileWriter.tooltip.username", "The user name used to gain access to the server."));
-        passwordField.setToolTipText(I18n.t("connectors.fileWriter.tooltip.password", "The password used to gain access to the server."));
+        usernameLabel.setText("Username:");
+        passwordLabel.setText("Password:");
+        usernameField.setToolTipText("The user name used to gain access to the server.");
+        passwordField.setToolTipText("The password used to gain access to the server.");
 
         if (allowAppend) {
             fileExistsOverwriteRadio.setEnabled(true);
@@ -916,7 +915,6 @@ public class FileWriter extends ConnectorSettingsPanel {
             timeoutField.setEnabled(true);
             advancedSettingsButton.setEnabled(true);
             advancedProperties = new S3SchemeProperties();
-            // keep these labels in English for now (S3 credentials are typically referenced by these exact names)
             usernameLabel.setText("AWS Access Key ID:");
             usernameField.setToolTipText("The access key ID used to authenticate to AWS S3. This is optional when using the default credential provider chain.");
             passwordLabel.setText("AWS Secret Access Key:");
@@ -993,10 +991,7 @@ public class FileWriter extends ConnectorSettingsPanel {
 
         if (scheme != selectedScheme) {
             if (selectedScheme != null && !isAdvancedDefault()) {
-                if (JOptionPane.showConfirmDialog(parent,
-                        I18n.t("connectors.fileWriter.confirm.changeSchemeLoseProps", "Are you sure you would like to change the scheme mode and lose all of the current properties?"),
-                        I18n.t("connectors.fileWriter.confirm.selectOptionTitle", "Select an Option"),
-                        JOptionPane.YES_NO_OPTION) != JOptionPane.YES_OPTION) {
+                if (JOptionPane.showConfirmDialog(parent, "Are you sure you would like to change the scheme mode and lose all of the current properties?", "Select an Option", JOptionPane.YES_NO_OPTION) != JOptionPane.YES_OPTION) {
                     schemeComboBox.setSelectedItem(selectedScheme);
                     return;
                 }
@@ -1048,7 +1043,7 @@ public class FileWriter extends ConnectorSettingsPanel {
                 ConnectionTestResponse connectionTestResponse = (ConnectionTestResponse) response;
 
                 if (connectionTestResponse == null) {
-                    parent.alertError(parent, I18n.t("connectors.fileWriter.error.failedInvokeService", "Failed to invoke service."));
+                    parent.alertError(parent, "Failed to invoke service.");
                 } else if (connectionTestResponse.getType().equals(ConnectionTestResponse.Type.SUCCESS)) {
                     parent.alertInformation(parent, connectionTestResponse.getMessage());
                 } else {
@@ -1058,10 +1053,7 @@ public class FileWriter extends ConnectorSettingsPanel {
         };
 
         try {
-            getServlet(FileConnectorServletInterface.class,
-                    I18n.t("connectors.fileWriter.testingConnection", "Testing connection..."),
-                    I18n.t("connectors.fileWriter.failedInvokeServicePrefix", "Failed to invoke service: "),
-                    handler).testWrite(getChannelId(), getChannelName(), (FileDispatcherProperties) getFilledProperties());
+            getServlet(FileConnectorServletInterface.class, "Testing connection...", "Failed to invoke service: ", handler).testWrite(getChannelId(), getChannelName(), (FileDispatcherProperties) getFilledProperties());
         } catch (ClientException e) {
             // Should not happen
         }

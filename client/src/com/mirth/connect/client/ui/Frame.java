@@ -118,7 +118,6 @@ import com.mirth.connect.client.ui.alert.DefaultAlertPanel;
 import com.mirth.connect.client.ui.browsers.event.EventBrowser;
 import com.mirth.connect.client.ui.browsers.message.MessageBrowser;
 import com.mirth.connect.client.ui.browsers.message.MessageBrowserChannelModel;
-import com.mirth.connect.client.ui.i18n.I18n;
 import com.mirth.connect.client.ui.codetemplate.CodeTemplatePanel;
 import com.mirth.connect.client.ui.components.rsta.ac.js.MirthJavaScriptLanguageSupport;
 import com.mirth.connect.client.ui.dependencies.ChannelDependenciesWarningDialog;
@@ -923,10 +922,6 @@ public class Frame extends JXFrame {
 
         contentPane.getViewport().add(contentPageObject);
         currentContentPage = contentPageObject;
-        contentPane.getViewport().revalidate();
-        contentPane.getViewport().repaint();
-        contentPane.revalidate();
-        contentPane.repaint();
 
         // Always cancel the current job if it is still running.
         if (statusUpdaterJob != null && !statusUpdaterJob.isDone()) {
@@ -953,10 +948,6 @@ public class Frame extends JXFrame {
 
         taskPane.getViewport().add(container);
         currentTaskPaneContainer = container;
-        taskPane.getViewport().revalidate();
-        taskPane.getViewport().repaint();
-        taskPane.revalidate();
-        taskPane.repaint();
     }
 
     /**
@@ -1026,17 +1017,17 @@ public class Frame extends JXFrame {
     private void createViewPane() {
         // Create View pane
         viewPane = new JXTaskPane();
-        viewPane.setTitle(I18n.t("taskpane.engine.title", "Engine"));
+        viewPane.setTitle("Engine");
         viewPane.setName(TaskConstants.VIEW_KEY);
         viewPane.setFocusable(false);
 
-        addTask(TaskConstants.VIEW_DASHBOARD, I18n.t("taskpane.engine.dashboard", "Dashboard"), I18n.t("taskpane.engine.dashboard.desc", "Contains information about your currently deployed channels."), "D", new ImageIcon(com.mirth.connect.client.ui.Frame.class.getResource("images/application_view_detail.png")), viewPane, null);
-        addTask(TaskConstants.VIEW_CHANNEL, I18n.t("taskpane.engine.channels", "Channels"), I18n.t("taskpane.engine.channels.desc", "Contains various operations to perform on your channels."), "C", new ImageIcon(com.mirth.connect.client.ui.Frame.class.getResource("images/application_form.png")), viewPane, null);
-        addTask(TaskConstants.VIEW_USERS, I18n.t("taskpane.engine.users", "Users"), I18n.t("taskpane.engine.users.desc", "Contains information on users."), "U", new ImageIcon(com.mirth.connect.client.ui.Frame.class.getResource("images/group.png")), viewPane, null);
-        addTask(TaskConstants.VIEW_SETTINGS, I18n.t("taskpane.engine.settings", "Settings"), I18n.t("taskpane.engine.settings.desc", "Contains local and system settings."), "S", new ImageIcon(com.mirth.connect.client.ui.Frame.class.getResource("images/wrench.png")), viewPane, null);
-        addTask(TaskConstants.VIEW_ALERTS, I18n.t("taskpane.engine.alerts", "Alerts"), I18n.t("taskpane.engine.alerts.desc", "Contains alert settings."), "A", new ImageIcon(com.mirth.connect.client.ui.Frame.class.getResource("images/error.png")), viewPane, null);
-        addTask(TaskConstants.VIEW_EVENTS, I18n.t("taskpane.engine.events", "Events"), I18n.t("taskpane.engine.events.desc", "Show the event logs for the system."), "E", new ImageIcon(com.mirth.connect.client.ui.Frame.class.getResource("images/table.png")), viewPane, null);
-        addTask(TaskConstants.VIEW_EXTENSIONS, I18n.t("taskpane.engine.extensions", "Extensions"), I18n.tf("taskpane.engine.extensions.desc", "View and manage {0} extensions", BrandingConstants.PRODUCT_NAME), "X", new ImageIcon(com.mirth.connect.client.ui.Frame.class.getResource("images/plugin.png")), viewPane, null);
+        addTask(TaskConstants.VIEW_DASHBOARD, "Dashboard", "Contains information about your currently deployed channels.", "D", new ImageIcon(com.mirth.connect.client.ui.Frame.class.getResource("images/application_view_detail.png")), viewPane, null);
+        addTask(TaskConstants.VIEW_CHANNEL, "Channels", "Contains various operations to perform on your channels.", "C", new ImageIcon(com.mirth.connect.client.ui.Frame.class.getResource("images/application_form.png")), viewPane, null);
+        addTask(TaskConstants.VIEW_USERS, "Users", "Contains information on users.", "U", new ImageIcon(com.mirth.connect.client.ui.Frame.class.getResource("images/group.png")), viewPane, null);
+        addTask(TaskConstants.VIEW_SETTINGS, "Settings", "Contains local and system settings.", "S", new ImageIcon(com.mirth.connect.client.ui.Frame.class.getResource("images/wrench.png")), viewPane, null);
+        addTask(TaskConstants.VIEW_ALERTS, "Alerts", "Contains alert settings.", "A", new ImageIcon(com.mirth.connect.client.ui.Frame.class.getResource("images/error.png")), viewPane, null);
+        addTask(TaskConstants.VIEW_EVENTS, "Events", "Show the event logs for the system.", "E", new ImageIcon(com.mirth.connect.client.ui.Frame.class.getResource("images/table.png")), viewPane, null);
+        addTask(TaskConstants.VIEW_EXTENSIONS, "Extensions", String.format("View and manage %s extensions", BrandingConstants.PRODUCT_NAME), "X", new ImageIcon(com.mirth.connect.client.ui.Frame.class.getResource("images/plugin.png")), viewPane, null);
 
         setNonFocusable(viewPane);
         taskPaneContainer.add(viewPane);
@@ -1093,82 +1084,28 @@ public class Frame extends JXFrame {
         // Create Channel Edit Tasks Pane
         channelEditTasks = new JXTaskPane();
         channelEditPopupMenu = new JPopupMenu();
-        channelEditTasks.setTitle(I18n.t("taskpane.channelEdit.title", "Channel Tasks"));
+        channelEditTasks.setTitle("Channel Tasks");
         channelEditTasks.setName(TaskConstants.CHANNEL_EDIT_KEY);
         channelEditTasks.setFocusable(false);
 
-        addTask(TaskConstants.CHANNEL_EDIT_SAVE,
-                I18n.t("taskpane.channelEdit.save", "Save Changes"),
-                I18n.t("taskpane.channelEdit.save.desc", "Save all changes made to this channel."),
-                "", new ImageIcon(com.mirth.connect.client.ui.Frame.class.getResource("images/disk.png")), channelEditTasks, channelEditPopupMenu);
-        addTask(TaskConstants.CHANNEL_EDIT_VALIDATE,
-                I18n.t("taskpane.channelEdit.validateConnector", "Validate Connector"),
-                I18n.t("taskpane.channelEdit.validateConnector.desc", "Validate the currently visible connector."),
-                "", new ImageIcon(com.mirth.connect.client.ui.Frame.class.getResource("images/accept.png")), channelEditTasks, channelEditPopupMenu);
-        addTask(TaskConstants.CHANNEL_EDIT_NEW_DESTINATION,
-                I18n.t("taskpane.channelEdit.newDestination", "New Destination"),
-                I18n.t("taskpane.channelEdit.newDestination.desc", "Create a new destination."),
-                "N", new ImageIcon(com.mirth.connect.client.ui.Frame.class.getResource("images/add.png")), channelEditTasks, channelEditPopupMenu);
-        addTask(TaskConstants.CHANNEL_EDIT_DELETE_DESTINATION,
-                I18n.t("taskpane.channelEdit.deleteDestination", "Delete Destination"),
-                I18n.t("taskpane.channelEdit.deleteDestination.desc", "Delete the currently selected destination."),
-                "L", new ImageIcon(com.mirth.connect.client.ui.Frame.class.getResource("images/delete.png")), channelEditTasks, channelEditPopupMenu);
-        addTask(TaskConstants.CHANNEL_EDIT_CLONE_DESTINATION,
-                I18n.t("taskpane.channelEdit.cloneDestination", "Clone Destination"),
-                I18n.t("taskpane.channelEdit.cloneDestination.desc", "Clones the currently selected destination."),
-                "", new ImageIcon(com.mirth.connect.client.ui.Frame.class.getResource("images/page_copy.png")), channelEditTasks, channelEditPopupMenu);
-        addTask(TaskConstants.CHANNEL_EDIT_ENABLE_DESTINATION,
-                I18n.t("taskpane.channelEdit.enableDestination", "Enable Destination"),
-                I18n.t("taskpane.channelEdit.enableDestination.desc", "Enable the currently selected destination."),
-                "", new ImageIcon(com.mirth.connect.client.ui.Frame.class.getResource("images/control_play_blue.png")), channelEditTasks, channelEditPopupMenu);
-        addTask(TaskConstants.CHANNEL_EDIT_DISABLE_DESTINATION,
-                I18n.t("taskpane.channelEdit.disableDestination", "Disable Destination"),
-                I18n.t("taskpane.channelEdit.disableDestination.desc", "Disable the currently selected destination."),
-                "", new ImageIcon(com.mirth.connect.client.ui.Frame.class.getResource("images/control_stop_blue.png")), channelEditTasks, channelEditPopupMenu);
-        addTask(TaskConstants.CHANNEL_EDIT_MOVE_DESTINATION_UP,
-                I18n.t("taskpane.channelEdit.moveDestinationUp", "Move Dest. Up"),
-                I18n.t("taskpane.channelEdit.moveDestinationUp.desc", "Move the currently selected destination up."),
-                "", new ImageIcon(com.mirth.connect.client.ui.Frame.class.getResource("images/arrow_up.png")), channelEditTasks, channelEditPopupMenu);
-        addTask(TaskConstants.CHANNEL_EDIT_MOVE_DESTINATION_DOWN,
-                I18n.t("taskpane.channelEdit.moveDestinationDown", "Move Dest. Down"),
-                I18n.t("taskpane.channelEdit.moveDestinationDown.desc", "Move the currently selected destination down."),
-                "", new ImageIcon(com.mirth.connect.client.ui.Frame.class.getResource("images/arrow_down.png")), channelEditTasks, channelEditPopupMenu);
-        addTask(TaskConstants.CHANNEL_EDIT_FILTER,
-                UIConstants.EDIT_FILTER,
-                I18n.t("taskpane.channelEdit.editFilter.desc", "Edit the filter for the current connector."),
-                "F", new ImageIcon(com.mirth.connect.client.ui.Frame.class.getResource("images/table_edit.png")), channelEditTasks, channelEditPopupMenu);
-        addTask(TaskConstants.CHANNEL_EDIT_TRANSFORMER,
-                UIConstants.EDIT_TRANSFORMER,
-                I18n.t("taskpane.channelEdit.editTransformer.desc", "Edit the transformer for the current connector."),
-                "T", new ImageIcon(com.mirth.connect.client.ui.Frame.class.getResource("images/table_edit.png")), channelEditTasks, channelEditPopupMenu);
-        addTask(TaskConstants.CHANNEL_EDIT_RESPONSE_TRANSFORMER,
-                UIConstants.EDIT_RESPONSE_TRANSFORMER,
-                I18n.t("taskpane.channelEdit.editResponseTransformer.desc", "Edit the response transformer for the current connector."),
-                "R", new ImageIcon(com.mirth.connect.client.ui.Frame.class.getResource("images/table_edit.png")), channelEditTasks, channelEditPopupMenu);
-        addTask(TaskConstants.CHANNEL_EDIT_IMPORT_CONNECTOR,
-                I18n.t("taskpane.channelEdit.importConnector", "Import Connector"),
-                I18n.t("taskpane.channelEdit.importConnector.desc", "Import the currently displayed connector from an XML file."),
-                "", new ImageIcon(com.mirth.connect.client.ui.Frame.class.getResource("images/report_go.png")), channelEditTasks, channelEditPopupMenu);
-        addTask(TaskConstants.CHANNEL_EDIT_EXPORT_CONNECTOR,
-                I18n.t("taskpane.channelEdit.exportConnector", "Export Connector"),
-                I18n.t("taskpane.channelEdit.exportConnector.desc", "Export the currently displayed connector to an XML file."),
-                "", new ImageIcon(com.mirth.connect.client.ui.Frame.class.getResource("images/report_disk.png")), channelEditTasks, channelEditPopupMenu);
-        addTask(TaskConstants.CHANNEL_EDIT_EXPORT,
-                I18n.t("taskpane.channelEdit.exportChannel", "Export Channel"),
-                I18n.t("taskpane.channelEdit.exportChannel.desc", "Export the currently selected channel to an XML file."),
-                "", new ImageIcon(com.mirth.connect.client.ui.Frame.class.getResource("images/report_disk.png")), channelEditTasks, channelEditPopupMenu);
-        addTask(TaskConstants.CHANNEL_EDIT_VALIDATE_SCRIPT,
-                I18n.t("taskpane.channelEdit.validateScript", "Validate Script"),
-                I18n.t("taskpane.channelEdit.validateScript.desc", "Validate the currently viewed script."),
-                "", new ImageIcon(com.mirth.connect.client.ui.Frame.class.getResource("images/accept.png")), channelEditTasks, channelEditPopupMenu);
-        addTask(TaskConstants.CHANNEL_EDIT_DEBUG_DEPLOY,
-                I18n.t("taskpane.channelEdit.debugChannel", "Debug Channel"),
-                I18n.t("taskpane.channelEdit.debugChannel.desc", "Deploy the currently selected channel in Debug mode."),
-                "", new ImageIcon(com.mirth.connect.client.ui.Frame.class.getResource("images/bug_go.png")), channelEditTasks, channelEditPopupMenu);
-        addTask(TaskConstants.CHANNEL_EDIT_DEPLOY,
-                I18n.t("taskpane.channelEdit.deployChannel", "Deploy Channel"),
-                I18n.t("taskpane.channelEdit.deployChannel.desc", "Deploy the currently selected channel."),
-                "", new ImageIcon(com.mirth.connect.client.ui.Frame.class.getResource("images/arrow_redo.png")), channelEditTasks, channelEditPopupMenu);
+        addTask(TaskConstants.CHANNEL_EDIT_SAVE, "Save Changes", "Save all changes made to this channel.", "", new ImageIcon(com.mirth.connect.client.ui.Frame.class.getResource("images/disk.png")), channelEditTasks, channelEditPopupMenu);
+        addTask(TaskConstants.CHANNEL_EDIT_VALIDATE, "Validate Connector", "Validate the currently visible connector.", "", new ImageIcon(com.mirth.connect.client.ui.Frame.class.getResource("images/accept.png")), channelEditTasks, channelEditPopupMenu);
+        addTask(TaskConstants.CHANNEL_EDIT_NEW_DESTINATION, "New Destination", "Create a new destination.", "N", new ImageIcon(com.mirth.connect.client.ui.Frame.class.getResource("images/add.png")), channelEditTasks, channelEditPopupMenu);
+        addTask(TaskConstants.CHANNEL_EDIT_DELETE_DESTINATION, "Delete Destination", "Delete the currently selected destination.", "L", new ImageIcon(com.mirth.connect.client.ui.Frame.class.getResource("images/delete.png")), channelEditTasks, channelEditPopupMenu);
+        addTask(TaskConstants.CHANNEL_EDIT_CLONE_DESTINATION, "Clone Destination", "Clones the currently selected destination.", "", new ImageIcon(com.mirth.connect.client.ui.Frame.class.getResource("images/page_copy.png")), channelEditTasks, channelEditPopupMenu);
+        addTask(TaskConstants.CHANNEL_EDIT_ENABLE_DESTINATION, "Enable Destination", "Enable the currently selected destination.", "", new ImageIcon(com.mirth.connect.client.ui.Frame.class.getResource("images/control_play_blue.png")), channelEditTasks, channelEditPopupMenu);
+        addTask(TaskConstants.CHANNEL_EDIT_DISABLE_DESTINATION, "Disable Destination", "Disable the currently selected destination.", "", new ImageIcon(com.mirth.connect.client.ui.Frame.class.getResource("images/control_stop_blue.png")), channelEditTasks, channelEditPopupMenu);
+        addTask(TaskConstants.CHANNEL_EDIT_MOVE_DESTINATION_UP, "Move Dest. Up", "Move the currently selected destination up.", "", new ImageIcon(com.mirth.connect.client.ui.Frame.class.getResource("images/arrow_up.png")), channelEditTasks, channelEditPopupMenu);
+        addTask(TaskConstants.CHANNEL_EDIT_MOVE_DESTINATION_DOWN, "Move Dest. Down", "Move the currently selected destination down.", "", new ImageIcon(com.mirth.connect.client.ui.Frame.class.getResource("images/arrow_down.png")), channelEditTasks, channelEditPopupMenu);
+        addTask(TaskConstants.CHANNEL_EDIT_FILTER, UIConstants.EDIT_FILTER, "Edit the filter for the current connector.", "F", new ImageIcon(com.mirth.connect.client.ui.Frame.class.getResource("images/table_edit.png")), channelEditTasks, channelEditPopupMenu);
+        addTask(TaskConstants.CHANNEL_EDIT_TRANSFORMER, UIConstants.EDIT_TRANSFORMER, "Edit the transformer for the current connector.", "T", new ImageIcon(com.mirth.connect.client.ui.Frame.class.getResource("images/table_edit.png")), channelEditTasks, channelEditPopupMenu);
+        addTask(TaskConstants.CHANNEL_EDIT_RESPONSE_TRANSFORMER, UIConstants.EDIT_RESPONSE_TRANSFORMER, "Edit the response transformer for the current connector.", "R", new ImageIcon(com.mirth.connect.client.ui.Frame.class.getResource("images/table_edit.png")), channelEditTasks, channelEditPopupMenu);
+        addTask(TaskConstants.CHANNEL_EDIT_IMPORT_CONNECTOR, "Import Connector", "Import the currently displayed connector from an XML file.", "", new ImageIcon(com.mirth.connect.client.ui.Frame.class.getResource("images/report_go.png")), channelEditTasks, channelEditPopupMenu);
+        addTask(TaskConstants.CHANNEL_EDIT_EXPORT_CONNECTOR, "Export Connector", "Export the currently displayed connector to an XML file.", "", new ImageIcon(com.mirth.connect.client.ui.Frame.class.getResource("images/report_disk.png")), channelEditTasks, channelEditPopupMenu);
+        addTask(TaskConstants.CHANNEL_EDIT_EXPORT, "Export Channel", "Export the currently selected channel to an XML file.", "", new ImageIcon(com.mirth.connect.client.ui.Frame.class.getResource("images/report_disk.png")), channelEditTasks, channelEditPopupMenu);
+        addTask(TaskConstants.CHANNEL_EDIT_VALIDATE_SCRIPT, "Validate Script", "Validate the currently viewed script.", "", new ImageIcon(com.mirth.connect.client.ui.Frame.class.getResource("images/accept.png")), channelEditTasks, channelEditPopupMenu);
+        addTask(TaskConstants.CHANNEL_EDIT_DEBUG_DEPLOY, "Debug Channel", "Deploy the currently selected channel in Debug mode.", "", new ImageIcon(com.mirth.connect.client.ui.Frame.class.getResource("images/bug_go.png")), channelEditTasks, channelEditPopupMenu);
+        addTask(TaskConstants.CHANNEL_EDIT_DEPLOY, "Deploy Channel", "Deploy the currently selected channel.", "", new ImageIcon(com.mirth.connect.client.ui.Frame.class.getResource("images/arrow_redo.png")), channelEditTasks, channelEditPopupMenu);
 
         setNonFocusable(channelEditTasks);
         taskPaneContainer.add(channelEditTasks);
@@ -1181,26 +1118,26 @@ public class Frame extends JXFrame {
         // Create Status Tasks Pane
         dashboardTasks = new JXTaskPane();
         dashboardPopupMenu = new JPopupMenu();
-        dashboardTasks.setTitle(I18n.t("taskpane.dashboard.title", "Dashboard Tasks"));
+        dashboardTasks.setTitle("Dashboard Tasks");
         dashboardTasks.setName(TaskConstants.DASHBOARD_KEY);
         dashboardTasks.setFocusable(false);
 
-        addTask(TaskConstants.DASHBOARD_REFRESH, I18n.t("taskpane.dashboard.refresh", "Refresh"), I18n.t("taskpane.dashboard.refresh.desc", "Refresh the list of statuses."), "", new ImageIcon(com.mirth.connect.client.ui.Frame.class.getResource("images/arrow_refresh.png")), dashboardTasks, dashboardPopupMenu);
+        addTask(TaskConstants.DASHBOARD_REFRESH, "Refresh", "Refresh the list of statuses.", "", new ImageIcon(com.mirth.connect.client.ui.Frame.class.getResource("images/arrow_refresh.png")), dashboardTasks, dashboardPopupMenu);
 
-        addTask(TaskConstants.DASHBOARD_SEND_MESSAGE, I18n.t("taskpane.dashboard.sendMessage", "Send Message"), I18n.t("taskpane.dashboard.sendMessage.desc", "Send messages to the currently selected channel."), "", new ImageIcon(com.mirth.connect.client.ui.Frame.class.getResource("images/email_go.png")), dashboardTasks, dashboardPopupMenu);
-        addTask(TaskConstants.DASHBOARD_SHOW_MESSAGES, I18n.t("taskpane.dashboard.viewMessages", "View Messages"), I18n.t("taskpane.dashboard.viewMessages.desc", "Show the messages for the currently selected channel."), "", new ImageIcon(com.mirth.connect.client.ui.Frame.class.getResource("images/page_white_stack.png")), dashboardTasks, dashboardPopupMenu);
-        addTask(TaskConstants.DASHBOARD_REMOVE_ALL_MESSAGES, I18n.t("taskpane.dashboard.removeAllMessages", "Remove All Messages"), I18n.t("taskpane.dashboard.removeAllMessages.desc", "Remove all Messages in this channel."), "", new ImageIcon(com.mirth.connect.client.ui.Frame.class.getResource("images/email_delete.png")), dashboardTasks, dashboardPopupMenu);
-        addTask(TaskConstants.DASHBOARD_CLEAR_STATS, I18n.t("taskpane.dashboard.clearStatistics", "Clear Statistics"), I18n.t("taskpane.dashboard.clearStatistics.desc", "Reset the statistics for this channel."), "", new ImageIcon(com.mirth.connect.client.ui.Frame.class.getResource("images/chart_bar_delete.png")), dashboardTasks, dashboardPopupMenu);
+        addTask(TaskConstants.DASHBOARD_SEND_MESSAGE, "Send Message", "Send messages to the currently selected channel.", "", new ImageIcon(com.mirth.connect.client.ui.Frame.class.getResource("images/email_go.png")), dashboardTasks, dashboardPopupMenu);
+        addTask(TaskConstants.DASHBOARD_SHOW_MESSAGES, "View Messages", "Show the messages for the currently selected channel.", "", new ImageIcon(com.mirth.connect.client.ui.Frame.class.getResource("images/page_white_stack.png")), dashboardTasks, dashboardPopupMenu);
+        addTask(TaskConstants.DASHBOARD_REMOVE_ALL_MESSAGES, "Remove All Messages", "Remove all Messages in this channel.", "", new ImageIcon(com.mirth.connect.client.ui.Frame.class.getResource("images/email_delete.png")), dashboardTasks, dashboardPopupMenu);
+        addTask(TaskConstants.DASHBOARD_CLEAR_STATS, "Clear Statistics", "Reset the statistics for this channel.", "", new ImageIcon(com.mirth.connect.client.ui.Frame.class.getResource("images/chart_bar_delete.png")), dashboardTasks, dashboardPopupMenu);
 
-        addTask(TaskConstants.DASHBOARD_START, I18n.t("taskpane.dashboard.start", "Start"), I18n.t("taskpane.dashboard.start.desc", "Start the currently selected channel."), "", new ImageIcon(com.mirth.connect.client.ui.Frame.class.getResource("images/control_play_blue.png")), dashboardTasks, dashboardPopupMenu);
-        addTask(TaskConstants.DASHBOARD_PAUSE, I18n.t("taskpane.dashboard.pause", "Pause"), I18n.t("taskpane.dashboard.pause.desc", "Pause the currently selected channel."), "", new ImageIcon(com.mirth.connect.client.ui.Frame.class.getResource("images/control_pause_blue.png")), dashboardTasks, dashboardPopupMenu);
-        addTask(TaskConstants.DASHBOARD_STOP, I18n.t("taskpane.dashboard.stop", "Stop"), I18n.t("taskpane.dashboard.stop.desc", "Stop the currently selected channel."), "", new ImageIcon(com.mirth.connect.client.ui.Frame.class.getResource("images/control_stop_blue.png")), dashboardTasks, dashboardPopupMenu);
-        addTask(TaskConstants.DASHBOARD_HALT, I18n.t("taskpane.dashboard.halt", "Halt"), I18n.t("taskpane.dashboard.halt.desc", "Halt the currently selected channel."), "", new ImageIcon(com.mirth.connect.client.ui.Frame.class.getResource("images/stop.png")), dashboardTasks, dashboardPopupMenu);
+        addTask(TaskConstants.DASHBOARD_START, "Start", "Start the currently selected channel.", "", new ImageIcon(com.mirth.connect.client.ui.Frame.class.getResource("images/control_play_blue.png")), dashboardTasks, dashboardPopupMenu);
+        addTask(TaskConstants.DASHBOARD_PAUSE, "Pause", "Pause the currently selected channel.", "", new ImageIcon(com.mirth.connect.client.ui.Frame.class.getResource("images/control_pause_blue.png")), dashboardTasks, dashboardPopupMenu);
+        addTask(TaskConstants.DASHBOARD_STOP, "Stop", "Stop the currently selected channel.", "", new ImageIcon(com.mirth.connect.client.ui.Frame.class.getResource("images/control_stop_blue.png")), dashboardTasks, dashboardPopupMenu);
+        addTask(TaskConstants.DASHBOARD_HALT, "Halt", "Halt the currently selected channel.", "", new ImageIcon(com.mirth.connect.client.ui.Frame.class.getResource("images/stop.png")), dashboardTasks, dashboardPopupMenu);
 
-        addTask(TaskConstants.DASHBOARD_UNDEPLOY, I18n.t("taskpane.dashboard.undeploy", "Undeploy Channel"), I18n.t("taskpane.dashboard.undeploy.desc", "Undeploys the currently selected channel."), "", new ImageIcon(com.mirth.connect.client.ui.Frame.class.getResource("images/arrow_undo.png")), dashboardTasks, dashboardPopupMenu);
+        addTask(TaskConstants.DASHBOARD_UNDEPLOY, "Undeploy Channel", "Undeploys the currently selected channel.", "", new ImageIcon(com.mirth.connect.client.ui.Frame.class.getResource("images/arrow_undo.png")), dashboardTasks, dashboardPopupMenu);
 
-        addTask(TaskConstants.DASHBOARD_START_CONNECTOR, I18n.t("taskpane.dashboard.startConnector", "Start"), I18n.t("taskpane.dashboard.startConnector.desc", "Start the currently selected connector."), "", new ImageIcon(com.mirth.connect.client.ui.Frame.class.getResource("images/control_play_blue.png")), dashboardTasks, dashboardPopupMenu);
-        addTask(TaskConstants.DASHBOARD_STOP_CONNECTOR, I18n.t("taskpane.dashboard.stopConnector", "Stop"), I18n.t("taskpane.dashboard.stopConnector.desc", "Stop the currently selected connector."), "", new ImageIcon(com.mirth.connect.client.ui.Frame.class.getResource("images/control_stop_blue.png")), dashboardTasks, dashboardPopupMenu);
+        addTask(TaskConstants.DASHBOARD_START_CONNECTOR, "Start", "Start the currently selected connector.", "", new ImageIcon(com.mirth.connect.client.ui.Frame.class.getResource("images/control_play_blue.png")), dashboardTasks, dashboardPopupMenu);
+        addTask(TaskConstants.DASHBOARD_STOP_CONNECTOR, "Stop", "Stop the currently selected connector.", "", new ImageIcon(com.mirth.connect.client.ui.Frame.class.getResource("images/control_stop_blue.png")), dashboardTasks, dashboardPopupMenu);
 
         setNonFocusable(dashboardTasks);
         taskPaneContainer.add(dashboardTasks);
@@ -1231,21 +1168,21 @@ public class Frame extends JXFrame {
         // Create Message Tasks Pane
         messageTasks = new JXTaskPane();
         messagePopupMenu = new JPopupMenu();
-        messageTasks.setTitle(I18n.t("taskpane.message.title", "Message Tasks"));
+        messageTasks.setTitle("Message Tasks");
         messageTasks.setName(TaskConstants.MESSAGE_KEY);
         messageTasks.setFocusable(false);
 
-        addTask(TaskConstants.MESSAGE_REFRESH, I18n.t("taskpane.message.refresh", "Refresh"), I18n.t("taskpane.message.refresh.desc", "Refresh the list of messages with the current search criteria."), "", new ImageIcon(com.mirth.connect.client.ui.Frame.class.getResource("images/arrow_refresh.png")), messageTasks, messagePopupMenu);
-        addTask(TaskConstants.MESSAGE_SEND, I18n.t("taskpane.message.send", "Send Message"), I18n.t("taskpane.message.send.desc", "Send a message to the channel."), "", new ImageIcon(com.mirth.connect.client.ui.Frame.class.getResource("images/email_go.png")), messageTasks, messagePopupMenu);
-        addTask(TaskConstants.MESSAGE_IMPORT, I18n.t("taskpane.message.import", "Import Messages"), I18n.t("taskpane.message.import.desc", "Import messages from a file."), "", new ImageIcon(com.mirth.connect.client.ui.Frame.class.getResource("images/report_go.png")), messageTasks, messagePopupMenu);
-        addTask(TaskConstants.MESSAGE_EXPORT, I18n.t("taskpane.message.export", "Export Results"), I18n.t("taskpane.message.export.desc", "Export all messages in the current search."), "", new ImageIcon(com.mirth.connect.client.ui.Frame.class.getResource("images/report_disk.png")), messageTasks, messagePopupMenu);
-        addTask(TaskConstants.MESSAGE_REMOVE_ALL, I18n.t("taskpane.message.removeAll", "Remove All Messages"), I18n.t("taskpane.message.removeAll.desc", "Remove all messages in this channel."), "", new ImageIcon(com.mirth.connect.client.ui.Frame.class.getResource("images/email_delete.png")), messageTasks, messagePopupMenu);
-        addTask(TaskConstants.MESSAGE_REMOVE_FILTERED, I18n.t("taskpane.message.removeResults", "Remove Results"), I18n.t("taskpane.message.removeResults.desc", "Remove all messages in the current search."), "", new ImageIcon(com.mirth.connect.client.ui.Frame.class.getResource("images/email_delete.png")), messageTasks, messagePopupMenu);
-        addTask(TaskConstants.MESSAGE_REMOVE, I18n.t("taskpane.message.removeOne", "Remove Message"), I18n.t("taskpane.message.removeOne.desc", "Remove the selected Message."), "", new ImageIcon(com.mirth.connect.client.ui.Frame.class.getResource("images/delete.png")), messageTasks, messagePopupMenu);
-        addTask(TaskConstants.MESSAGE_REPROCESS_FILTERED, I18n.t("taskpane.message.reprocessResults", "Reprocess Results"), I18n.t("taskpane.message.reprocessResults.desc", "Reprocess all messages in the current search."), "", new ImageIcon(com.mirth.connect.client.ui.Frame.class.getResource("images/reprocess_results.png")), messageTasks, messagePopupMenu);
-        addTask(TaskConstants.MESSAGE_REPROCESS, I18n.t("taskpane.message.reprocessOne", "Reprocess Message"), I18n.t("taskpane.message.reprocessOne.desc", "Reprocess the selected message."), "", new ImageIcon(com.mirth.connect.client.ui.Frame.class.getResource("images/reprocess_message.png")), messageTasks, messagePopupMenu);
-        addTask(TaskConstants.MESSAGE_VIEW_IMAGE, I18n.t("taskpane.message.viewAttachment", "View Attachment"), I18n.t("taskpane.message.viewAttachment", "View Attachment"), I18n.t("taskpane.message.viewAttachment.desc", "View the attachment for the selected message."), new ImageIcon(com.mirth.connect.client.ui.Frame.class.getResource("images/attach.png")), messageTasks, messagePopupMenu);
-        addTask(TaskConstants.MESSAGE_EXPORT_ATTACHMENT, I18n.t("taskpane.message.exportAttachment", "Export Attachment"), I18n.t("taskpane.message.exportAttachment", "Export Attachment"), I18n.t("taskpane.message.exportAttachment.desc", "Export the selected attachment to a file."), new ImageIcon(com.mirth.connect.client.ui.Frame.class.getResource("images/report_disk.png")), messageTasks, messagePopupMenu);
+        addTask(TaskConstants.MESSAGE_REFRESH, "Refresh", "Refresh the list of messages with the current search criteria.", "", new ImageIcon(com.mirth.connect.client.ui.Frame.class.getResource("images/arrow_refresh.png")), messageTasks, messagePopupMenu);
+        addTask(TaskConstants.MESSAGE_SEND, "Send Message", "Send a message to the channel.", "", new ImageIcon(com.mirth.connect.client.ui.Frame.class.getResource("images/email_go.png")), messageTasks, messagePopupMenu);
+        addTask(TaskConstants.MESSAGE_IMPORT, "Import Messages", "Import messages from a file.", "", new ImageIcon(com.mirth.connect.client.ui.Frame.class.getResource("images/report_go.png")), messageTasks, messagePopupMenu);
+        addTask(TaskConstants.MESSAGE_EXPORT, "Export Results", "Export all messages in the current search.", "", new ImageIcon(com.mirth.connect.client.ui.Frame.class.getResource("images/report_disk.png")), messageTasks, messagePopupMenu);
+        addTask(TaskConstants.MESSAGE_REMOVE_ALL, "Remove All Messages", "Remove all messages in this channel.", "", new ImageIcon(com.mirth.connect.client.ui.Frame.class.getResource("images/email_delete.png")), messageTasks, messagePopupMenu);
+        addTask(TaskConstants.MESSAGE_REMOVE_FILTERED, "Remove Results", "Remove all messages in the current search.", "", new ImageIcon(com.mirth.connect.client.ui.Frame.class.getResource("images/email_delete.png")), messageTasks, messagePopupMenu);
+        addTask(TaskConstants.MESSAGE_REMOVE, "Remove Message", "Remove the selected Message.", "", new ImageIcon(com.mirth.connect.client.ui.Frame.class.getResource("images/delete.png")), messageTasks, messagePopupMenu);
+        addTask(TaskConstants.MESSAGE_REPROCESS_FILTERED, "Reprocess Results", "Reprocess all messages in the current search.", "", new ImageIcon(com.mirth.connect.client.ui.Frame.class.getResource("images/reprocess_results.png")), messageTasks, messagePopupMenu);
+        addTask(TaskConstants.MESSAGE_REPROCESS, "Reprocess Message", "Reprocess the selected message.", "", new ImageIcon(com.mirth.connect.client.ui.Frame.class.getResource("images/reprocess_message.png")), messageTasks, messagePopupMenu);
+        addTask(TaskConstants.MESSAGE_VIEW_IMAGE, "View Attachment", "View Attachment", "View the attachment for the selected message.", new ImageIcon(com.mirth.connect.client.ui.Frame.class.getResource("images/attach.png")), messageTasks, messagePopupMenu);
+        addTask(TaskConstants.MESSAGE_EXPORT_ATTACHMENT, "Export Attachment", "Export Attachment", "Export the selected attachment to a file.", new ImageIcon(com.mirth.connect.client.ui.Frame.class.getResource("images/report_disk.png")), messageTasks, messagePopupMenu);
         setNonFocusable(messageTasks);
         taskPaneContainer.add(messageTasks);
     }
@@ -1315,19 +1252,19 @@ public class Frame extends JXFrame {
     private void createOtherPane() {
         // Create Other Pane
         otherPane = new JXTaskPane();
-        otherPane.setTitle(I18n.t("taskpane.other.title", "Other"));
+        otherPane.setTitle("Other");
         otherPane.setName(TaskConstants.OTHER_KEY);
         otherPane.setFocusable(false);
         if (CHECK_FOR_NOTIFICATIONS) {
             addTask(TaskConstants.OTHER_NOTIFICATIONS, UIConstants.VIEW_NOTIFICATIONS, String.format("View notifications from %s.", BrandingConstants.PRODUCT_NAME), "", new ImageIcon(com.mirth.connect.client.ui.Frame.class.getResource("images/flag_orange.png")), otherPane, null);
         }
-        addTask(TaskConstants.OTHER_VIEW_USER_API, I18n.t("taskpane.other.viewUserApi", "View User API"), I18n.tf("taskpane.other.viewUserApi.desc", "View documentation for the {0} User API.", BrandingConstants.PRODUCT_NAME), "", new ImageIcon(com.mirth.connect.client.ui.Frame.class.getResource("images/page_white_text.png")), otherPane, null);
-        addTask(TaskConstants.OTHER_VIEW_CLIENT_API, I18n.t("taskpane.other.viewClientApi", "View Client API"), I18n.tf("taskpane.other.viewClientApi.desc", "View documentation for the {0} Client API.", BrandingConstants.PRODUCT_NAME), "", new ImageIcon(com.mirth.connect.client.ui.Frame.class.getResource("images/page_white_text.png")), otherPane, null);
-        addTask(TaskConstants.OTHER_HELP, I18n.t("taskpane.other.help", "Help"), I18n.tf("taskpane.other.help.desc", "View help for {0}.", BrandingConstants.PRODUCT_NAME), "", new ImageIcon(com.mirth.connect.client.ui.Frame.class.getResource("images/help.png")), otherPane, null);
-        addTask(TaskConstants.OTHER_ABOUT, I18n.t("taskpane.other.about", "About"), I18n.tf("taskpane.other.about.desc", "View the about page for {0}.", BrandingConstants.PRODUCT_NAME), "", new ImageIcon(com.mirth.connect.client.ui.Frame.class.getResource("images/information.png")), otherPane, null);
-        addTask(TaskConstants.OTHER_VISIT_MIRTH, I18n.t("taskpane.other.visitHomepage", "Visit homepage"), I18n.tf("taskpane.other.visitHomepage.desc", "View {0}'s homepage.", BrandingConstants.PRODUCT_NAME), "", new ImageIcon(com.mirth.connect.client.ui.Frame.class.getResource("images/house.png")), otherPane, null);
-        addTask(TaskConstants.OTHER_REPORT_ISSUE, I18n.t("taskpane.other.reportIssue", "Report Issue"), I18n.tf("taskpane.other.reportIssue.desc", "Visit {0}'s issue tracker.", BrandingConstants.PRODUCT_NAME), "", new ImageIcon(com.mirth.connect.client.ui.Frame.class.getResource("images/bug.png")), otherPane, null);
-        addTask(TaskConstants.OTHER_LOGOUT, I18n.t("taskpane.other.logout", "Logout"), I18n.t("taskpane.other.logout.desc", "Logout and return to the login screen."), "", new ImageIcon(com.mirth.connect.client.ui.Frame.class.getResource("images/disconnect.png")), otherPane, null);
+        addTask(TaskConstants.OTHER_VIEW_USER_API, "View User API", String.format("View documentation for the %s User API.", BrandingConstants.PRODUCT_NAME), "", new ImageIcon(com.mirth.connect.client.ui.Frame.class.getResource("images/page_white_text.png")), otherPane, null);
+        addTask(TaskConstants.OTHER_VIEW_CLIENT_API, "View Client API", String.format("View documentation for the %s Client API.", BrandingConstants.PRODUCT_NAME), "", new ImageIcon(com.mirth.connect.client.ui.Frame.class.getResource("images/page_white_text.png")), otherPane, null);
+        addTask(TaskConstants.OTHER_HELP, "Help", String.format("View help for %s.", BrandingConstants.PRODUCT_NAME), "", new ImageIcon(com.mirth.connect.client.ui.Frame.class.getResource("images/help.png")), otherPane, null);
+        addTask(TaskConstants.OTHER_ABOUT, "About", String.format("View the about page for %s.", BrandingConstants.PRODUCT_NAME), "", new ImageIcon(com.mirth.connect.client.ui.Frame.class.getResource("images/information.png")), otherPane, null);
+        addTask(TaskConstants.OTHER_VISIT_MIRTH, "Visit homepage", String.format("View %s's homepage.", BrandingConstants.PRODUCT_NAME), "", new ImageIcon(com.mirth.connect.client.ui.Frame.class.getResource("images/house.png")), otherPane, null);
+        addTask(TaskConstants.OTHER_REPORT_ISSUE, "Report Issue", String.format("Visit %s's issue tracker.", BrandingConstants.PRODUCT_NAME), "", new ImageIcon(com.mirth.connect.client.ui.Frame.class.getResource("images/bug.png")), otherPane, null);
+        addTask(TaskConstants.OTHER_LOGOUT, "Logout", "Logout and return to the login screen.", "", new ImageIcon(com.mirth.connect.client.ui.Frame.class.getResource("images/disconnect.png")), otherPane, null);
         setNonFocusable(otherPane);
         taskPaneContainer.add(otherPane);
         otherPane.setVisible(true);
@@ -1664,12 +1601,11 @@ public class Frame extends JXFrame {
      * Sets the 'index' in 'pane' to be bold
      */
     public void setBold(JXTaskPane pane, int index) {
-        int componentCount = pane.getContentPane().getComponentCount();
-        for (int i = 0; i < componentCount; i++) {
+        for (int i = 0; i < pane.getContentPane().getComponentCount(); i++) {
             pane.getContentPane().getComponent(i).setFont(UIConstants.TEXTFIELD_PLAIN_FONT);
         }
 
-        if (index != UIConstants.ERROR_CONSTANT && index >= 0 && index < componentCount) {
+        if (index != UIConstants.ERROR_CONSTANT) {
             pane.getContentPane().getComponent(index).setFont(UIConstants.TEXTFIELD_BOLD_FONT);
         }
     }
@@ -3492,7 +3428,7 @@ public class Frame extends JXFrame {
 	            }
         	}
             activeBrowser = enhancedMessageBrowser;
-            panelName = I18n.t("messages.panel.title.multi", "Multi-Channel Messages");
+            panelName = "Multi-Channel Messages";
         } else {
             if (messageBrowser == null) {
                 messageBrowser = new MessageBrowser();
@@ -3500,7 +3436,8 @@ public class Frame extends JXFrame {
             activeBrowser = messageBrowser;        
             // Build the panel name of the message browser
             Iterator<MessageBrowserChannelModel> selectedChannelModelsIter = selectedChannelModels.values().iterator();
-            panelName = I18n.tf("messages.panel.title.channel", "Channel Messages - {0}", selectedChannelModelsIter.next().getChannelName());
+            StringBuilder panelNameBuilder = new StringBuilder("Channel Messages - " + selectedChannelModelsIter.next().getChannelName());
+            panelName = panelNameBuilder.toString();
         }
 
         setBold(viewPane, -1);

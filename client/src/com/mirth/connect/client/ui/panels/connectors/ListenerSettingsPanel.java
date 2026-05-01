@@ -24,7 +24,6 @@ import com.mirth.connect.client.ui.PlatformUI;
 import com.mirth.connect.client.ui.UIConstants;
 import com.mirth.connect.client.ui.components.MirthRadioButton;
 import com.mirth.connect.client.ui.components.MirthTextField;
-import com.mirth.connect.client.ui.i18n.I18n;
 import com.mirth.connect.client.ui.util.PortUsageDialog;
 import com.mirth.connect.donkey.model.channel.ListenerConnectorProperties;
 import com.mirth.connect.donkey.model.channel.ListenerConnectorPropertiesInterface;
@@ -108,20 +107,15 @@ public class ListenerSettingsPanel extends JPanel {
         portsInUse = new JButton();
 
         setBackground(UIConstants.BACKGROUND_COLOR);
-        setBorder(BorderFactory.createTitledBorder(
-                BorderFactory.createMatteBorder(1, 0, 0, 0, new java.awt.Color(204, 204, 204)),
-                I18n.t("connectors.listenerSettings.title", "Listener Settings"),
-                javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION,
-                javax.swing.border.TitledBorder.DEFAULT_POSITION,
-                new java.awt.Font("Tahoma", 1, 11))); // NOI18N
+        setBorder(BorderFactory.createTitledBorder(BorderFactory.createMatteBorder(1, 0, 0, 0, new java.awt.Color(204, 204, 204)), "Listener Settings", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Tahoma", 1, 11))); // NOI18N
 
-        addressLabel.setText(I18n.t("connectors.listenerSettings.localAddress", "Local Address:"));
+        addressLabel.setText("Local Address:");
 
         allRadio.setBackground(UIConstants.BACKGROUND_COLOR);
         allRadio.setBorder(BorderFactory.createEmptyBorder(0, 0, 0, 0));
         listenerButtonGroup.add(allRadio);
-        allRadio.setText(I18n.t("connectors.listenerSettings.allInterfaces", "All interfaces"));
-        allRadio.setToolTipText(I18n.t("connectors.listenerSettings.allInterfaces.tooltip", "<html>If checked, the connector will listen on all interfaces, using address 0.0.0.0.</html>"));
+        allRadio.setText("All interfaces");
+        allRadio.setToolTipText("<html>If checked, the connector will listen on all interfaces, using address 0.0.0.0.</html>");
         allRadio.setMargin(new java.awt.Insets(0, 0, 0, 0));
         allRadio.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -132,8 +126,8 @@ public class ListenerSettingsPanel extends JPanel {
         specificRadio.setBackground(UIConstants.BACKGROUND_COLOR);
         specificRadio.setBorder(javax.swing.BorderFactory.createEmptyBorder(0, 0, 0, 0));
         listenerButtonGroup.add(specificRadio);
-        specificRadio.setText(I18n.t("connectors.listenerSettings.specificInterface", "Specific interface:"));
-        specificRadio.setToolTipText(I18n.t("connectors.listenerSettings.specificInterface.tooltip", "<html>If checked, the connector will listen on the specific interface address defined.</html>"));
+        specificRadio.setText("Specific interface:");
+        specificRadio.setToolTipText("<html>If checked, the connector will listen on the specific interface address defined.</html>");
         specificRadio.setMargin(new java.awt.Insets(0, 0, 0, 0));
         specificRadio.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent evt) {
@@ -141,18 +135,18 @@ public class ListenerSettingsPanel extends JPanel {
             }
         });
 
-        addressField.setToolTipText(I18n.t("connectors.listenerSettings.address.tooltip", "The DNS domain name or IP address on which the web service should listen for connections."));
+        addressField.setToolTipText("The DNS domain name or IP address on which the web service should listen for connections.");
 
-        portLabel.setText(I18n.t("connectors.listenerSettings.localPort", "Local Port:"));
+        portLabel.setText("Local Port:");
 
-        portField.setToolTipText(I18n.t("connectors.listenerSettings.port.tooltip", "The port on which the web service should listen for connections."));
+        portField.setToolTipText("The port on which the web service should listen for connections.");
         portField.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyReleased(java.awt.event.KeyEvent evt) {
                 portFieldKeyReleased(evt);
             }
         });
         
-        portsInUse.setText(I18n.t("connectors.listenerSettings.portsInUse", "Ports in Use"));
+        portsInUse.setText("Ports in Use");
         portsInUse.setToolTipText(String.format("<html>View all listener ports currently used by %s.<br>", BrandingConstants.PRODUCT_NAME)
         		+ "Any port number can be entered even if it's already in use;<br>"
         		+ "however, only one channel can be deployed per port.</html>");

@@ -102,13 +102,6 @@
 				<include name="*.properties" />
 			</fileset>
 		</copy>
-
-		<!-- Copy i18n resource bundle properties files -->
-		<copy todir="${classes}/com/mirth/connect/client/ui/i18n">
-			<fileset dir="${src}/com/mirth/connect/client/ui/i18n">
-				<include name="*.properties" />
-			</fileset>
-		</copy>
 		
 		<!-- Copy HTML files to use with JavaFX -->
 		<copy todir="${classes}/com/mirth/connect/client/ui/components/tag">

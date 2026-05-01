@@ -25,10 +25,8 @@ import java.util.stream.Collectors;
 
 import javax.mail.internet.InternetAddress;
 import javax.swing.BorderFactory;
-import javax.swing.DefaultListCellRenderer;
 import javax.swing.JComboBox;
 import javax.swing.JLabel;
-import javax.swing.JList;
 import javax.swing.JPanel;
 import javax.swing.JPasswordField;
 import javax.swing.JScrollPane;
@@ -41,7 +39,6 @@ import com.google.i18n.phonenumbers.NumberParseException;
 import com.google.i18n.phonenumbers.PhoneNumberUtil;
 import com.google.i18n.phonenumbers.Phonenumber.PhoneNumber;
 import com.mirth.connect.client.ui.components.MirthTextField;
-import com.mirth.connect.client.ui.i18n.I18n;
 import com.mirth.connect.model.User;
 
 import net.miginfocom.swing.MigLayout;
@@ -228,20 +225,20 @@ public class UserEditPanel extends javax.swing.JPanel {
 
     public String validateUser() {
         if (!checkIfAbleToFinish()) {
-            return I18n.t("user.edit.error.required", "Please fill in all required information.");
+            return "Please fill in all required information.";
         }
 
         // if it's a new user or the username was changed, make sure the username isn't already used.
         if (user.getId() == null || !user.getUsername().equals(username.getText())) {
             for (int i = 0; i < parent.users.size(); i++) {
                 if (parent.users.get(i).getUsername().equals(username.getText())) {
-                    return I18n.t("user.edit.error.usernameExists", "This username already exists. Please choose another one.");
+                    return "This username already exists. Please choose another one.";
                 }
             }
         }
 
         if (!String.valueOf(password.getPassword()).equals(String.valueOf(confirmPassword.getPassword()))) {
-            return I18n.t("user.edit.error.passwordsSame", "Passwords must be the same.");
+            return "Passwords must be the same.";
         }
 
         try {
@@ -250,15 +247,15 @@ public class UserEditPanel extends javax.swing.JPanel {
                 new InternetAddress(emailAddress).validate();
             }
         } catch (Exception e) {
-            return I18n.tf("user.edit.error.invalidEmail", "The email address is invalid: {0}", e.getMessage());
+            return "The email address is invalid: " + e.getMessage();
         }
 
         if (StringUtils.isNotBlank(phone.getText())) {
         	if (country.getSelectedItem().equals(DEFAULT_OPTION)) {
-        		return I18n.t("user.edit.error.countryRequiredForPhone", "Country field is required to validate phone number.");
+        		return "Country field is required to validate phone number.";
         	} else {
         		if (!validatePhoneNumber(phone.getText(), getKeyFromValue(countryMap, country.getSelectedItem()).toString())) {
-            		return I18n.t("user.edit.error.invalidPhone", "The phone number is invalid for the given Country and/or State/Territory.");
+            		return "The phone number is invalid for the given Country and/or State/Territory.";
         		}
         	}
         }
@@ -342,7 +339,7 @@ public class UserEditPanel extends javax.swing.JPanel {
     	organizationAsteriskLabel.setText("*");
     	organizationAsteriskLabel.setVisible(false);
 
-        usernameLabel = new JLabel(I18n.t("user.edit.username", "Username:"));
+        usernameLabel = new JLabel("Username:");
         username = new JTextField();
         username.addKeyListener(new KeyAdapter() {
             public void keyReleased(KeyEvent evt) {
@@ -350,7 +347,7 @@ public class UserEditPanel extends javax.swing.JPanel {
             }
         });
         
-        passwordLabel = new JLabel(I18n.t("user.edit.newPassword", "New Password:"));
+        passwordLabel = new JLabel("New Password:");
         password = new JPasswordField();
         password.addKeyListener(new KeyAdapter() {
             public void keyReleased(KeyEvent evt) {
@@ -358,7 +355,7 @@ public class UserEditPanel extends javax.swing.JPanel {
             }
         });
         
-        confirmPasswordLabel = new JLabel(I18n.t("user.edit.confirmNewPassword", "Confirm New Password:"));
+        confirmPasswordLabel = new JLabel("Confirm New Password:");
         confirmPassword = new JPasswordField();
         confirmPassword.addKeyListener(new KeyAdapter() {
             public void keyReleased(KeyEvent evt) {
@@ -366,7 +363,7 @@ public class UserEditPanel extends javax.swing.JPanel {
             }
         });
         
-        firstNameLabel = new JLabel(I18n.t("user.edit.firstName", "First Name:"));
+        firstNameLabel = new JLabel("First Name:");
         firstName = new MirthTextField();
         firstName.addKeyListener(new KeyAdapter() {
             public void keyReleased(KeyEvent evt) {
@@ -374,7 +371,7 @@ public class UserEditPanel extends javax.swing.JPanel {
             }
         });
         
-        lastNameLabel = new JLabel(I18n.t("user.edit.lastName", "Last Name:"));
+        lastNameLabel = new JLabel("Last Name:");
         lastName = new MirthTextField();
         lastName.addKeyListener(new KeyAdapter() {
             public void keyReleased(KeyEvent evt) {
@@ -382,7 +379,7 @@ public class UserEditPanel extends javax.swing.JPanel {
             }
         });
         
-        emailLabel = new JLabel(I18n.t("user.edit.email", "Email:"));
+        emailLabel = new JLabel("Email:");
         email = new MirthTextField();
         email.addKeyListener(new KeyAdapter() {
             public void keyReleased(KeyEvent evt) {
@@ -390,9 +387,8 @@ public class UserEditPanel extends javax.swing.JPanel {
             }
         });
         
-        countryLabel = new JLabel(I18n.t("user.edit.country", "Country:"));
+        countryLabel = new JLabel("Country:");
         country = new JComboBox<String>();
-        country.addItem(DEFAULT_OPTION);
         for (String item : getCountryNames()) {
             country.addItem(item);
         }        
@@ -403,9 +399,8 @@ public class UserEditPanel extends javax.swing.JPanel {
             }
         });  
 
-        stateTerritoryLabel = new JLabel(I18n.t("user.edit.stateTerritory", "State/Territory:"));
+        stateTerritoryLabel = new JLabel("State/Territory:");
         stateTerritory = new JComboBox<String>();
-        stateTerritory.addItem(DEFAULT_OPTION);
         for (String item : STATE_TERRITORY_CODES) {
             stateTerritory.addItem(item);
         }
@@ -416,7 +411,7 @@ public class UserEditPanel extends javax.swing.JPanel {
             }
         });  
         
-        phoneLabel = new JLabel(I18n.t("user.edit.phone", "Phone:"));
+        phoneLabel = new JLabel("Phone:");
         phone = new MirthTextField();
         phone.addKeyListener(new KeyAdapter() {
             public void keyReleased(KeyEvent evt) {
@@ -424,7 +419,7 @@ public class UserEditPanel extends javax.swing.JPanel {
             }
         });
         
-        organizationLabel = new JLabel(I18n.t("user.edit.organization", "Organization:"));
+        organizationLabel = new JLabel("Organization:");
         organization = new MirthTextField();
         organization.addKeyListener(new KeyAdapter() {
             public void keyReleased(KeyEvent evt) {
@@ -432,9 +427,8 @@ public class UserEditPanel extends javax.swing.JPanel {
             }
         });
         
-        roleLabel = new JLabel(I18n.t("user.edit.role", "Role:"));
+        roleLabel = new JLabel("Role:");
         role = new JComboBox<String>();
-        role.addItem(DEFAULT_OPTION);
         for (String item : ROLES) {
         	role.addItem(item);
         }
@@ -445,9 +439,8 @@ public class UserEditPanel extends javax.swing.JPanel {
             }
         });  
         
-        industryLabel = new JLabel(I18n.t("user.edit.business", "Business:"));
+        industryLabel = new JLabel("Business:");
         industry = new JComboBox<String>();
-        industry.addItem(DEFAULT_OPTION);
         for (String item : INDUSTRIES) {
             industry.addItem(item);
         }
@@ -460,7 +453,7 @@ public class UserEditPanel extends javax.swing.JPanel {
             }
         });  
 
-        descriptionLabel = new JLabel(I18n.t("user.edit.description", "Description:"));
+        descriptionLabel = new JLabel("Description:");
         description = new JTextArea();
         description.setColumns(20);
         description.setFont(new java.awt.Font("Tahoma", 0, 11)); // NOI18N
@@ -471,24 +464,6 @@ public class UserEditPanel extends javax.swing.JPanel {
         jScrollPane1 = new JScrollPane();
         jScrollPane1.setViewportView(description);
 
-        // Localize placeholder option display without changing stored values.
-        applySelectOptionRenderer(country);
-        applySelectOptionRenderer(stateTerritory);
-        applySelectOptionRenderer(role);
-        applySelectOptionRenderer(industry);
-    }
-
-    private void applySelectOptionRenderer(JComboBox<String> comboBox) {
-        comboBox.setRenderer(new DefaultListCellRenderer() {
-            @Override
-            public java.awt.Component getListCellRendererComponent(JList<?> list, Object value, int index, boolean isSelected, boolean cellHasFocus) {
-                Object displayValue = value;
-                if (DEFAULT_OPTION.equals(value)) {
-                    displayValue = I18n.t("user.edit.selectOption", DEFAULT_OPTION);
-                }
-                return super.getListCellRendererComponent(list, displayValue, index, isSelected, cellHasFocus);
-            }
-        });
     }
     
     private void initLayout() {        
@@ -566,25 +541,19 @@ public class UserEditPanel extends javax.swing.JPanel {
 
     private void phoneKeyReleased(KeyEvent evt) {
     	// this commented code will add the country code in front of the phone number - like +1 for the US
-        Object countryCode = getKeyFromValue(countryMap, country.getSelectedItem());
-        if (countryCode != null) {
-            phone.setText(formatPhoneNumber(phone.getText(), countryCode.toString()));
-        }
+    	phone.setText(formatPhoneNumber(phone.getText(), getKeyFromValue(countryMap, country.getSelectedItem()).toString()));
         checkAndTriggerFinishButton(evt);
     }
 
     private void countryActionPerformed(ActionEvent evt) {
         if (dialog != null) {
-        	if ("United States".equals(country.getSelectedItem())) {
+        	if (country.getSelectedItem() == "United States") {
         		stateTerritory.setEnabled(true);
         	} else {
                 stateTerritory.getModel().setSelectedItem(DEFAULT_OPTION);
         		stateTerritory.setEnabled(false);
         	}
-            Object countryCode = getKeyFromValue(countryMap, country.getSelectedItem());
-            if (countryCode != null) {
-                phone.setText(formatPhoneNumber(phone.getText(), countryCode.toString()));
-            }
+        	phone.setText(formatPhoneNumber(phone.getText(), getKeyFromValue(countryMap, country.getSelectedItem()).toString()));
             checkIfAbleToFinish();
         }
     }
