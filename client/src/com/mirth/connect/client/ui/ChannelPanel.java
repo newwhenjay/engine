@@ -102,6 +102,8 @@ import com.mirth.connect.client.ui.components.tag.FilterCompletion;
 import com.mirth.connect.client.ui.components.tag.MirthTagField;
 import com.mirth.connect.client.ui.components.tag.SearchFilterListener;
 import com.mirth.connect.client.ui.components.tag.TagFilterCompletion;
+import com.mirth.connect.client.ui.DebugLog;
+import com.mirth.connect.client.ui.i18n.I18n;
 import com.mirth.connect.client.ui.tag.SettingsPanelTags;
 import com.mirth.connect.client.ui.util.DisplayUtil;
 import com.mirth.connect.donkey.model.channel.DebugOptions;
@@ -205,47 +207,47 @@ public class ChannelPanel extends AbstractFramePanel {
         initLayout();
 
         channelTasks = new JXTaskPane();
-        channelTasks.setTitle("Channel Tasks");
+        channelTasks.setTitle(I18n.t("channels.tasks.title", "Channel Tasks"));
         channelTasks.setName(TaskConstants.CHANNEL_KEY);
         channelTasks.setFocusable(false);
 
         channelPopupMenu = new JPopupMenu();
         channelTable.setComponentPopupMenu(channelPopupMenu);
 
-        parent.addTask(TaskConstants.CHANNEL_REFRESH, "Refresh", "Refresh the list of channels.", "", new ImageIcon(com.mirth.connect.client.ui.Frame.class.getResource("images/arrow_refresh.png")), channelTasks, channelPopupMenu, this);
-        parent.addTask(TaskConstants.CHANNEL_REDEPLOY_ALL, "Redeploy All", "Undeploy all channels and deploy all currently enabled channels.", "A", new ImageIcon(com.mirth.connect.client.ui.Frame.class.getResource("images/arrow_rotate_clockwise.png")), channelTasks, channelPopupMenu, this);
-        parent.addTask(TaskConstants.CHANNEL_DEPLOY_DEBUG, "Debug Channel", "Deploys the currently selected channel in debug mode.", "", new ImageIcon(com.mirth.connect.client.ui.Frame.class.getResource("images/bug_go.png")), channelTasks, channelPopupMenu, this);
-        parent.addTask(TaskConstants.CHANNEL_DEPLOY, "Deploy Channel", "Deploys the currently selected channel.", "", new ImageIcon(com.mirth.connect.client.ui.Frame.class.getResource("images/arrow_redo.png")), channelTasks, channelPopupMenu, this);
-        parent.addTask(TaskConstants.CHANNEL_EDIT_GLOBAL_SCRIPTS, "Edit Global Scripts", "Edit scripts that are not channel specific.", "G", new ImageIcon(com.mirth.connect.client.ui.Frame.class.getResource("images/script_edit.png")), channelTasks, channelPopupMenu, this);
-        parent.addTask(TaskConstants.CHANNEL_EDIT_CODE_TEMPLATES, "Edit Code Templates", String.format("Create and manage templates to be used in JavaScript throughout %s.", BrandingConstants.PRODUCT_NAME), "", new ImageIcon(com.mirth.connect.client.ui.Frame.class.getResource("images/page_edit.png")), channelTasks, channelPopupMenu, this);
-        parent.addTask(TaskConstants.CHANNEL_NEW_CHANNEL, "New Channel", "Create a new channel.", "N", new ImageIcon(com.mirth.connect.client.ui.Frame.class.getResource("images/application_form_add.png")), channelTasks, channelPopupMenu, this);
-        parent.addTask(TaskConstants.CHANNEL_IMPORT_CHANNEL, "Import Channel", "Import a channel from an XML file.", "", new ImageIcon(com.mirth.connect.client.ui.Frame.class.getResource("images/report_go.png")), channelTasks, channelPopupMenu, this);
-        parent.addTask(TaskConstants.CHANNEL_EXPORT_ALL_CHANNELS, "Export All Channels", "Export all of the channels to XML files.", "", new ImageIcon(com.mirth.connect.client.ui.Frame.class.getResource("images/report_disk.png")), channelTasks, channelPopupMenu, this);
-        parent.addTask(TaskConstants.CHANNEL_EXPORT_CHANNEL, "Export Channel", "Export the currently selected channel to an XML file.", "", new ImageIcon(com.mirth.connect.client.ui.Frame.class.getResource("images/report_disk.png")), channelTasks, channelPopupMenu, this);
-        parent.addTask(TaskConstants.CHANNEL_DELETE_CHANNEL, "Delete Channel", "Delete the currently selected channel.", "L", new ImageIcon(com.mirth.connect.client.ui.Frame.class.getResource("images/application_form_delete.png")), channelTasks, channelPopupMenu, this);
-        parent.addTask(TaskConstants.CHANNEL_CLONE, "Clone Channel", "Clone the currently selected channel.", "", new ImageIcon(com.mirth.connect.client.ui.Frame.class.getResource("images/page_copy.png")), channelTasks, channelPopupMenu, this);
-        parent.addTask(TaskConstants.CHANNEL_EDIT, "Edit Channel", "Edit the currently selected channel.", "I", new ImageIcon(com.mirth.connect.client.ui.Frame.class.getResource("images/application_form_edit.png")), channelTasks, channelPopupMenu, this);
-        parent.addTask(TaskConstants.CHANNEL_ENABLE, "Enable Channel", "Enable the currently selected channel.", "", new ImageIcon(com.mirth.connect.client.ui.Frame.class.getResource("images/control_play_blue.png")), channelTasks, channelPopupMenu, this);
-        parent.addTask(TaskConstants.CHANNEL_DISABLE, "Disable Channel", "Disable the currently selected channel.", "", new ImageIcon(com.mirth.connect.client.ui.Frame.class.getResource("images/control_stop_blue.png")), channelTasks, channelPopupMenu, this);
-        parent.addTask(TaskConstants.CHANNEL_VIEW_MESSAGES, "View Messages", "Show the messages for the currently selected channel.", "", new ImageIcon(com.mirth.connect.client.ui.Frame.class.getResource("images/page_white_stack.png")), channelTasks, channelPopupMenu, this);
+        parent.addTask(TaskConstants.CHANNEL_REFRESH, I18n.t("channels.task.refresh", "Refresh"), I18n.t("channels.task.refresh.desc", "Refresh the list of channels."), "", new ImageIcon(com.mirth.connect.client.ui.Frame.class.getResource("images/arrow_refresh.png")), channelTasks, channelPopupMenu, this);
+        parent.addTask(TaskConstants.CHANNEL_REDEPLOY_ALL, I18n.t("channels.task.redeployAll", "Redeploy All"), I18n.t("channels.task.redeployAll.desc", "Undeploy all channels and deploy all currently enabled channels."), "A", new ImageIcon(com.mirth.connect.client.ui.Frame.class.getResource("images/arrow_rotate_clockwise.png")), channelTasks, channelPopupMenu, this);
+        parent.addTask(TaskConstants.CHANNEL_DEPLOY_DEBUG, I18n.t("channels.task.debug", "Debug Channel"), I18n.t("channels.task.debug.desc", "Deploys the currently selected channel in debug mode."), "", new ImageIcon(com.mirth.connect.client.ui.Frame.class.getResource("images/bug_go.png")), channelTasks, channelPopupMenu, this);
+        parent.addTask(TaskConstants.CHANNEL_DEPLOY, I18n.t("channels.task.deploy", "Deploy Channel"), I18n.t("channels.task.deploy.desc", "Deploys the currently selected channel."), "", new ImageIcon(com.mirth.connect.client.ui.Frame.class.getResource("images/arrow_redo.png")), channelTasks, channelPopupMenu, this);
+        parent.addTask(TaskConstants.CHANNEL_EDIT_GLOBAL_SCRIPTS, I18n.t("channels.task.editGlobalScripts", "Edit Global Scripts"), I18n.t("channels.task.editGlobalScripts.desc", "Edit scripts that are not channel specific."), "G", new ImageIcon(com.mirth.connect.client.ui.Frame.class.getResource("images/script_edit.png")), channelTasks, channelPopupMenu, this);
+        parent.addTask(TaskConstants.CHANNEL_EDIT_CODE_TEMPLATES, I18n.t("channels.task.editCodeTemplates", "Edit Code Templates"), I18n.tf("channels.task.editCodeTemplates.desc", String.format("Create and manage templates to be used in JavaScript throughout %s.", BrandingConstants.PRODUCT_NAME), BrandingConstants.PRODUCT_NAME), "", new ImageIcon(com.mirth.connect.client.ui.Frame.class.getResource("images/page_edit.png")), channelTasks, channelPopupMenu, this);
+        parent.addTask(TaskConstants.CHANNEL_NEW_CHANNEL, I18n.t("channels.task.newChannel", "New Channel"), I18n.t("channels.task.newChannel.desc", "Create a new channel."), "N", new ImageIcon(com.mirth.connect.client.ui.Frame.class.getResource("images/application_form_add.png")), channelTasks, channelPopupMenu, this);
+        parent.addTask(TaskConstants.CHANNEL_IMPORT_CHANNEL, I18n.t("channels.task.importChannel", "Import Channel"), I18n.t("channels.task.importChannel.desc", "Import a channel from an XML file."), "", new ImageIcon(com.mirth.connect.client.ui.Frame.class.getResource("images/report_go.png")), channelTasks, channelPopupMenu, this);
+        parent.addTask(TaskConstants.CHANNEL_EXPORT_ALL_CHANNELS, I18n.t("channels.task.exportAllChannels", "Export All Channels"), I18n.t("channels.task.exportAllChannels.desc", "Export all of the channels to XML files."), "", new ImageIcon(com.mirth.connect.client.ui.Frame.class.getResource("images/report_disk.png")), channelTasks, channelPopupMenu, this);
+        parent.addTask(TaskConstants.CHANNEL_EXPORT_CHANNEL, I18n.t("channels.task.exportChannel", "Export Channel"), I18n.t("channels.task.exportChannel.desc", "Export the currently selected channel to an XML file."), "", new ImageIcon(com.mirth.connect.client.ui.Frame.class.getResource("images/report_disk.png")), channelTasks, channelPopupMenu, this);
+        parent.addTask(TaskConstants.CHANNEL_DELETE_CHANNEL, I18n.t("channels.task.deleteChannel", "Delete Channel"), I18n.t("channels.task.deleteChannel.desc", "Delete the currently selected channel."), "L", new ImageIcon(com.mirth.connect.client.ui.Frame.class.getResource("images/application_form_delete.png")), channelTasks, channelPopupMenu, this);
+        parent.addTask(TaskConstants.CHANNEL_CLONE, I18n.t("channels.task.cloneChannel", "Clone Channel"), I18n.t("channels.task.cloneChannel.desc", "Clone the currently selected channel."), "", new ImageIcon(com.mirth.connect.client.ui.Frame.class.getResource("images/page_copy.png")), channelTasks, channelPopupMenu, this);
+        parent.addTask(TaskConstants.CHANNEL_EDIT, I18n.t("channels.task.editChannel", "Edit Channel"), I18n.t("channels.task.editChannel.desc", "Edit the currently selected channel."), "I", new ImageIcon(com.mirth.connect.client.ui.Frame.class.getResource("images/application_form_edit.png")), channelTasks, channelPopupMenu, this);
+        parent.addTask(TaskConstants.CHANNEL_ENABLE, I18n.t("channels.task.enableChannel", "Enable Channel"), I18n.t("channels.task.enableChannel.desc", "Enable the currently selected channel."), "", new ImageIcon(com.mirth.connect.client.ui.Frame.class.getResource("images/control_play_blue.png")), channelTasks, channelPopupMenu, this);
+        parent.addTask(TaskConstants.CHANNEL_DISABLE, I18n.t("channels.task.disableChannel", "Disable Channel"), I18n.t("channels.task.disableChannel.desc", "Disable the currently selected channel."), "", new ImageIcon(com.mirth.connect.client.ui.Frame.class.getResource("images/control_stop_blue.png")), channelTasks, channelPopupMenu, this);
+        parent.addTask(TaskConstants.CHANNEL_VIEW_MESSAGES, I18n.t("channels.task.viewMessages", "View Messages"), I18n.t("channels.task.viewMessages.desc", "Show the messages for the currently selected channel."), "", new ImageIcon(com.mirth.connect.client.ui.Frame.class.getResource("images/page_white_stack.png")), channelTasks, channelPopupMenu, this);
         parent.setNonFocusable(channelTasks);
         parent.taskPaneContainer.add(channelTasks, parent.taskPaneContainer.getComponentCount() - 1);
 
         groupTasks = new JXTaskPane();
-        groupTasks.setTitle("Group Tasks");
+        groupTasks.setTitle(I18n.t("channels.groups.tasks.title", "Group Tasks"));
         groupTasks.setName(TaskConstants.CHANNEL_GROUP_KEY);
         groupTasks.setFocusable(false);
 
         groupPopupMenu = new JPopupMenu();
 
-        parent.addTask(TaskConstants.CHANNEL_GROUP_SAVE, "Save Group Changes", "Save all changes made to channel groups.", "", new ImageIcon(com.mirth.connect.client.ui.Frame.class.getResource("images/disk.png")), groupTasks, groupPopupMenu, this);
-        parent.addTask(TaskConstants.CHANNEL_GROUP_ASSIGN_CHANNEL, "Assign To Group", "Assign channel(s) to a group.", "A", new ImageIcon(com.mirth.connect.client.ui.Frame.class.getResource("images/report_go.png")), groupTasks, groupPopupMenu, this);
-        parent.addTask(TaskConstants.CHANNEL_GROUP_NEW_GROUP, "New Group", "Create a new channel group.", "N", new ImageIcon(com.mirth.connect.client.ui.Frame.class.getResource("images/application_form_add.png")), groupTasks, groupPopupMenu, this);
-        parent.addTask(TaskConstants.CHANNEL_GROUP_EDIT_DETAILS, "Edit Group Details", "Edit group name and description.", "E", new ImageIcon(com.mirth.connect.client.ui.Frame.class.getResource("images/application_form_edit.png")), groupTasks, groupPopupMenu, this);
-        parent.addTask(TaskConstants.CHANNEL_GROUP_IMPORT_GROUP, "Import Group", "Import a channel group from an XML file.", "", new ImageIcon(com.mirth.connect.client.ui.Frame.class.getResource("images/report_go.png")), groupTasks, groupPopupMenu, this);
-        parent.addTask(TaskConstants.CHANNEL_GROUP_EXPORT_ALL_GROUPS, "Export All Groups", "Export all of the channel groups to XML files.", "", new ImageIcon(com.mirth.connect.client.ui.Frame.class.getResource("images/report_disk.png")), groupTasks, groupPopupMenu, this);
-        parent.addTask(TaskConstants.CHANNEL_GROUP_EXPORT_GROUP, "Export Group", "Export the currently selected channel group to an XML file.", "", new ImageIcon(com.mirth.connect.client.ui.Frame.class.getResource("images/report_disk.png")), groupTasks, groupPopupMenu, this);
-        parent.addTask(TaskConstants.CHANNEL_GROUP_DELETE_GROUP, "Delete Group", "Delete the currently selected channel group.", "L", new ImageIcon(com.mirth.connect.client.ui.Frame.class.getResource("images/application_form_delete.png")), groupTasks, groupPopupMenu, this);
+        parent.addTask(TaskConstants.CHANNEL_GROUP_SAVE, I18n.t("channels.groupTask.saveChanges", "Save Group Changes"), I18n.t("channels.groupTask.saveChanges.desc", "Save all changes made to channel groups."), "", new ImageIcon(com.mirth.connect.client.ui.Frame.class.getResource("images/disk.png")), groupTasks, groupPopupMenu, this);
+        parent.addTask(TaskConstants.CHANNEL_GROUP_ASSIGN_CHANNEL, I18n.t("channels.groupTask.assignToGroup", "Assign To Group"), I18n.t("channels.groupTask.assignToGroup.desc", "Assign channel(s) to a group."), "A", new ImageIcon(com.mirth.connect.client.ui.Frame.class.getResource("images/report_go.png")), groupTasks, groupPopupMenu, this);
+        parent.addTask(TaskConstants.CHANNEL_GROUP_NEW_GROUP, I18n.t("channels.groupTask.newGroup", "New Group"), I18n.t("channels.groupTask.newGroup.desc", "Create a new channel group."), "N", new ImageIcon(com.mirth.connect.client.ui.Frame.class.getResource("images/application_form_add.png")), groupTasks, groupPopupMenu, this);
+        parent.addTask(TaskConstants.CHANNEL_GROUP_EDIT_DETAILS, I18n.t("channels.groupTask.editDetails", "Edit Group Details"), I18n.t("channels.groupTask.editDetails.desc", "Edit group name and description."), "E", new ImageIcon(com.mirth.connect.client.ui.Frame.class.getResource("images/application_form_edit.png")), groupTasks, groupPopupMenu, this);
+        parent.addTask(TaskConstants.CHANNEL_GROUP_IMPORT_GROUP, I18n.t("channels.groupTask.importGroup", "Import Group"), I18n.t("channels.groupTask.importGroup.desc", "Import a channel group from an XML file."), "", new ImageIcon(com.mirth.connect.client.ui.Frame.class.getResource("images/report_go.png")), groupTasks, groupPopupMenu, this);
+        parent.addTask(TaskConstants.CHANNEL_GROUP_EXPORT_ALL_GROUPS, I18n.t("channels.groupTask.exportAllGroups", "Export All Groups"), I18n.t("channels.groupTask.exportAllGroups.desc", "Export all of the channel groups to XML files."), "", new ImageIcon(com.mirth.connect.client.ui.Frame.class.getResource("images/report_disk.png")), groupTasks, groupPopupMenu, this);
+        parent.addTask(TaskConstants.CHANNEL_GROUP_EXPORT_GROUP, I18n.t("channels.groupTask.exportGroup", "Export Group"), I18n.t("channels.groupTask.exportGroup.desc", "Export the currently selected channel group to an XML file."), "", new ImageIcon(com.mirth.connect.client.ui.Frame.class.getResource("images/report_disk.png")), groupTasks, groupPopupMenu, this);
+        parent.addTask(TaskConstants.CHANNEL_GROUP_DELETE_GROUP, I18n.t("channels.groupTask.deleteGroup", "Delete Group"), I18n.t("channels.groupTask.deleteGroup.desc", "Delete the currently selected channel group."), "L", new ImageIcon(com.mirth.connect.client.ui.Frame.class.getResource("images/application_form_delete.png")), groupTasks, groupPopupMenu, this);
 
         parent.setNonFocusable(groupTasks);
         parent.taskPaneContainer.add(groupTasks, parent.taskPaneContainer.getComponentCount() - 1);
@@ -310,7 +312,7 @@ public class ChannelPanel extends AbstractFramePanel {
         tagField.setFocus(true);
 
         parent.setBold(parent.viewPane, 1);
-        parent.setPanelName("Channels");
+        parent.setPanelName(I18n.t("channels.panel.title", "Channels"));
         parent.setCurrentContentPage(ChannelPanel.this);
         parent.setFocus(taskPanes.toArray(new JXTaskPane[taskPanes.size()]), true, true);
         parent.setSaveEnabled(false);
@@ -423,7 +425,7 @@ public class ChannelPanel extends AbstractFramePanel {
             return;
         }
 
-        QueuingSwingWorkerTask<Void, Void> task = new QueuingSwingWorkerTask<Void, Void>("doRefreshChannels", "Loading channels...") {
+        QueuingSwingWorkerTask<Void, Void> task = new QueuingSwingWorkerTask<Void, Void>("doRefreshChannels", I18n.t("channels.loading", "Loading channels...")) {
             @Override
             public Void doInBackground() {
                 retrieveChannels();
@@ -610,8 +612,11 @@ public class ChannelPanel extends AbstractFramePanel {
 
     public void retrieveChannels(boolean refreshTags) {
         try {
+            DebugLog.info("ChannelPanel.retrieveChannels begin. serverUrl=" + PlatformUI.SERVER_URL);
             channelIdsAndNames = parent.mirthClient.getChannelIdsAndNames();
+            DebugLog.info("ChannelPanel.retrieveChannels getChannelIdsAndNames size=" + (channelIdsAndNames == null ? "null" : channelIdsAndNames.size()));
             updateChannelStatuses(parent.mirthClient.getChannelSummary(getChannelHeaders(), false));
+            DebugLog.info("ChannelPanel.retrieveChannels getChannelSummary channelStatuses size=" + (channelStatuses == null ? "null" : channelStatuses.size()));
 
             try {
                 updateChannelGroups(parent.mirthClient.getAllChannelGroups());
@@ -621,7 +626,9 @@ public class ChannelPanel extends AbstractFramePanel {
             }
 
             channelDependencies = parent.mirthClient.getChannelDependencies();
+            DebugLog.info("ChannelPanel.retrieveChannels getChannelDependencies size=" + (channelDependencies == null ? "null" : channelDependencies.size()));
             updateChannelMetadata(parent.mirthClient.getChannelMetadata());
+            DebugLog.info("ChannelPanel.retrieveChannels getChannelMetadata done");
 
             if (refreshTags) {
                 SettingsPanelTags tagsPanel = parent.getTagsPanel();
@@ -630,6 +637,7 @@ public class ChannelPanel extends AbstractFramePanel {
                 }
             }
         } catch (ClientException e) {
+            DebugLog.error("ChannelPanel.retrieveChannels failed", e);
             SwingUtilities.invokeLater(() -> {
                 parent.alertThrowable(parent, e);
             });
@@ -871,7 +879,7 @@ public class ChannelPanel extends AbstractFramePanel {
     public void doDeployChannel(DebugOptions debugOptions) {
         List<Channel> selectedChannels = getSelectedChannels();
         if (selectedChannels.size() == 0) {
-            parent.alertWarning(parent, "Channel no longer exists.");
+            parent.alertWarning(parent, I18n.t("channels.error.channelMissing", "Channel no longer exists."));
             return;
         }
 
@@ -887,7 +895,7 @@ public class ChannelPanel extends AbstractFramePanel {
         }
 
         if (channelDisabled) {
-            parent.alertWarning(parent, "Disabled channels will not be deployed.");
+            parent.alertWarning(parent, I18n.t("channels.warn.disabledNotDeployed", "Disabled channels will not be deployed."));
         }
 
         parent.deployChannel(selectedEnabledChannelIds, debugOptions);
@@ -1074,7 +1082,7 @@ public class ChannelPanel extends AbstractFramePanel {
         }
 
         if (LoadedExtensions.getInstance().getSourceConnectors().size() == 0 || LoadedExtensions.getInstance().getDestinationConnectors().size() == 0) {
-            parent.alertError(parent, "You must have at least one source connector and one destination connector installed.");
+            parent.alertError(parent, I18n.t("channels.error.needConnectors", "You must have at least one source connector and one destination connector installed."));
             return;
         }
 
@@ -2323,7 +2331,7 @@ public class ChannelPanel extends AbstractFramePanel {
         if (selectedChannels.size() > 1) {
             JOptionPane.showMessageDialog(parent, "This operation can only be performed on a single channel.");
         } else if (selectedChannels.size() == 0) {
-            JOptionPane.showMessageDialog(parent, "Channel no longer exists.");
+            JOptionPane.showMessageDialog(parent, I18n.t("channels.error.channelMissing", "Channel no longer exists."));
         } else {
             try {
                 Channel channel = selectedChannels.get(0);
@@ -2349,7 +2357,7 @@ public class ChannelPanel extends AbstractFramePanel {
 
         final List<Channel> selectedChannels = getSelectedChannels();
         if (selectedChannels.size() == 0) {
-            parent.alertWarning(parent, "Channel no longer exists.");
+            parent.alertWarning(parent, I18n.t("channels.error.channelMissing", "Channel no longer exists."));
             return;
         }
 
@@ -2432,7 +2440,7 @@ public class ChannelPanel extends AbstractFramePanel {
 
         final List<Channel> selectedChannels = getSelectedChannels();
         if (selectedChannels.size() == 0) {
-            parent.alertWarning(parent, "Channel no longer exists.");
+            parent.alertWarning(parent, I18n.t("channels.error.channelMissing", "Channel no longer exists."));
             return;
         }
 
@@ -2619,6 +2627,11 @@ public class ChannelPanel extends AbstractFramePanel {
             defaultGroup.getChannels().add(new Channel(channelId));
             defaultGroupChannelStatuses.add(this.channelStatuses.get(channelId));
         }
+
+        DebugLog.info("ChannelPanel.updateChannelGroups groupsFromServer=" + channelGroups.size()
+                + " cachedGroupStatuses=" + this.groupStatuses.size()
+                + " defaultGroupChannels=" + defaultGroupChannelStatuses.size()
+                + " totalChannelStatuses=" + this.channelStatuses.size());
     }
 
     private void updateChannelMetadata(Map<String, ChannelMetadata> metadataMap) {
@@ -2916,9 +2929,37 @@ public class ChannelPanel extends AbstractFramePanel {
             plugin.tableUpdate(filteredChannels);
         }
 
+        DebugLog.info("ChannelPanel.updateModel before model.update. groupMode="
+                + model.isGroupModeEnabled()
+                + " groups=" + filteredGroupStatuses.size()
+                + " channels(total=" + totalChannelCount + ", visible=" + visibleChannelCount + ")"
+                + " filterEnabled=" + tagField.isFilterEnabled()
+                + " filterText=" + StringUtils.defaultString(filterText));
+
         model.update(filteredGroupStatuses);
 
         restoreTableState(tableState);
+
+        DebugLog.info("ChannelPanel.updateModel after restoreTableState. tableRowCount=" + channelTable.getRowCount()
+                + " selectedRowCount=" + channelTable.getSelectedRowCount());
+
+        // Final guardrail: we can have rows but no visible columns due to legacy prefs / i18n mismatch.
+        if (channelTable.getRowCount() > 0 && channelTable.getColumnCount() == 0) {
+            DebugLog.info("ChannelPanel.updateModel detected rows but 0 columns. Restoring default columns.");
+            channelTable.restoreDefaultColumnPreferences();
+            channelTable.packTable(UIConstants.COL_MARGIN);
+        }
+        try {
+            DebugLog.info("ChannelPanel.updateModel uiState columnCount=" + channelTable.getColumnCount()
+                    + " headerHeight=" + (channelTable.getTableHeader() == null ? "null" : channelTable.getTableHeader().getHeight())
+                    + " tableSize=" + channelTable.getSize()
+                    + " scrollViewportSize=" + (channelScrollPane == null || channelScrollPane.getViewport() == null ? "null" : channelScrollPane.getViewport().getSize())
+                    + " scrollView=" + (channelScrollPane == null || channelScrollPane.getViewport() == null || channelScrollPane.getViewport().getView() == null ? "null" : channelScrollPane.getViewport().getView().getClass().getName()));
+        } catch (Exception e) {
+            DebugLog.error("ChannelPanel.updateModel uiState log failed", e);
+        }
+        channelTable.revalidate();
+        channelTable.repaint();
     }
 
     /**
@@ -3081,6 +3122,17 @@ public class ChannelPanel extends AbstractFramePanel {
         channelTable.setAutoCreateColumnsFromModel(false);
         channelTable.setShowGrid(true, true);
         channelTable.restoreColumnPreferences();
+        // Guardrail: if preferences collapsed all column widths, recover defaults.
+        int visibleColumnCount = channelTable.getColumnCount();
+        int visibleWidthSum = 0;
+        for (int i = 0; i < visibleColumnCount; i++) {
+            visibleWidthSum += channelTable.getColumnModel().getColumn(i).getWidth();
+        }
+        if (visibleColumnCount == 0 || visibleWidthSum == 0) {
+            DebugLog.info("ChannelPanel: restoring default column preferences (visibleColumnCount=" + visibleColumnCount + ", visibleWidthSum=" + visibleWidthSum + ")");
+            channelTable.restoreDefaultColumnPreferences();
+            channelTable.packTable(UIConstants.COL_MARGIN);
+        }
         channelTable.setMirthColumnControlEnabled(true);
 
         channelTable.setDragEnabled(true);
@@ -3364,7 +3416,7 @@ public class ChannelPanel extends AbstractFramePanel {
         filterPanel = new JPanel();
         filterPanel.setBorder(BorderFactory.createMatteBorder(1, 0, 0, 0, new Color(164, 164, 164)));
 
-        filterLabel = new JLabel("Filter:");
+        filterLabel = new JLabel(I18n.t("channels.filter", "Filter:"));
 
         Set<FilterCompletion> tags = new HashSet<FilterCompletion>();
         for (ChannelTag tag : getCachedChannelTags()) {
@@ -3397,7 +3449,7 @@ public class ChannelPanel extends AbstractFramePanel {
         tagsLabel = new JLabel();
 
         tagModeTextButton = new IconToggleButton(UIConstants.ICON_TEXT);
-        tagModeTextButton.setToolTipText("Display tags as names.");
+        tagModeTextButton.setToolTipText(I18n.t("channels.tags.mode.text.tooltip", "Display tags as names."));
         tagModeTextButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent evt) {
@@ -3407,7 +3459,7 @@ public class ChannelPanel extends AbstractFramePanel {
         });
 
         tagModeIconButton = new IconToggleButton(UIConstants.ICON_TAG);
-        tagModeIconButton.setToolTipText("Display tags as icons.");
+        tagModeIconButton.setToolTipText(I18n.t("channels.tags.mode.icon.tooltip", "Display tags as icons."));
         tagModeIconButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent evt) {
@@ -3419,7 +3471,7 @@ public class ChannelPanel extends AbstractFramePanel {
         ButtonGroup tableModeButtonGroup = new ButtonGroup();
 
         tableModeGroupsButton = new IconToggleButton(UIConstants.ICON_GROUP);
-        tableModeGroupsButton.setToolTipText("Groups");
+        tableModeGroupsButton.setToolTipText(I18n.t("channels.table.mode.groups.tooltip", "Groups"));
         tableModeGroupsButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent evt) {
@@ -3431,7 +3483,7 @@ public class ChannelPanel extends AbstractFramePanel {
         tableModeButtonGroup.add(tableModeGroupsButton);
 
         tableModeChannelsButton = new IconToggleButton(UIConstants.ICON_CHANNEL);
-        tableModeChannelsButton.setToolTipText("Channels");
+        tableModeChannelsButton.setToolTipText(I18n.t("channels.table.mode.channels.tooltip", "Channels"));
         tableModeChannelsButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent evt) {
@@ -3671,18 +3723,18 @@ public class ChannelPanel extends AbstractFramePanel {
 
             containerPanel = new JPanel();
             containerPanel.setBackground(getBackground());
-            containerPanel.setBorder(BorderFactory.createTitledBorder("Group Settings"));
+            containerPanel.setBorder(BorderFactory.createTitledBorder(I18n.t("channels.groupSettings.title", "Group Settings")));
 
-            groupNameLabel = new JLabel("Name:");
+            groupNameLabel = new JLabel(I18n.t("common.name", "Name:"));
             groupNameField = new JTextField();
 
-            groupDescriptionLabel = new JLabel("Description:");
+            groupDescriptionLabel = new JLabel(I18n.t("common.description", "Description:"));
             groupDescriptionScrollPane = new MirthRTextScrollPane(null, false, SyntaxConstants.SYNTAX_STYLE_NONE, false);
             groupDescriptionScrollPane.setSaveEnabled(false);
 
             separator = new JSeparator(SwingConstants.HORIZONTAL);
 
-            okButton = new JButton("OK");
+            okButton = new JButton(I18n.t("common.ok", "OK"));
             okButton.addActionListener(new ActionListener() {
                 @Override
                 public void actionPerformed(ActionEvent evt) {
@@ -3705,7 +3757,7 @@ public class ChannelPanel extends AbstractFramePanel {
                 }
             });
 
-            cancelButton = new JButton("Cancel");
+            cancelButton = new JButton(I18n.t("common.cancel", "Cancel"));
             cancelButton.addActionListener(new ActionListener() {
                 @Override
                 public void actionPerformed(ActionEvent evt) {
@@ -3786,7 +3838,7 @@ public class ChannelPanel extends AbstractFramePanel {
 
             separator = new JSeparator(SwingConstants.HORIZONTAL);
 
-            okButton = new JButton("OK");
+            okButton = new JButton(I18n.t("common.ok", "OK"));
             okButton.addActionListener(new ActionListener() {
                 @Override
                 public void actionPerformed(ActionEvent evt) {
@@ -3795,7 +3847,7 @@ public class ChannelPanel extends AbstractFramePanel {
                 }
             });
 
-            cancelButton = new JButton("Cancel");
+            cancelButton = new JButton(I18n.t("common.cancel", "Cancel"));
             cancelButton.addActionListener(new ActionListener() {
                 @Override
                 public void actionPerformed(ActionEvent evt) {
@@ -3807,7 +3859,7 @@ public class ChannelPanel extends AbstractFramePanel {
         private void initLayout() {
             setLayout(new MigLayout("insets 8, novisualpadding, hidemode 3, fill"));
 
-            add(new JLabel("Choose the group to assign the selected channel(s) to."));
+            add(new JLabel(I18n.t("channels.assignGroup.help", "Choose the group to assign the selected channel(s) to.")));
             add(groupComboBox, "newline, growx");
             add(separator, "newline, growx");
             add(okButton, "newline, w 51!, right, split 2");

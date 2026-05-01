@@ -75,6 +75,7 @@ import com.mirth.connect.client.ui.components.MirthRadioButton;
 import com.mirth.connect.client.ui.components.MirthSyntaxTextArea;
 import com.mirth.connect.client.ui.components.MirthTable;
 import com.mirth.connect.client.ui.components.MirthTextField;
+import com.mirth.connect.client.ui.i18n.I18n;
 import com.mirth.connect.client.ui.panels.connectors.ConnectorSettingsPanel;
 import com.mirth.connect.client.ui.panels.connectors.ListenerSettingsPanel;
 import com.mirth.connect.connectors.http.HttpStaticResource.ResourceType;
@@ -84,8 +85,8 @@ public class HttpListener extends ConnectorSettingsPanel {
 
     private final int NAME_COLUMN = 0;
     private final int VALUE_COLUMN = 1;
-    private final String NAME_COLUMN_NAME = "Name";
-    private final String VALUE_COLUMN_NAME = "Value";
+    private final String NAME_COLUMN_NAME = "Name"; // identifier (do not localize)
+    private final String VALUE_COLUMN_NAME = "Value"; // identifier (do not localize)
     private int responseHeadersLastIndex = -1;
     private int staticResourcesLastIndex = -1;
     private boolean usingHttps = false;
@@ -296,7 +297,9 @@ public class HttpListener extends ConnectorSettingsPanel {
             // ignore exceptions getting the server ip
         }
 
-        httpUrlLabel.setText(usingHttps ? "HTTPS URL:" : "HTTP URL:");
+        httpUrlLabel.setText(usingHttps
+                ? I18n.t("connectors.httpListener.httpsUrl", "HTTPS URL:")
+                : I18n.t("connectors.httpListener.httpUrl", "HTTP URL:"));
 
         // Display: http://server:port/contextpath/
         httpUrlField.setText("http" + (usingHttps ? "s" : "") + "://" + server + ":" + ((HttpReceiverProperties) getFilledProperties()).getListenerConnectorProperties().getPort() + (contextPathField.getText().startsWith("/") ? "" : "/") + contextPathField.getText() + ((StringUtils.isBlank(contextPathField.getText()) || contextPathField.getText().endsWith("/")) ? "" : "/"));
@@ -323,8 +326,7 @@ public class HttpListener extends ConnectorSettingsPanel {
             }
         }
 
-        responseHeadersTable.setModel(new DefaultTableModel(tableData, new String[] {
-                NAME_COLUMN_NAME, VALUE_COLUMN_NAME }) {
+        responseHeadersTable.setModel(new DefaultTableModel(tableData, new String[] { NAME_COLUMN_NAME, VALUE_COLUMN_NAME }) {
 
             boolean[] canEdit = new boolean[] { true, true };
 
@@ -382,6 +384,14 @@ public class HttpListener extends ConnectorSettingsPanel {
         responseHeadersTable.getColumnModel().getColumn(responseHeadersTable.getColumnModel().getColumnIndex(NAME_COLUMN_NAME)).setCellEditor(new HTTPTableCellEditor(true));
         responseHeadersTable.getColumnModel().getColumn(responseHeadersTable.getColumnModel().getColumnIndex(VALUE_COLUMN_NAME)).setCellEditor(new HTTPTableCellEditor(false));
         responseHeadersTable.setCustomEditorControls(true);
+        // Localize visible column headers (keep identifiers stable)
+        responseHeadersTable.getColumnModel().getColumn(responseHeadersTable.getColumnModel().getColumnIndex(NAME_COLUMN_NAME))
+                .setHeaderValue(I18n.t("connectors.httpListener.table.name", "Name"));
+        responseHeadersTable.getColumnModel().getColumn(responseHeadersTable.getColumnModel().getColumnIndex(VALUE_COLUMN_NAME))
+                .setHeaderValue(I18n.t("connectors.httpListener.table.value", "Value"));
+        if (responseHeadersTable.getTableHeader() != null) {
+            responseHeadersTable.getTableHeader().repaint();
+        }
 
         responseHeadersTable.setSelectionMode(0);
         responseHeadersTable.setRowSelectionAllowed(true);
@@ -506,7 +516,12 @@ public class HttpListener extends ConnectorSettingsPanel {
     }
 
     private void initComponentsManual() {
-        staticResourcesTable.setModel(new RefreshTableModel(StaticResourcesColumn.getNames(), 0) {
+        staticResourcesTable.setModel(new RefreshTableModel(new String[] {
+                I18n.t("connectors.httpListener.staticResources.contextPath", "Context Path"),
+                I18n.t("connectors.httpListener.staticResources.resourceType", "Resource Type"),
+                I18n.t("connectors.httpListener.staticResources.value", "Value"),
+                I18n.t("connectors.httpListener.staticResources.contentType", "Content Type")
+        }, 0) {
             @Override
             public boolean isCellEditable(int rowIndex, int columnIndex) {
                 return true;
@@ -704,7 +719,7 @@ public class HttpListener extends ConnectorSettingsPanel {
 
                 public ValueDialog() {
                     super(parent, true);
-                    setTitle("Custom Value");
+                    setTitle(I18n.t("connectors.httpListener.dialog.customValue.title", "Custom Value"));
                     setPreferredSize(new Dimension(600, 500));
                     setLayout(new MigLayout("insets 12, novisualpadding, hidemode 3, fill", "", "[grow]7[]"));
                     setBackground(UIConstants.BACKGROUND_COLOR);
@@ -721,7 +736,7 @@ public class HttpListener extends ConnectorSettingsPanel {
                     JPanel buttonPanel = new JPanel(new MigLayout("insets 0, novisualpadding, hidemode 3"));
                     buttonPanel.setBackground(getBackground());
 
-                    JButton openFileButton = new JButton("Open File...");
+                    JButton openFileButton = new JButton(I18n.t("connectors.httpListener.dialog.openFile", "Open File..."));
                     openFileButton.addActionListener(new ActionListener() {
                         @Override
                         public void actionPerformed(ActionEvent evt) {
@@ -733,7 +748,7 @@ public class HttpListener extends ConnectorSettingsPanel {
                     });
                     buttonPanel.add(openFileButton);
 
-                    JButton okButton = new JButton("OK");
+                    JButton okButton = new JButton(I18n.t("connectors.httpListener.dialog.ok", "OK"));
                     okButton.addActionListener(new ActionListener() {
                         @Override
                         public void actionPerformed(ActionEvent evt) {
@@ -747,7 +762,7 @@ public class HttpListener extends ConnectorSettingsPanel {
                     });
                     buttonPanel.add(okButton);
 
-                    JButton cancelButton = new JButton("Cancel");
+                    JButton cancelButton = new JButton(I18n.t("connectors.httpListener.dialog.cancel", "Cancel"));
                     cancelButton.addActionListener(new ActionListener() {
                         @Override
                         public void actionPerformed(ActionEvent evt) {
@@ -874,7 +889,7 @@ public class HttpListener extends ConnectorSettingsPanel {
 
         messageContentPlainBodyRadio.setBackground(new Color(255, 255, 255));
         includeHeadersGroup.add(messageContentPlainBodyRadio);
-        messageContentPlainBodyRadio.setText("Plain Body");
+        messageContentPlainBodyRadio.setText(I18n.t("connectors.httpListener.plainBody", "Plain Body"));
         messageContentPlainBodyRadio.setMargin(new Insets(0, 0, 0, 0));
         messageContentPlainBodyRadio.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent evt) {
@@ -882,16 +897,16 @@ public class HttpListener extends ConnectorSettingsPanel {
             }
         });
 
-        messageContentLabel.setText("Message Content:");
+        messageContentLabel.setText(I18n.t("connectors.httpListener.messageContent", "Message Content:"));
 
-        responseContentTypeLabel.setText("Response Content Type:");
+        responseContentTypeLabel.setText(I18n.t("connectors.httpListener.responseContentType", "Response Content Type:"));
 
         charsetEncodingCombobox.setModel(new DefaultComboBoxModel<String>(new String[] { "default",
                 "utf-8", "iso-8859-1", "utf-16 (le)", "utf-16 (be)", "utf-16 (bom)", "us-ascii" }));
 
-        charsetEncodingLabel.setText("Charset Encoding:");
+        charsetEncodingLabel.setText(I18n.t("connectors.httpListener.charsetEncoding", "Charset Encoding:"));
 
-        contextPathLabel.setText("Base Context Path:");
+        contextPathLabel.setText(I18n.t("connectors.httpListener.baseContextPath", "Base Context Path:"));
 
         contextPathField.addKeyListener(new KeyAdapter() {
             public void keyReleased(java.awt.event.KeyEvent evt) {
@@ -899,32 +914,32 @@ public class HttpListener extends ConnectorSettingsPanel {
             }
         });
 
-        receiveTimeoutLabel.setText("Receive Timeout (ms):");
+        receiveTimeoutLabel.setText(I18n.t("connectors.httpListener.receiveTimeoutMs", "Receive Timeout (ms):"));
 
-        httpUrlLabel.setText("HTTP URL:");
+        httpUrlLabel.setText(I18n.t("connectors.httpListener.httpUrl", "HTTP URL:"));
 
-        headersLabel.setText("Response Headers:");
+        headersLabel.setText(I18n.t("connectors.httpListener.responseHeaders", "Response Headers:"));
 
         responseHeadersTable.setModel(new DefaultTableModel(new Object[][] {
 
         }, new String[] { "Name", "Value" }));
         responseHeadersPane.setViewportView(responseHeadersTable);
 
-        responseHeadersNewButton.setText("New");
+        responseHeadersNewButton.setText(I18n.t("connectors.httpListener.button.new", "New"));
         responseHeadersNewButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent evt) {
                 responseHeadersNewButtonActionPerformed(evt);
             }
         });
 
-        responseHeadersDeleteButton.setText("Delete");
+        responseHeadersDeleteButton.setText(I18n.t("connectors.httpListener.button.delete", "Delete"));
         responseHeadersDeleteButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent evt) {
                 responseHeadersDeleteButtonActionPerformed(evt);
             }
         });
 
-        useResponseHeadersTableRadio = new MirthRadioButton("Use Table");
+        useResponseHeadersTableRadio = new MirthRadioButton(I18n.t("connectors.httpListener.useTable", "Use Table"));
         useResponseHeadersTableRadio.setBackground(getBackground());
         useResponseHeadersTableRadio.addActionListener(new ActionListener() {
             @Override
@@ -932,7 +947,7 @@ public class HttpListener extends ConnectorSettingsPanel {
                 useResponseHeadersVariableFieldsEnabled(false);
             }
         });
-        useResponseHeadersVariableRadio = new MirthRadioButton("Use Map:");
+        useResponseHeadersVariableRadio = new MirthRadioButton(I18n.t("connectors.httpListener.useMap", "Use Map:"));
         useResponseHeadersVariableRadio.setBackground(getBackground());
         useResponseHeadersVariableRadio.addActionListener(new ActionListener() {
             @Override
@@ -946,11 +961,11 @@ public class HttpListener extends ConnectorSettingsPanel {
 
         responseHeadersVariableField = new MirthTextField();
         
-        responseStatusCodeLabel.setText("Response Status Code:");
+        responseStatusCodeLabel.setText(I18n.t("connectors.httpListener.responseStatusCode", "Response Status Code:"));
 
         messageContentXmlBodyRadio.setBackground(new Color(255, 255, 255));
         includeHeadersGroup.add(messageContentXmlBodyRadio);
-        messageContentXmlBodyRadio.setText("XML Body");
+        messageContentXmlBodyRadio.setText(I18n.t("connectors.httpListener.xmlBody", "XML Body"));
         messageContentXmlBodyRadio.setMargin(new Insets(0, 0, 0, 0));
         messageContentXmlBodyRadio.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent evt) {
@@ -958,40 +973,40 @@ public class HttpListener extends ConnectorSettingsPanel {
             }
         });
 
-        parseMultipartLabel.setText("Parse Multipart:");
+        parseMultipartLabel.setText(I18n.t("connectors.httpListener.parseMultipart", "Parse Multipart:"));
 
         parseMultipartYesRadio.setBackground(new Color(255, 255, 255));
         parseMultipartButtonGroup.add(parseMultipartYesRadio);
-        parseMultipartYesRadio.setText("Yes");
+        parseMultipartYesRadio.setText(I18n.t("connectors.sourceSettings.yes", "Yes"));
         parseMultipartYesRadio.setMargin(new Insets(0, 0, 0, 0));
 
         parseMultipartNoRadio.setBackground(new Color(255, 255, 255));
         parseMultipartButtonGroup.add(parseMultipartNoRadio);
-        parseMultipartNoRadio.setText("No");
+        parseMultipartNoRadio.setText(I18n.t("connectors.sourceSettings.no", "No"));
         parseMultipartNoRadio.setMargin(new Insets(0, 0, 0, 0));
 
-        includeMetadataLabel.setText("Include Metadata:");
+        includeMetadataLabel.setText(I18n.t("connectors.httpListener.includeMetadata", "Include Metadata:"));
 
         includeMetadataYesRadio.setBackground(new Color(255, 255, 255));
         includeMetadataButtonGroup.add(includeMetadataYesRadio);
-        includeMetadataYesRadio.setText("Yes");
+        includeMetadataYesRadio.setText(I18n.t("connectors.sourceSettings.yes", "Yes"));
         includeMetadataYesRadio.setMargin(new Insets(0, 0, 0, 0));
 
         includeMetadataNoRadio.setBackground(new Color(255, 255, 255));
         includeMetadataButtonGroup.add(includeMetadataNoRadio);
-        includeMetadataNoRadio.setText("No");
+        includeMetadataNoRadio.setText(I18n.t("connectors.sourceSettings.no", "No"));
         includeMetadataNoRadio.setMargin(new Insets(0, 0, 0, 0));
 
-        staticResourcesLabel.setText("Static Resources:");
+        staticResourcesLabel.setText(I18n.t("connectors.httpListener.staticResources", "Static Resources:"));
 
-        staticResourcesDeleteButton.setText("Delete");
+        staticResourcesDeleteButton.setText(I18n.t("connectors.httpListener.button.delete", "Delete"));
         staticResourcesDeleteButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent evt) {
                 staticResourcesDeleteButtonActionPerformed(evt);
             }
         });
 
-        staticResourcesNewButton.setText("New");
+        staticResourcesNewButton.setText(I18n.t("connectors.httpListener.button.new", "New"));
         staticResourcesNewButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent evt) {
                 staticResourcesNewButtonActionPerformed(evt);
@@ -1005,11 +1020,11 @@ public class HttpListener extends ConnectorSettingsPanel {
         }));
         responseHeadersPane1.setViewportView(staticResourcesTable);
 
-        responseDataTypeLabel.setText("Response Data Type:");
+        responseDataTypeLabel.setText(I18n.t("connectors.httpListener.responseDataType", "Response Data Type:"));
 
         responseDataTypeBinaryRadio.setBackground(new Color(255, 255, 255));
         responseDataTypeButtonGroup.add(responseDataTypeBinaryRadio);
-        responseDataTypeBinaryRadio.setText("Binary");
+        responseDataTypeBinaryRadio.setText(I18n.t("connectors.httpListener.responseDataType.binary", "Binary"));
         responseDataTypeBinaryRadio.setMargin(new Insets(0, 0, 0, 0));
         responseDataTypeBinaryRadio.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent evt) {
@@ -1019,7 +1034,7 @@ public class HttpListener extends ConnectorSettingsPanel {
 
         responseDataTypeTextRadio.setBackground(new Color(255, 255, 255));
         responseDataTypeButtonGroup.add(responseDataTypeTextRadio);
-        responseDataTypeTextRadio.setText("Text");
+        responseDataTypeTextRadio.setText(I18n.t("connectors.httpListener.responseDataType.text", "Text"));
         responseDataTypeTextRadio.setMargin(new Insets(0, 0, 0, 0));
         responseDataTypeTextRadio.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(ActionEvent evt) {
@@ -1027,37 +1042,41 @@ public class HttpListener extends ConnectorSettingsPanel {
             }
         });
 
-        binaryMimeTypesLabel.setText("Binary MIME Types:");
+        binaryMimeTypesLabel.setText(I18n.t("connectors.httpListener.binaryMimeTypes", "Binary MIME Types:"));
 
         binaryMimeTypesField.setMinimumSize(new java.awt.Dimension(200, 21));
         binaryMimeTypesField.setPreferredSize(new java.awt.Dimension(200, 21));
 
         binaryMimeTypesRegexCheckBox.setBackground(new java.awt.Color(255, 255, 255));
-        binaryMimeTypesRegexCheckBox.setText("Regular Expression");
+        binaryMimeTypesRegexCheckBox.setText(I18n.t("connectors.httpListener.regex", "Regular Expression"));
     }
     
     protected void initToolTips() {
-        messageContentPlainBodyRadio.setToolTipText("<html>If selected, the request body will be sent to the channel as a raw string.</html>");
-        responseContentTypeField.setToolTipText("The MIME type to be used for the response.");
-        charsetEncodingCombobox.setToolTipText(String.format("<html>Select the character set encoding to be used for the response to the sending system.<br>Set to Default to assume the default character set encoding for the JVM running %s.</html>", BrandingConstants.PRODUCT_NAME));
-        contextPathField.setToolTipText("The context path for the HTTP Listener URL.");
-        receiveTimeoutField.setToolTipText("Enter the maximum idle time in milliseconds for a connection.");
-        httpUrlField.setToolTipText("<html>Displays the generated HTTP URL for the HTTP Listener.</html>");
-        responseHeadersTable.setToolTipText("Response header parameters are encoded as HTTP headers in the response sent to the client.");
-        responseStatusCodeField.setToolTipText("<html>Enter the status code for the HTTP response.  If this field is left blank a <br>default status code of 200 will be returned for a successful message, <br>and 500 will be returned for an errored message. If a \"Respond from\" <br>value is chosen, that response will be used to determine a successful <br>or errored response.<html>");
-        messageContentXmlBodyRadio.setToolTipText("<html>If selected, the request body will be sent to the channel as serialized XML.</html>");
-        parseMultipartYesRadio.setToolTipText("<html>Select Yes to automatically parse multipart requests into separate XML nodes.<br/>Select No to always keep the request body as a single XML node.</html>");
-        parseMultipartNoRadio.setToolTipText("<html>Select Yes to automatically parse multipart requests into separate XML nodes.<br/>Select No to always keep the request body as a single XML node.</html>");
-        includeMetadataYesRadio.setToolTipText("<html>Select Yes to include request metadata (method, context path, headers,<br/>query parameters) in the XML content. Note that regardless of this<br/>setting, the same metadata is always available in the source map.</html>");
-        includeMetadataNoRadio.setToolTipText("<html>Select Yes to include request metadata (method, context path, headers,<br/>query parameters) in the XML content. Note that regardless of this<br/>setting, the same metadata is always available in the source map.</html>");
-        staticResourcesTable.setToolTipText("<html>Values in this table are automatically sent back to any request<br/>with the matching context path. There are three resource types:<br/> - <b>File</b>: The value field specifies the path of the file to return.<br/> - <b>Directory</b>: Any file within the directory given by the value<br/>&nbsp;&nbsp;&nbsp;field may be requested, but subdirectories are not included.<br/> - <b>Custom</b>: The value field itself is returned as the response.<br/></html>");
-        responseDataTypeBinaryRadio.setToolTipText("<html>If Binary is selected, responses will be decoded from Base64 into raw byte streams.<br/>If Text is selected, responses will be encoded with the specified character set encoding.</html>");
-        responseDataTypeTextRadio.setToolTipText("<html>If Binary is selected, responses will be decoded from Base64 into raw byte streams.<br/>If Text is selected, responses will be encoded with the specified character set encoding.</html>");
-        binaryMimeTypesField.setToolTipText("<html>When a response comes in with a Content-Type header that<br/>matches one of these entries, the content will be encoded<br/>into a Base64 string. If Regular Expression is unchecked,<br/>specify multiple entries with commas. Otherwise, enter a<br/>valid regular expression to match MIME types against.</html>");
-        binaryMimeTypesRegexCheckBox.setToolTipText("<html>When a response comes in with a Content-Type header that<br/>matches one of these entries, the content will be encoded<br/>into a Base64 string. If Regular Expression is unchecked,<br/>specify multiple entries with commas. Otherwise, enter a<br/>valid regular expression to match MIME types against.</html>");
-        useResponseHeadersTableRadio.setToolTipText("<html>The table below will be used to populate response headers.</html>");
-        useResponseHeadersVariableRadio.setToolTipText("<html>The Java map specified by the following variable will be used to populate response headers.<br/>The map must have String keys and either String or List&lt;String&gt; values.</html>");
-        responseHeadersVariableField.setToolTipText("<html>The variable of a Java map to use to populate response headers.<br/>The map must have String keys and either String or List&lt;String&gt; values.</html>");
+        messageContentPlainBodyRadio.setToolTipText(I18n.t("connectors.httpListener.tooltip.plainBody", "<html>If selected, the request body will be sent to the channel as a raw string.</html>"));
+        responseContentTypeField.setToolTipText(I18n.t("connectors.httpListener.tooltip.responseContentType", "The MIME type to be used for the response."));
+        charsetEncodingCombobox.setToolTipText(I18n.tf(
+                "connectors.httpListener.tooltip.charsetEncoding",
+                "<html>Select the character set encoding to be used for the response to the sending system.<br>Set to Default to assume the default character set encoding for the JVM running {0}.</html>",
+                BrandingConstants.PRODUCT_NAME));
+        contextPathField.setToolTipText(I18n.t("connectors.httpListener.tooltip.baseContextPath", "The context path for the HTTP Listener URL."));
+        receiveTimeoutField.setToolTipText(I18n.t("connectors.httpListener.tooltip.receiveTimeout", "Enter the maximum idle time in milliseconds for a connection."));
+        httpUrlField.setToolTipText(I18n.t("connectors.httpListener.tooltip.httpUrl", "<html>Displays the generated HTTP URL for the HTTP Listener.</html>"));
+        responseStatusCodeField.setToolTipText(I18n.t(
+                "connectors.httpListener.tooltip.responseStatusCode",
+                "<html>Enter the status code for the HTTP response.  If this field is left blank a <br>default status code of 200 will be returned for a successful message, <br>and 500 will be returned for an errored message. If a \"Respond from\" <br>value is chosen, that response will be used to determine a successful <br>or errored response.<html>"));
+        messageContentXmlBodyRadio.setToolTipText(I18n.t("connectors.httpListener.tooltip.xmlBody", "<html>If selected, the request body will be sent to the channel as serialized XML.</html>"));
+        parseMultipartYesRadio.setToolTipText(I18n.t("connectors.httpListener.tooltip.parseMultipart", "<html>Select Yes to automatically parse multipart requests into separate XML nodes.<br/>Select No to always keep the request body as a single XML node.</html>"));
+        parseMultipartNoRadio.setToolTipText(I18n.t("connectors.httpListener.tooltip.parseMultipart", "<html>Select Yes to automatically parse multipart requests into separate XML nodes.<br/>Select No to always keep the request body as a single XML node.</html>"));
+        includeMetadataYesRadio.setToolTipText(I18n.t("connectors.httpListener.tooltip.includeMetadata", "<html>Select Yes to include request metadata (method, context path, headers,<br/>query parameters) in the XML content. Note that regardless of this<br/>setting, the same metadata is always available in the source map.</html>"));
+        includeMetadataNoRadio.setToolTipText(I18n.t("connectors.httpListener.tooltip.includeMetadata", "<html>Select Yes to include request metadata (method, context path, headers,<br/>query parameters) in the XML content. Note that regardless of this<br/>setting, the same metadata is always available in the source map.</html>"));
+        staticResourcesTable.setToolTipText(I18n.t("connectors.httpListener.tooltip.staticResources", "<html>Values in this table are automatically sent back to any request<br/>with the matching context path. There are three resource types:<br/> - <b>File</b>: The value field specifies the path of the file to return.<br/> - <b>Directory</b>: Any file within the directory given by the value<br/>&nbsp;&nbsp;&nbsp;field may be requested, but subdirectories are not included.<br/> - <b>Custom</b>: The value field itself is returned as the response.<br/></html>"));
+        responseDataTypeBinaryRadio.setToolTipText(I18n.t("connectors.httpListener.tooltip.responseDataType", "<html>If Binary is selected, responses will be decoded from Base64 into raw byte streams.<br/>If Text is selected, responses will be encoded with the specified character set encoding.</html>"));
+        responseDataTypeTextRadio.setToolTipText(I18n.t("connectors.httpListener.tooltip.responseDataType", "<html>If Binary is selected, responses will be decoded from Base64 into raw byte streams.<br/>If Text is selected, responses will be encoded with the specified character set encoding.</html>"));
+        binaryMimeTypesField.setToolTipText(I18n.t("connectors.httpListener.tooltip.binaryMimeTypes", "<html>When a response comes in with a Content-Type header that<br/>matches one of these entries, the content will be encoded<br/>into a Base64 string. If Regular Expression is unchecked,<br/>specify multiple entries with commas. Otherwise, enter a<br/>valid regular expression to match MIME types against.</html>"));
+        binaryMimeTypesRegexCheckBox.setToolTipText(I18n.t("connectors.httpListener.tooltip.binaryMimeTypes", "<html>When a response comes in with a Content-Type header that<br/>matches one of these entries, the content will be encoded<br/>into a Base64 string. If Regular Expression is unchecked,<br/>specify multiple entries with commas. Otherwise, enter a<br/>valid regular expression to match MIME types against.</html>"));
+        useResponseHeadersTableRadio.setToolTipText(I18n.t("connectors.httpListener.tooltip.useTable", "<html>The table below will be used to populate response headers.</html>"));
+        useResponseHeadersVariableRadio.setToolTipText(I18n.t("connectors.httpListener.tooltip.useMap", "<html>The Java map specified by the following variable will be used to populate response headers.<br/>The map must have String keys and either String or List&lt;String&gt; values.</html>"));
+        responseHeadersVariableField.setToolTipText(I18n.t("connectors.httpListener.tooltip.useMap.var", "<html>The variable of a Java map to use to populate response headers.<br/>The map must have String keys and either String or List&lt;String&gt; values.</html>"));
     }
 
     protected void initLayout() {

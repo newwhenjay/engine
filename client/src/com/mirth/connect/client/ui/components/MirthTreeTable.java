@@ -46,6 +46,7 @@ import javax.swing.TransferHandler;
 import javax.swing.table.JTableHeader;
 import javax.swing.table.TableColumn;
 import javax.swing.table.TableColumnModel;
+import java.awt.event.MouseEvent;
 
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
@@ -156,6 +157,22 @@ public class MirthTreeTable extends SortableTreeTable {
         final JButton columnControlButton = new JButton(new ColumnControlButton(this).getIcon());
         configureColumnControlAction(columnControlButton);
         setColumnControl(columnControlButton);
+    }
+
+    @Override
+    public String getToolTipText(MouseEvent event) {
+        try {
+            if (event != null) {
+                int viewColumn = columnAtPoint(event.getPoint());
+                if (viewColumn < 0 || viewColumn >= getColumnCount()) {
+                    return null;
+                }
+            }
+            return super.getToolTipText(event);
+        } catch (IllegalArgumentException e) {
+            // SwingX can throw when the mouse is over non-column regions.
+            return null;
+        }
     }
     
     protected void configureColumnControlAction(JButton columnControlButton) {
@@ -479,6 +496,14 @@ public class MirthTreeTable extends SortableTreeTable {
                     ((SortableHeaderCellRenderer) getTableHeader().getDefaultRenderer()).setSortingIcon(sortOrder);
                     ((SortableHeaderCellRenderer) getTableHeader().getDefaultRenderer()).setColumnIndex(sortOrderColumn);
                 }
+
+                /*
+                 * Guardrail: It's possible for preferences to hide all columns, leaving a blank
+                 * table even though rows exist. If that happens, reset to defaults.
+                 */
+                if (getColumnCount() == 0) {
+                    restoreDefaultColumnPreferences();
+                }
             } catch (Exception e) {
                 restoreDefaultColumnPreferences();
             }
@@ -523,12 +548,16 @@ public class MirthTreeTable extends SortableTreeTable {
                 int index = 0;
                 for (TableColumn column : getColumns(true)) {
                     TableColumnExt columnExt = (TableColumnExt) column;
-                    columnModel.moveColumn(columnModel.getColumnIndex(columnExt.getTitle()), index++);
+                    Object identifier = columnExt.getIdentifier();
+                    String key = identifier != null ? String.valueOf(identifier) : columnExt.getTitle();
+                    columnModel.moveColumn(columnModel.getColumnIndex(key), index++);
                 }
 
                 for (TableColumn column : getColumns(true)) {
                     TableColumnExt columnExt = (TableColumnExt) column;
-                    columnExt.setVisible(defaultVisibleColumns.contains(columnExt.getTitle()));
+                    Object identifier = columnExt.getIdentifier();
+                    String key = identifier != null ? String.valueOf(identifier) : columnExt.getTitle();
+                    columnExt.setVisible(defaultVisibleColumns.contains(key));
                 }
 
                 sortOrder = null;

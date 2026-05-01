@@ -39,6 +39,7 @@ import org.jdesktop.swingx.decorator.HighlighterFactory;
 import com.mirth.connect.client.core.ClientException;
 import com.mirth.connect.client.core.TaskConstants;
 import com.mirth.connect.client.ui.components.MirthTable;
+import com.mirth.connect.client.ui.i18n.I18n;
 import com.mirth.connect.model.DatabaseTask;
 import com.mirth.connect.model.DatabaseTask.Status;
 
@@ -54,14 +55,27 @@ public class SettingsPanelDatabaseTasks extends AbstractSettingsPanel implements
         setLayout(new MigLayout("insets 12, novisualpadding, hidemode 3, fill"));
         setBackground(UIConstants.BACKGROUND_COLOR);
         initComponents();
-        addTask(TaskConstants.SETTINGS_RUN_DATABASE_TASK, "Run Task", "Execute the selected database task.", "", new ImageIcon(Frame.class.getResource("images/control_play_blue.png")));
-        addTask(TaskConstants.SETTINGS_CANCEL_DATABASE_TASK, "Cancel Task", "Cancel the selected database task.", "", new ImageIcon(Frame.class.getResource("images/stop.png")));
+        addTask(TaskConstants.SETTINGS_RUN_DATABASE_TASK,
+                I18n.t("settings.dbTasks.task.run.title", "Run Task"),
+                I18n.t("settings.dbTasks.task.run.desc", "Execute the selected database task."),
+                "",
+                new ImageIcon(Frame.class.getResource("images/control_play_blue.png")));
+        addTask(TaskConstants.SETTINGS_CANCEL_DATABASE_TASK,
+                I18n.t("settings.dbTasks.task.cancel.title", "Cancel Task"),
+                I18n.t("settings.dbTasks.task.cancel.desc", "Cancel the selected database task."),
+                "",
+                new ImageIcon(Frame.class.getResource("images/stop.png")));
         setVisibleTasks(2, 3, false);
     }
 
     @Override
+    public String getTabDisplayName() {
+        return I18n.t("settings.tab.databaseTasks", TAB_NAME);
+    }
+
+    @Override
     public void doRefresh() {
-        final String workingId = getFrame().startWorking("Loading database tasks...");
+        final String workingId = getFrame().startWorking(I18n.t("settings.dbTasks.working.loading", "Loading database tasks..."));
         final int selectedRow = taskTable.getSelectedRow();
 
         SwingWorker<Map<String, DatabaseTask>, Void> worker = new SwingWorker<Map<String, DatabaseTask>, Void>() {
@@ -100,7 +114,7 @@ public class SettingsPanelDatabaseTasks extends AbstractSettingsPanel implements
                     if (t instanceof ExecutionException) {
                         t = t.getCause();
                     }
-                    getFrame().alertThrowable(getFrame(), t, "Error loading database tasks: " + t.toString());
+                    getFrame().alertThrowable(getFrame(), t, I18n.tf("settings.dbTasks.error.loadingWithReason", "Error loading database tasks: {0}", t.toString()));
                 } finally {
                     getFrame().stopWorking(workingId);
                 }
@@ -122,7 +136,7 @@ public class SettingsPanelDatabaseTasks extends AbstractSettingsPanel implements
             return;
         }
 
-        final String workingId = getFrame().startWorking("Running database task...");
+        final String workingId = getFrame().startWorking(I18n.t("settings.dbTasks.working.running", "Running database task..."));
         final String taskId = databaseTask.getId();
 
         SwingWorker<String, Void> worker = new SwingWorker<String, Void>() {
@@ -143,7 +157,7 @@ public class SettingsPanelDatabaseTasks extends AbstractSettingsPanel implements
                     if (t instanceof ExecutionException) {
                         t = t.getCause();
                     }
-                    getFrame().alertThrowable(getFrame(), t, "Error running database task: " + t.getMessage());
+                    getFrame().alertThrowable(getFrame(), t, I18n.tf("settings.dbTasks.error.runningWithReason", "Error running database task: {0}", t.getMessage()));
                 } finally {
                     getFrame().stopWorking(workingId);
                     doRefresh();
@@ -159,15 +173,15 @@ public class SettingsPanelDatabaseTasks extends AbstractSettingsPanel implements
         DatabaseTask databaseTask = (DatabaseTask) taskTable.getValueAt(taskTable.getSelectedRow(), 1);
 
         if (databaseTask.getStatus() != Status.RUNNING) {
-            getFrame().alertError(getFrame(), "Task \"" + databaseTask.getName() + "\" is not currently running.");
+            getFrame().alertError(getFrame(), I18n.tf("settings.dbTasks.error.notRunning", "Task \"{0}\" is not currently running.", databaseTask.getName()));
             return;
         }
 
-        if (!getFrame().alertOption(getFrame(), "Are you sure you want to cancel the selected database task?")) {
+        if (!getFrame().alertOption(getFrame(), I18n.t("settings.dbTasks.confirm.cancel", "Are you sure you want to cancel the selected database task?"))) {
             return;
         }
 
-        final String workingId = getFrame().startWorking("Cancelling database task...");
+        final String workingId = getFrame().startWorking(I18n.t("settings.dbTasks.working.cancelling", "Cancelling database task..."));
         final String taskId = databaseTask.getId();
 
         SwingWorker<Void, Void> worker = new SwingWorker<Void, Void>() {
@@ -186,7 +200,7 @@ public class SettingsPanelDatabaseTasks extends AbstractSettingsPanel implements
                     if (t instanceof ExecutionException) {
                         t = t.getCause();
                     }
-                    getFrame().alertThrowable(getFrame(), t, "Error cancelling database task: " + t.getMessage());
+                    getFrame().alertThrowable(getFrame(), t, I18n.tf("settings.dbTasks.error.cancellingWithReason", "Error cancelling database task: {0}", t.getMessage()));
                 } finally {
                     getFrame().stopWorking(workingId);
                     doRefresh();
@@ -200,12 +214,18 @@ public class SettingsPanelDatabaseTasks extends AbstractSettingsPanel implements
     private void initComponents() {
         JPanel containerPanel = new JPanel(new MigLayout("insets 0, novisualpadding, hidemode 3, fill"));
         containerPanel.setBackground(getBackground());
-        containerPanel.setBorder(BorderFactory.createTitledBorder(BorderFactory.createMatteBorder(1, 0, 0, 0, new Color(204, 204, 204)), "Database Tasks", TitledBorder.DEFAULT_JUSTIFICATION, TitledBorder.DEFAULT_POSITION, new Font("Tahoma", 1, 11)));
-        containerPanel.add(new JLabel("Cleanup or optimization tasks for the internal database. If no tasks are present, no action is necessary."), "top, wrap");
+        containerPanel.setBorder(BorderFactory.createTitledBorder(BorderFactory.createMatteBorder(1, 0, 0, 0, new Color(204, 204, 204)),
+                I18n.t("settings.dbTasks.section.tasks", "Database Tasks"),
+                TitledBorder.DEFAULT_JUSTIFICATION, TitledBorder.DEFAULT_POSITION, new Font("Tahoma", 1, 11)));
+        containerPanel.add(new JLabel(I18n.t("settings.dbTasks.help",
+                "Cleanup or optimization tasks for the internal database. If no tasks are present, no action is necessary.")), "top, wrap");
 
         taskTable = new MirthTable();
-        taskTable.setModel(new RefreshTableModel(new Object[] { "Status", "Name", "Description",
-                "Start Time" }, 0));
+        taskTable.setModel(new RefreshTableModel(new Object[] {
+                I18n.t("settings.dbTasks.column.status", "Status"),
+                I18n.t("settings.dbTasks.column.name", "Name"),
+                I18n.t("settings.dbTasks.column.description", "Description"),
+                I18n.t("settings.dbTasks.column.startTime", "Start Time") }, 0));
         taskTable.setDragEnabled(false);
         taskTable.setRowSelectionAllowed(true);
         taskTable.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
@@ -261,10 +281,14 @@ public class SettingsPanelDatabaseTasks extends AbstractSettingsPanel implements
 
         JPanel channelsPanel = new JPanel(new MigLayout("insets 0, novisualpadding, hidemode 3, fill"));
         channelsPanel.setBackground(getBackground());
-        channelsPanel.setBorder(BorderFactory.createTitledBorder(BorderFactory.createMatteBorder(1, 0, 0, 0, new Color(204, 204, 204)), "Affected Channels", TitledBorder.DEFAULT_JUSTIFICATION, TitledBorder.DEFAULT_POSITION, new Font("Tahoma", 1, 11)));
+        channelsPanel.setBorder(BorderFactory.createTitledBorder(BorderFactory.createMatteBorder(1, 0, 0, 0, new Color(204, 204, 204)),
+                I18n.t("settings.dbTasks.section.affectedChannels", "Affected Channels"),
+                TitledBorder.DEFAULT_JUSTIFICATION, TitledBorder.DEFAULT_POSITION, new Font("Tahoma", 1, 11)));
 
         channelsTable = new MirthTable();
-        channelsTable.setModel(new RefreshTableModel(new Object[] { "Name", "Id" }, 0));
+        channelsTable.setModel(new RefreshTableModel(new Object[] {
+                I18n.t("settings.dbTasks.channel.column.name", "Name"),
+                I18n.t("settings.dbTasks.channel.column.id", "Id") }, 0));
         channelsTable.setDragEnabled(false);
         channelsTable.setRowSelectionAllowed(false);
         channelsTable.setRowHeight(UIConstants.ROW_HEIGHT);

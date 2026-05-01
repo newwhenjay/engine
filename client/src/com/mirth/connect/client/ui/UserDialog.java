@@ -13,6 +13,7 @@ import java.awt.Dimension;
 import java.awt.Point;
 
 import com.mirth.connect.client.ui.util.DisplayUtil;
+import com.mirth.connect.client.ui.i18n.I18n;
 import com.mirth.connect.model.User;
 
 /**
@@ -34,17 +35,20 @@ public class UserDialog extends MirthDialog implements UserDialogInterface {
         boolean passwordRequired = false;
         if (currentUser != null) {
             editingLoggedInUser = currentUser.getUsername().equals(PlatformUI.USER_NAME);
-            jLabel2.setText("Edit User");
+            jLabel2.setText(I18n.t("user.dialog.editUser", "Edit User"));
         } else {
             currentUser = new User();
             passwordRequired = true;
-            jLabel2.setText("New User");
+            jLabel2.setText(I18n.t("user.dialog.newUser", "New User"));
         }
 
         userEditPanel.setUser(this, currentUser);
         userEditPanel.setRequiredFields(false, passwordRequired);
 
         jLabel2.setForeground(UIConstants.HEADER_TITLE_TEXT_COLOR);
+        setTitle(I18n.t("user.dialog.title", "User"));
+        finishButton.setText(I18n.t("user.dialog.finish", "Finish"));
+        cancelButton.setText(I18n.t("user.dialog.cancel", "Cancel"));
         setModal(true);
         pack();
         Dimension dlgSize = getPreferredSize();

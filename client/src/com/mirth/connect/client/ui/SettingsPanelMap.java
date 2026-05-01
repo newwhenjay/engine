@@ -48,6 +48,7 @@ import com.mirth.connect.client.ui.components.MirthButton;
 import com.mirth.connect.client.ui.components.MirthDialogTableCellEditor;
 import com.mirth.connect.client.ui.components.MirthPasswordTableCellRenderer;
 import com.mirth.connect.client.ui.components.MirthTable;
+import com.mirth.connect.client.ui.i18n.I18n;
 import com.mirth.connect.util.ConfigurationProperty;
 
 public class SettingsPanelMap extends AbstractSettingsPanel {
@@ -56,15 +57,37 @@ public class SettingsPanelMap extends AbstractSettingsPanel {
     private static final String SHOW_VALUES_KEY = "showConfigMapValues";
     private static Preferences userPreferences = Preferences.userNodeForPackage(Mirth.class);
 
+    // Table column identifiers (do not localize)
+    private static final String COLUMN_KEY = "Key";
+    private static final String COLUMN_VALUE = "Value";
+    private static final String COLUMN_COMMENT = "Comment";
+
+    private static final int COL_KEY = 0;
+    private static final int COL_VALUE = 1;
+    private static final int COL_COMMENT = 2;
+
     public SettingsPanelMap(String tabName) {
         super(tabName);
 
         initComponents();
 
-        addTask(TaskConstants.SETTINGS_CONFIGURATION_MAP_IMPORT, "Import Map", "Import a properties file into the configuration map. This will remove and replace any existing map values.", "", new ImageIcon(com.mirth.connect.client.ui.Frame.class.getResource("images/report_disk.png")));
-        addTask(TaskConstants.SETTINGS_CONFIGURATION_MAP_EXPORT, "Export Map", "Export the configuration map to a properties file.", "", new ImageIcon(com.mirth.connect.client.ui.Frame.class.getResource("images/report_go.png")));
+        addTask(TaskConstants.SETTINGS_CONFIGURATION_MAP_IMPORT,
+                I18n.t("settings.configMap.task.import.title", "Import Map"),
+                I18n.t("settings.configMap.task.import.desc", "Import a properties file into the configuration map. This will remove and replace any existing map values."),
+                "",
+                new ImageIcon(com.mirth.connect.client.ui.Frame.class.getResource("images/report_disk.png")));
+        addTask(TaskConstants.SETTINGS_CONFIGURATION_MAP_EXPORT,
+                I18n.t("settings.configMap.task.export.title", "Export Map"),
+                I18n.t("settings.configMap.task.export.desc", "Export the configuration map to a properties file."),
+                "",
+                new ImageIcon(com.mirth.connect.client.ui.Frame.class.getResource("images/report_go.png")));
 
         setVisibleTasks(2, 3, true);
+    }
+
+    @Override
+    public String getTabDisplayName() {
+        return I18n.t("settings.tab.configurationMap", TAB_NAME);
     }
 
     public void doRefresh() {
@@ -79,7 +102,7 @@ public class SettingsPanelMap extends AbstractSettingsPanel {
         boolean showConfigMapValues = userPreferences.getBoolean(SHOW_VALUES_KEY, false);
         showValuesCheckbox.setSelected(showConfigMapValues);
 
-        final String workingId = getFrame().startWorking("Loading " + getTabName() + " settings...");
+        final String workingId = getFrame().startWorking(I18n.tf("settings.configMap.working.loading", "Loading {0} settings...", getTabName()));
 
         SwingWorker<Void, Void> worker = new SwingWorker<Void, Void>() {
 
@@ -118,7 +141,7 @@ public class SettingsPanelMap extends AbstractSettingsPanel {
             return false;
         }
 
-        final String workingId = getFrame().startWorking("Saving " + getTabName() + " settings...");
+        final String workingId = getFrame().startWorking(I18n.tf("settings.configMap.working.saving", "Saving {0} settings...", getTabName()));
 
         SwingWorker<Void, Void> worker = new SwingWorker<Void, Void>() {
 
@@ -157,7 +180,7 @@ public class SettingsPanelMap extends AbstractSettingsPanel {
                 configurationMap.put(key, new ConfigurationProperty(value, comment));
             } else {
                 if (StringUtils.isNotBlank(value) || StringUtils.isNotBlank(comment)) {
-                    getFrame().alertWarning(this, "Blank keys are not allowed.");
+                    getFrame().alertWarning(this, I18n.t("settings.configMap.error.blankKeysNotAllowed", "Blank keys are not allowed."));
                     return null;
                 }
             }
@@ -191,7 +214,7 @@ public class SettingsPanelMap extends AbstractSettingsPanel {
                 updateConfigurationTable(configurationMap, showValuesCheckbox.isSelected(), true);
                 setSaveEnabled(true);
             } catch (Exception e) {
-                getFrame().alertThrowable(getFrame(), e, "Error importing configuration map");
+                getFrame().alertThrowable(getFrame(), e, I18n.t("settings.configMap.error.importFailed", "Error importing configuration map"));
             }
         }
     }
@@ -203,7 +226,7 @@ public class SettingsPanelMap extends AbstractSettingsPanel {
         }
 
         if (isSaveEnabled()) {
-            int option = JOptionPane.showConfirmDialog(this, "Would you like to save the settings first?");
+            int option = JOptionPane.showConfirmDialog(this, I18n.t("settings.configMap.confirm.saveFirst", "Would you like to save the settings first?"));
 
             if (option == JOptionPane.YES_OPTION) {
                 if (!doSave()) {
@@ -214,7 +237,7 @@ public class SettingsPanelMap extends AbstractSettingsPanel {
             }
         }
 
-        final String workingId = getFrame().startWorking("Exporting " + getTabName() + " settings...");
+        final String workingId = getFrame().startWorking(I18n.tf("settings.configMap.working.exporting", "Exporting {0} settings...", getTabName()));
 
         SwingWorker<Void, Void> worker = new SwingWorker<Void, Void>() {
 
@@ -285,9 +308,9 @@ public class SettingsPanelMap extends AbstractSettingsPanel {
 
     private void updateCellRenderer(boolean show) {
         if (show) {
-            configurationMapTable.getColumnExt("Value").setCellRenderer(new DefaultTableCellRenderer());
+            configurationMapTable.getColumnExt(COL_VALUE).setCellRenderer(new DefaultTableCellRenderer());
         } else {
-            configurationMapTable.getColumnExt("Value").setCellRenderer(new MirthPasswordTableCellRenderer());
+            configurationMapTable.getColumnExt(COL_VALUE).setCellRenderer(new MirthPasswordTableCellRenderer());
         }
     }
 
@@ -302,9 +325,9 @@ public class SettingsPanelMap extends AbstractSettingsPanel {
         setBorder(javax.swing.BorderFactory.createEmptyBorder(0, 0, 0, 0));
         setLayout(new MigLayout("insets 12, fill"));
 
-        showValuesLabel = new JLabel("Show values");
+        showValuesLabel = new JLabel(I18n.t("settings.configMap.label.showValues", "Show values"));
         showValuesCheckbox = new JCheckBox();
-        String tooltip = "If enabled, values in the table will be shown.";
+        String tooltip = I18n.t("settings.configMap.tooltip.showValues", "If enabled, values in the table will be shown.");
         showValuesCheckbox.setToolTipText(tooltip);
         showValuesCheckbox.setBackground(Color.WHITE);
         showValuesCheckbox.addActionListener(new ActionListener() {
@@ -320,7 +343,10 @@ public class SettingsPanelMap extends AbstractSettingsPanel {
         configurationMapTable.setSortable(false);
         configurationMapTable.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
         configurationMapTable.setModel(new RefreshTableModel(new String[][] {}, new String[] {
-                "Key", "Value", "Comment" }));
+                COLUMN_KEY, COLUMN_VALUE, COLUMN_COMMENT }));
+        configurationMapTable.getColumnExt(COL_KEY).setTitle(I18n.t("settings.configMap.column.key", "Key"));
+        configurationMapTable.getColumnExt(COL_VALUE).setTitle(I18n.t("settings.configMap.column.value", "Value"));
+        configurationMapTable.getColumnExt(COL_COMMENT).setTitle(I18n.t("settings.configMap.column.comment", "Comment"));
         TableCellEditor cellEditor = new TextFieldCellEditor() {
 
             @Override
@@ -330,8 +356,8 @@ public class SettingsPanelMap extends AbstractSettingsPanel {
             }
 
         };
-        configurationMapTable.getColumnExt("Key").setCellEditor(cellEditor);
-        configurationMapTable.getColumnExt("Comment").setCellEditor(cellEditor);
+        configurationMapTable.getColumnExt(COL_KEY).setCellEditor(cellEditor);
+        configurationMapTable.getColumnExt(COL_COMMENT).setCellEditor(cellEditor);
         configurationMapTable.getSelectionModel().addListSelectionListener(new ListSelectionListener() {
             public void valueChanged(ListSelectionEvent evt) {
                 int selectedRow;
@@ -344,7 +370,7 @@ public class SettingsPanelMap extends AbstractSettingsPanel {
             }
         });
 
-        configurationMapTable.getColumnExt("Value").setCellEditor(new MirthDialogTableCellEditor(configurationMapTable));
+        configurationMapTable.getColumnExt(COL_VALUE).setCellEditor(new MirthDialogTableCellEditor(configurationMapTable));
 
         if (Preferences.userNodeForPackage(Mirth.class).getBoolean("highlightRows", true)) {
             configurationMapTable.setHighlighters(HighlighterFactory.createAlternateStriping(UIConstants.HIGHLIGHTER_COLOR, UIConstants.BACKGROUND_COLOR));
@@ -353,7 +379,7 @@ public class SettingsPanelMap extends AbstractSettingsPanel {
         configurationMapScrollPane = new JScrollPane();
         configurationMapScrollPane.setViewportView(configurationMapTable);
 
-        addButton = new MirthButton("Add");
+        addButton = new MirthButton(I18n.t("settings.configMap.button.add", "Add"));
         addButton.addActionListener(new ActionListener() {
 
             @Override
@@ -369,7 +395,7 @@ public class SettingsPanelMap extends AbstractSettingsPanel {
             }
 
         });
-        removeButton = new MirthButton("Remove");
+        removeButton = new MirthButton(I18n.t("settings.configMap.button.remove", "Remove"));
         removeButton.addActionListener(new ActionListener() {
 
             @Override
@@ -401,7 +427,9 @@ public class SettingsPanelMap extends AbstractSettingsPanel {
         configurationMapPanel = new JPanel();
         configurationMapPanel.setBackground(Color.WHITE);
         configurationMapPanel.setLayout(new MigLayout("fill, insets 0", "[grow]", "[][grow]"));
-        configurationMapPanel.setBorder(javax.swing.BorderFactory.createTitledBorder(javax.swing.BorderFactory.createMatteBorder(1, 0, 0, 0, new java.awt.Color(204, 204, 204)), "Configuration Map", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Tahoma", 1, 11))); // NOI18N
+        configurationMapPanel.setBorder(javax.swing.BorderFactory.createTitledBorder(javax.swing.BorderFactory.createMatteBorder(1, 0, 0, 0, new java.awt.Color(204, 204, 204)),
+                I18n.t("settings.configMap.section.title", "Configuration Map"),
+                javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Tahoma", 1, 11))); // NOI18N
 
         JPanel showValuesPanel = new JPanel();
         showValuesPanel.setBackground(Color.WHITE);

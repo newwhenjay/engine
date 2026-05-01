@@ -109,6 +109,14 @@ public abstract class AbstractSettingsPanel extends JPanel {
         return tabName;
     }
 
+    /**
+     * Display name shown in the Settings tab bar. By default this is the same as the internal
+     * tab name, but subclasses may override to provide an internationalized label.
+     */
+    public String getTabDisplayName() {
+        return tabName;
+    }
+
     public String getTaskKey() {
         return tabName;
     }

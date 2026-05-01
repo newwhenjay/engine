@@ -49,6 +49,7 @@ import com.mirth.connect.client.ui.PlatformUI;
 import com.mirth.connect.client.ui.UIConstants;
 import com.mirth.connect.client.ui.components.MirthFieldConstraints;
 import com.mirth.connect.client.ui.components.MirthRadioButton;
+import com.mirth.connect.client.ui.i18n.I18n;
 import com.mirth.connect.donkey.model.channel.ConnectorPluginProperties;
 import com.mirth.connect.donkey.model.channel.DestinationConnectorProperties;
 import com.mirth.connect.donkey.model.channel.DestinationConnectorPropertiesInterface;
@@ -177,7 +178,7 @@ public class DestinationSettingsPanel extends JPanel {
             case METADATA:
             case DISABLED:
                 if (queueMessagesAlwaysRadio.isSelected() || queueMessagesOnFailureRadio.isSelected()) {
-                    queueMessagesWarningLabel.setText("<html>Queueing is not supported by the current message storage mode</html>");
+                    queueMessagesWarningLabel.setText(I18n.t("connectors.destinationSettings.queue.unsupported", "<html>Queueing is not supported by the current message storage mode</html>"));
                 } else {
                     queueMessagesWarningLabel.setText("");
                 }
@@ -233,9 +234,12 @@ public class DestinationSettingsPanel extends JPanel {
     private void initComponents() {
         setLayout(new MigLayout("insets 4 8 4 4, novisualpadding, hidemode 3, fill", "[]13[grow]"));
         setBackground(UIConstants.BACKGROUND_COLOR);
-        setBorder(BorderFactory.createTitledBorder(BorderFactory.createMatteBorder(1, 0, 0, 0, new Color(204, 204, 204)), "Destination Settings", TitledBorder.DEFAULT_JUSTIFICATION, TitledBorder.DEFAULT_POSITION, new Font("Tahoma", 1, 11)));
+        setBorder(BorderFactory.createTitledBorder(
+                BorderFactory.createMatteBorder(1, 0, 0, 0, new Color(204, 204, 204)),
+                I18n.t("connectors.destinationSettings.title", "Destination Settings"),
+                TitledBorder.DEFAULT_JUSTIFICATION, TitledBorder.DEFAULT_POSITION, new Font("Tahoma", 1, 11)));
 
-        queueMessagesLabel = new JLabel("Queue Messages:");
+        queueMessagesLabel = new JLabel(I18n.t("connectors.destinationSettings.queueMessages", "Queue Messages:"));
 
         ButtonGroup queueMessagesButtonGroup = new ButtonGroup();
         ActionListener queueMessagesActionListener = new ActionListener() {
@@ -245,28 +249,30 @@ public class DestinationSettingsPanel extends JPanel {
             }
         };
 
-        queueMessagesNeverRadio = new MirthRadioButton("Never");
+        queueMessagesNeverRadio = new MirthRadioButton(I18n.t("connectors.destinationSettings.queue.never", "Never"));
         queueMessagesNeverRadio.setBackground(getBackground());
-        queueMessagesNeverRadio.setToolTipText("Disable the destination queue.");
+        queueMessagesNeverRadio.setToolTipText(I18n.t("connectors.destinationSettings.queue.never.tooltip", "Disable the destination queue."));
         queueMessagesNeverRadio.addActionListener(queueMessagesActionListener);
         queueMessagesButtonGroup.add(queueMessagesNeverRadio);
 
-        queueMessagesOnFailureRadio = new MirthRadioButton("On Failure");
+        queueMessagesOnFailureRadio = new MirthRadioButton(I18n.t("connectors.destinationSettings.queue.onFailure", "On Failure"));
         queueMessagesOnFailureRadio.setBackground(getBackground());
-        queueMessagesOnFailureRadio.setToolTipText("<html>Attempt to send the message first before queueing it. This will allow subsequent<br/>destinations and the Postprocessor to use the response from this destination if it<br/>successfully sends before queueing.</html>");
+        queueMessagesOnFailureRadio.setToolTipText(I18n.t("connectors.destinationSettings.queue.onFailure.tooltip",
+                "<html>Attempt to send the message first before queueing it. This will allow subsequent<br/>destinations and the Postprocessor to use the response from this destination if it<br/>successfully sends before queueing.</html>"));
         queueMessagesOnFailureRadio.addActionListener(queueMessagesActionListener);
         queueMessagesButtonGroup.add(queueMessagesOnFailureRadio);
 
-        queueMessagesAlwaysRadio = new MirthRadioButton("Always");
+        queueMessagesAlwaysRadio = new MirthRadioButton(I18n.t("connectors.destinationSettings.queue.always", "Always"));
         queueMessagesAlwaysRadio.setBackground(getBackground());
-        queueMessagesAlwaysRadio.setToolTipText("<html>Immediately queue the message. Subsequent destinations and the<br/>Postprocessor will always see this destination's response as QUEUED.</html>");
+        queueMessagesAlwaysRadio.setToolTipText(I18n.t("connectors.destinationSettings.queue.always.tooltip",
+                "<html>Immediately queue the message. Subsequent destinations and the<br/>Postprocessor will always see this destination's response as QUEUED.</html>"));
         queueMessagesAlwaysRadio.addActionListener(queueMessagesActionListener);
         queueMessagesButtonGroup.add(queueMessagesAlwaysRadio);
 
         queueMessagesWarningLabel = new JLabel();
         queueMessagesWarningLabel.setForeground(Color.RED);
 
-        advancedQueueSettingsLabel = new JLabel("Advanced Queue Settings:");
+        advancedQueueSettingsLabel = new JLabel(I18n.t("connectors.destinationSettings.advancedQueueSettings", "Advanced Queue Settings:"));
 
         advancedQueueSettingsButton = new JButton(new ImageIcon(Frame.class.getResource("images/wrench.png")));
         advancedQueueSettingsButton.addActionListener(new ActionListener() {
@@ -278,32 +284,34 @@ public class DestinationSettingsPanel extends JPanel {
 
         advancedQueueSettingsValueLabel = new JLabel();
 
-        validateResponseLabel = new JLabel("Validate Response:");
+        validateResponseLabel = new JLabel(I18n.t("connectors.destinationSettings.validateResponse", "Validate Response:"));
 
         ButtonGroup validateResponseButtonGroup = new ButtonGroup();
-        String toolTipText = "<html>Select Yes to validate the response. Responses can only be validated if the<br>response transformer's inbound properties contains a <b>Response Validation</b><br>section. If validation fails, the message will be marked as queued or errored.</html>";
+        String toolTipText = I18n.t("connectors.destinationSettings.validateResponse.tooltip",
+                "<html>Select Yes to validate the response. Responses can only be validated if the<br>response transformer's inbound properties contains a <b>Response Validation</b><br>section. If validation fails, the message will be marked as queued or errored.</html>");
 
-        validateResponseYesRadio = new MirthRadioButton("Yes");
+        validateResponseYesRadio = new MirthRadioButton(I18n.t("connectors.sourceSettings.yes", "Yes"));
         validateResponseYesRadio.setBackground(getBackground());
         validateResponseYesRadio.setToolTipText(toolTipText);
         validateResponseButtonGroup.add(validateResponseYesRadio);
 
-        validateResponseNoRadio = new MirthRadioButton("No");
+        validateResponseNoRadio = new MirthRadioButton(I18n.t("connectors.sourceSettings.no", "No"));
         validateResponseNoRadio.setBackground(getBackground());
         validateResponseNoRadio.setToolTipText(toolTipText);
         validateResponseButtonGroup.add(validateResponseNoRadio);
 
-        reattachAttachmentsLabel = new JLabel("Reattach Attachments:");
+        reattachAttachmentsLabel = new JLabel(I18n.t("connectors.destinationSettings.reattachAttachments", "Reattach Attachments:"));
 
         ButtonGroup reattachAttachmentsButtonGroup = new ButtonGroup();
-        toolTipText = "<html>If enabled, replacement tokens using the ${ATTACH:...} syntax will<br/>automatically be replaced with the associated attachment content<br/>before the message is sent. If disabled, the tokens will be<br/>expanded to the full ${ATTACH:channelId:messageId:attachmentId}<br/>syntax which can then be reattached in downstream channels.</html>";
+        toolTipText = I18n.t("connectors.destinationSettings.reattachAttachments.tooltip",
+                "<html>If enabled, replacement tokens using the ${ATTACH:...} syntax will<br/>automatically be replaced with the associated attachment content<br/>before the message is sent. If disabled, the tokens will be<br/>expanded to the full ${ATTACH:channelId:messageId:attachmentId}<br/>syntax which can then be reattached in downstream channels.</html>");
 
-        reattachAttachmentsYesRadio = new MirthRadioButton("Yes");
+        reattachAttachmentsYesRadio = new MirthRadioButton(I18n.t("connectors.sourceSettings.yes", "Yes"));
         reattachAttachmentsYesRadio.setBackground(getBackground());
         reattachAttachmentsYesRadio.setToolTipText(toolTipText);
         reattachAttachmentsButtonGroup.add(reattachAttachmentsYesRadio);
 
-        reattachAttachmentsNoRadio = new MirthRadioButton("No");
+        reattachAttachmentsNoRadio = new MirthRadioButton(I18n.t("connectors.sourceSettings.no", "No"));
         reattachAttachmentsNoRadio.setBackground(getBackground());
         reattachAttachmentsNoRadio.setToolTipText(toolTipText);
         reattachAttachmentsButtonGroup.add(reattachAttachmentsNoRadio);
@@ -414,23 +422,23 @@ public class DestinationSettingsPanel extends JPanel {
             String errors = "";
 
             if (retryCountField.isEnabled() && StringUtils.isBlank(retryCountField.getText())) {
-                errors += "Retry count cannot be blank.\n";
+                errors += I18n.t("connectors.destinationSettings.advancedDialog.error.retryCountBlank", "Retry count cannot be blank.") + "\n";
                 retryCountField.setBackground(UIConstants.INVALID_COLOR);
             }
 
             if (retryIntervalField.isEnabled() && NumberUtils.toInt(retryIntervalField.getText(), 0) <= 0) {
-                errors += "Retry interval must be greater than zero.\n";
+                errors += I18n.t("connectors.destinationSettings.advancedDialog.error.retryIntervalPositive", "Retry interval must be greater than zero.") + "\n";
                 retryIntervalField.setBackground(UIConstants.INVALID_COLOR);
             }
 
             if (queueThreadsField.isEnabled() && NumberUtils.toInt(queueThreadsField.getText(), 0) <= 0) {
-                errors += "Queue threads must be greater than zero.\n";
+                errors += I18n.t("connectors.destinationSettings.advancedDialog.error.queueThreadsPositive", "Queue threads must be greater than zero.") + "\n";
                 queueThreadsField.setBackground(UIConstants.INVALID_COLOR);
             }
 
             if (NumberUtils.toInt(queueBufferSizeField.getText()) <= 0) {
                 queueBufferSizeField.setBackground(UIConstants.INVALID_COLOR);
-                errors += "Queue buffer size must be greater than zero.\n";
+                errors += I18n.t("connectors.destinationSettings.advancedDialog.error.queueBufferSizePositive", "Queue buffer size must be greater than zero.") + "\n";
             }
 
             if (StringUtils.isNotBlank(errors)) {

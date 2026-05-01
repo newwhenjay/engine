@@ -13,6 +13,8 @@
 
 	<target name="init">
 		<property file="build.properties" />
+		<!-- Ensure ${version} is set even when running server/build.xml directly -->
+		<property file="${conf}/mirth.properties" />
 
 		<fail message="Required property archive.entry.date is not set"
 			unless:set="archive.entry.date" />
@@ -135,7 +137,6 @@
 			<include name="com/mirth/connect/util/**" />
 			<include name="com/mirth/connect/server/util/ResourceUtil.class" />
 			<include name="com/mirth/connect/server/util/DebuggerUtil.class" />
-			<include name="org/mozilla/**" />
 			<include name="org/glassfish/jersey/**" />
 			<include name="de/**" />
 			<include name="net/lingala/zip4j/unzip/**" />
@@ -1020,6 +1021,10 @@
 
 		<!-- make oieserver script executable on unix platforms -->
 		<chmod file="${setup}/oieserver" perm="755"/>
+		<!-- make administrator helper scripts executable on unix platforms -->
+		<chmod file="${setup}/oieadmin" perm="755" failonerror="false"/>
+		<chmod file="${setup}/client" perm="755" failonerror="false"/>
+		<chmod file="${setup}/client-https" perm="755" failonerror="false"/>
 
 		<!-- create the server jar -->
 		<jar destfile="${setup.server.lib}/${server.jar}" basedir="${classes}" modificationTime="${archive.entry.date}">
@@ -1034,6 +1039,7 @@
 			<include name="mirth-client.jnlp" />
 
 			<exclude name="com/mirth/connect/server/launcher/**" />
+			<exclude name="org/mozilla/**" />
 			<exclude name="org/dcm4che2/**" />
 		</jar>
 

@@ -64,6 +64,7 @@ import com.mirth.connect.client.ui.components.MirthDatePicker;
 import com.mirth.connect.client.ui.components.MirthFieldConstraints;
 import com.mirth.connect.client.ui.components.MirthTable;
 import com.mirth.connect.client.ui.components.MirthTimePicker;
+import com.mirth.connect.client.ui.i18n.I18n;
 import com.mirth.connect.client.ui.util.DisplayUtil;
 import com.mirth.connect.model.ServerEvent;
 import com.mirth.connect.model.ServerEvent.Level;
@@ -85,6 +86,7 @@ public class EventBrowser extends javax.swing.JPanel {
     private final String EVENT_PATIENT_ID_NAME = "Patient ID";
     private final String EVENT_CHANNEL_MESSAGE_COLUMN_NAME = "Channel ID - Message ID";
     private final String EVENT_CHANNEL_NAME_COLUMN_NAME = "Channel Name";
+
     private final String ATTRIBUTES_NAME_COLUMN_NAME = "Name";
     private final String ATTRIBUTES_VALUE_COLUMN_NAME = "Value";
     private final int ATTRIBUTES_VALUE_COLUMN_NUMBER = 1;
@@ -126,7 +128,7 @@ public class EventBrowser extends javax.swing.JPanel {
         pageNumberField.setDocument(new MirthFieldConstraints(7, false, false, true));
 
         LineBorder lineBorder = new LineBorder(new Color(0, 0, 0));
-        TitledBorder titledBorder = new TitledBorder("Current Search");
+        TitledBorder titledBorder = new TitledBorder(I18n.t("eventBrowser.currentSearch", "Current Search"));
         titledBorder.setBorder(lineBorder);
 
         lastSearchCriteriaPane.setBorder(titledBorder);
@@ -161,10 +163,12 @@ public class EventBrowser extends javax.swing.JPanel {
 
         updateCachedUserMap();
 
-        advancedSearchPopup = new EventBrowserAdvancedFilter(parent, "Advanced Search Filter", true, userMapById);
+        advancedSearchPopup = new EventBrowserAdvancedFilter(parent, I18n.t("eventBrowser.advanced.title", "Advanced Search Filter"), true, userMapById);
         advancedSearchPopup.setVisible(false);
 
         eventSplitPane.setDividerLocation(0.8);
+
+        localize();
 
         this.addAncestorListener(new AncestorListener() {
 
@@ -184,6 +188,32 @@ public class EventBrowser extends javax.swing.JPanel {
             }
 
         });
+    }
+
+    private void localize() {
+        resetButton.setText(I18n.t("eventBrowser.button.reset", "Reset"));
+        allDayCheckBox.setText(I18n.t("eventBrowser.checkbox.allDay", "All Day"));
+        nextPageButton.setText(I18n.t("eventBrowser.button.next", "Next >"));
+        previousPageButton.setText(I18n.t("eventBrowser.button.prev", "< Prev"));
+        pageGoButton.setText(I18n.t("eventBrowser.button.go", "Go"));
+        pageNumberLabel.setText(I18n.t("eventBrowser.label.page", "Page"));
+        pageSizeLabel.setText(I18n.t("eventBrowser.label.pageSize", "Page Size:"));
+        resultsLabel.setText(I18n.t("eventBrowser.label.results", "Results"));
+        jLabel3.setText(I18n.t("eventBrowser.label.startTime", "Start Time:"));
+        jLabel2.setText(I18n.t("eventBrowser.label.endTime", "End Time:"));
+        nameLabel.setText(I18n.t("eventBrowser.label.name", "Name:"));
+        filterButton.setText(I18n.t("eventBrowser.button.search", "Search"));
+        advSearchButton.setText(I18n.t("eventBrowser.button.advanced", "Advanced..."));
+        countButton.setText(I18n.t("eventBrowser.button.count", "Count"));
+
+        levelBoxInformation.setText(I18n.t("eventBrowser.level.information", "INFORMATION"));
+        levelBoxWarning.setText(I18n.t("eventBrowser.level.warning", "WARNING"));
+        levelBoxError.setText(I18n.t("eventBrowser.level.error", "ERROR"));
+
+        pageSizeField.setToolTipText(I18n.t("eventBrowser.tooltip.pageSize", "<html>\nAfter changing the page size, a new search must be performed for the changes to<br/>\ntake effect.  The default page size can also be configured on the Settings panel.\n</html>"));
+        pageNumberField.setToolTipText(I18n.t("eventBrowser.tooltip.pageNumber", "Enter a page number and press Enter to jump to that page."));
+        countButton.setToolTipText(I18n.t("eventBrowser.tooltip.count", "Count the number of overall messages for the current search criteria."));
+        nameField.setToolTipText(I18n.t("eventBrowser.tooltip.name", "<html>\nSearch event names for the given string.\n</html>"));
     }
 
     /**
@@ -250,7 +280,7 @@ public class EventBrowser extends javax.swing.JPanel {
             }
             eventFilter.setEndDate(endCalendar);
         } catch (ParseException e) {
-            parent.alertError(parent, "Invalid date.");
+            parent.alertError(parent, I18n.t("eventBrowser.error.invalidDate", "Invalid date."));
             return false;
         }
 
@@ -258,7 +288,7 @@ public class EventBrowser extends javax.swing.JPanel {
         Calendar endDate = eventFilter.getEndDate();
 
         if (startDate != null && endDate != null && startDate.getTimeInMillis() > endDate.getTimeInMillis()) {
-            parent.alertError(parent, "Start date cannot be after the end date.");
+            parent.alertError(parent, I18n.t("eventBrowser.error.startAfterEnd", "Start date cannot be after the end date."));
             return false;
         }
 
@@ -332,7 +362,7 @@ public class EventBrowser extends javax.swing.JPanel {
             try {
                 events.setPageSize(Integer.parseInt(pageSizeField.getText()));
             } catch (NumberFormatException e) {
-                parent.alertError(parent, "Invalid page size.");
+                parent.alertError(parent, I18n.t("eventBrowser.error.invalidPageSize", "Invalid page size."));
                 return;
             }
 
@@ -350,7 +380,7 @@ public class EventBrowser extends javax.swing.JPanel {
         Calendar endDate = eventFilter.getEndDate();
         String padding = "\n";
 
-        text.append("Max Event Id: ");
+        text.append(I18n.t("eventBrowser.criteria.maxEventId", "Max Event Id:") + " ");
         text.append(eventFilter.getMaxEventId());
 
         String startDateFormatString = startTimePicker.isEnabled() ? "yyyy-MM-dd HH:mm" : "yyyy-MM-dd";
@@ -359,54 +389,54 @@ public class EventBrowser extends javax.swing.JPanel {
         DateFormat startDateFormat = new SimpleDateFormat(startDateFormatString);
         DateFormat endDateFormat = new SimpleDateFormat(endDateFormatString);
 
-        text.append(padding + "Date Range: ");
+        text.append(padding + I18n.t("eventBrowser.criteria.dateRange", "Date Range:") + " ");
 
         if (startDate == null) {
-            text.append("(any)");
+            text.append(I18n.t("eventBrowser.criteria.any", "(any)"));
         } else {
             text.append(startDateFormat.format(startDate.getTime()));
             if (!startTimePicker.isEnabled()) {
-                text.append(" (all day)");
+                text.append(" " + I18n.t("eventBrowser.criteria.allDaySuffix", "(all day)"));
             }
         }
 
-        text.append(" to ");
+        text.append(" " + I18n.t("eventBrowser.criteria.to", "to") + " ");
 
         if (endDate == null) {
-            text.append("(any)");
+            text.append(I18n.t("eventBrowser.criteria.any", "(any)"));
         } else {
             text.append(endDateFormat.format(endDate.getTime()));
             if (!endTimePicker.isEnabled()) {
-                text.append(" (all day)");
+                text.append(" " + I18n.t("eventBrowser.criteria.allDaySuffix", "(all day)"));
             }
         }
 
-        text.append(padding + "Levels: ");
+        text.append(padding + I18n.t("eventBrowser.criteria.levels", "Levels:") + " ");
 
         if (eventFilter.getLevels() == null) {
-            text.append("(any)");
+            text.append(I18n.t("eventBrowser.criteria.any", "(any)"));
         } else {
             text.append(StringUtils.join(eventFilter.getLevels(), ", "));
         }
 
         if (eventFilter.getName() != null) {
-            text.append(padding + "Name: " + eventFilter.getName());
+            text.append(padding + I18n.t("eventBrowser.criteria.name", "Name:") + " " + eventFilter.getName());
         }
 
         if (eventFilter.getUserId() != null) {
-            text.append(padding + "User Id: " + eventFilter.getUserId());
+            text.append(padding + I18n.t("eventBrowser.criteria.userId", "User Id:") + " " + eventFilter.getUserId());
         }
 
         if (eventFilter.getOutcome() != null) {
-            text.append(padding + "Outcome: " + eventFilter.getOutcome());
+            text.append(padding + I18n.t("eventBrowser.criteria.outcome", "Outcome:") + " " + eventFilter.getOutcome());
         }
 
         if (eventFilter.getAttributeSearch() != null) {
-            text.append(padding + "AttributeSearch: " + eventFilter.getAttributeSearch());
+            text.append(padding + I18n.t("eventBrowser.criteria.attributes", "Attributes:") + " " + eventFilter.getAttributeSearch());
         }
 
         if (eventFilter.getIpAddress() != null) {
-            text.append(padding + "IP Address: " + eventFilter.getIpAddress());
+            text.append(padding + I18n.t("eventBrowser.criteria.ipAddress", "IP Address:") + " " + eventFilter.getIpAddress());
         }
 
         lastSearchCriteria.setText(text.toString());
@@ -421,7 +451,7 @@ public class EventBrowser extends javax.swing.JPanel {
     }
 
     public void loadPageNumber(final int pageNumber) {
-        final String workingId = parent.startWorking("Loading page...");
+        final String workingId = parent.startWorking(I18n.t("eventBrowser.working.loadingPage", "Loading page..."));
 
         if (worker != null && !worker.isDone()) {
             parent.mirthClient.getServerConnection().abort(getAbortOperations());
@@ -448,7 +478,7 @@ public class EventBrowser extends javax.swing.JPanel {
                 } catch (Throwable t) { // catch Throwable in case the client runs out of memory
 
                     if (t.getMessage().contains("Java heap space")) {
-                        parent.alertError(parent, "There was an out of memory error when trying to retrieve events.\nIncrease your heap size or decrease your page size and search again.");
+                        parent.alertError(parent, I18n.t("eventBrowser.error.outOfMemory", "There was an out of memory error when trying to retrieve events.\nIncrease your heap size or decrease your page size and search again."));
                     } else if (t instanceof RequestAbortedException) {
                         // The client is no longer waiting for the search request
                     } else {
@@ -517,7 +547,7 @@ public class EventBrowser extends javax.swing.JPanel {
             endOffset = startOffset + events.size() - 1;
         }
 
-        String resultText = "Results " + DisplayUtil.formatNumber(startOffset) + " - " + DisplayUtil.formatNumber(endOffset) + " of ";
+        String resultText = I18n.t("eventBrowser.results.prefix", "Results") + " " + DisplayUtil.formatNumber(startOffset) + " - " + DisplayUtil.formatNumber(endOffset) + " " + I18n.t("eventBrowser.results.of", "of") + " ";
 
         // enable the previous page button if the page number is > 1
         // Now that we have hasNextPage, we no longer need any additional logic
@@ -526,14 +556,14 @@ public class EventBrowser extends javax.swing.JPanel {
 
         if (pageCount != null) {
             resultsLabel.setText(resultText + DisplayUtil.formatNumber(events.getItemCount()));
-            pageTotalLabel.setText("of " + DisplayUtil.formatNumber(events.getPageCount()));
+            pageTotalLabel.setText(I18n.t("eventBrowser.results.of", "of") + " " + DisplayUtil.formatNumber(events.getPageCount()));
             pageTotalLabel.setEnabled(true);
             pageGoButton.setEnabled(true);
             pageNumberLabel.setEnabled(true);
             pageNumberField.setEnabled(true);
         } else {
             resultsLabel.setText(resultText + "?");
-            pageTotalLabel.setText("of " + "?");
+            pageTotalLabel.setText(I18n.t("eventBrowser.results.of", "of") + " ?");
             pageGoButton.setEnabled(false);
             pageTotalLabel.setEnabled(false);
             pageNumberLabel.setEnabled(false);
@@ -700,6 +730,31 @@ public class EventBrowser extends javax.swing.JPanel {
         eventTable.setMirthColumnControlEnabled(true);
         eventTable.restoreColumnPreferences();
 
+        // Keep stable identifiers (English) but localize displayed titles.
+        eventTable.getColumnExt(EVENT_ID_COLUMN_NAME).setIdentifier(EVENT_ID_COLUMN_NAME);
+        eventTable.getColumnExt(EVENT_LEVEL_COLUMN_NAME).setIdentifier(EVENT_LEVEL_COLUMN_NAME);
+        eventTable.getColumnExt(EVENT_DATE_COLUMN_NAME).setIdentifier(EVENT_DATE_COLUMN_NAME);
+        eventTable.getColumnExt(EVENT_NAME_COLUMN_NAME).setIdentifier(EVENT_NAME_COLUMN_NAME);
+        eventTable.getColumnExt(EVENT_SERVER_ID_COLUMN_NAME).setIdentifier(EVENT_SERVER_ID_COLUMN_NAME);
+        eventTable.getColumnExt(EVENT_USER_COLUMN_NAME).setIdentifier(EVENT_USER_COLUMN_NAME);
+        eventTable.getColumnExt(EVENT_OUTCOME_COLUMN_NAME).setIdentifier(EVENT_OUTCOME_COLUMN_NAME);
+        eventTable.getColumnExt(EVENT_IP_ADDRESS_COLUMN_NAME).setIdentifier(EVENT_IP_ADDRESS_COLUMN_NAME);
+        eventTable.getColumnExt(EVENT_CHANNEL_MESSAGE_COLUMN_NAME).setIdentifier(EVENT_CHANNEL_MESSAGE_COLUMN_NAME);
+        eventTable.getColumnExt(EVENT_CHANNEL_NAME_COLUMN_NAME).setIdentifier(EVENT_CHANNEL_NAME_COLUMN_NAME);
+        eventTable.getColumnExt(EVENT_PATIENT_ID_NAME).setIdentifier(EVENT_PATIENT_ID_NAME);
+
+        eventTable.getColumnExt(EVENT_ID_COLUMN_NAME).setTitle(I18n.t("eventBrowser.column.id", "ID"));
+        eventTable.getColumnExt(EVENT_LEVEL_COLUMN_NAME).setTitle(I18n.t("eventBrowser.column.level", "Level"));
+        eventTable.getColumnExt(EVENT_DATE_COLUMN_NAME).setTitle(I18n.t("eventBrowser.column.dateTime", "Date & Time"));
+        eventTable.getColumnExt(EVENT_NAME_COLUMN_NAME).setTitle(I18n.t("eventBrowser.column.name", "Name"));
+        eventTable.getColumnExt(EVENT_SERVER_ID_COLUMN_NAME).setTitle(I18n.t("eventBrowser.column.serverId", "Server ID"));
+        eventTable.getColumnExt(EVENT_USER_COLUMN_NAME).setTitle(I18n.t("eventBrowser.column.user", "User"));
+        eventTable.getColumnExt(EVENT_OUTCOME_COLUMN_NAME).setTitle(I18n.t("eventBrowser.column.outcome", "Outcome"));
+        eventTable.getColumnExt(EVENT_IP_ADDRESS_COLUMN_NAME).setTitle(I18n.t("eventBrowser.column.ipAddress", "IP Address"));
+        eventTable.getColumnExt(EVENT_CHANNEL_MESSAGE_COLUMN_NAME).setTitle(I18n.t("eventBrowser.column.channelMessageId", "Channel ID - Message ID"));
+        eventTable.getColumnExt(EVENT_CHANNEL_NAME_COLUMN_NAME).setTitle(I18n.t("eventBrowser.column.channelName", "Channel Name"));
+        eventTable.getColumnExt(EVENT_PATIENT_ID_NAME).setTitle(I18n.t("eventBrowser.column.patientId", "Patient ID"));
+
         eventTable.getColumnExt(EVENT_LEVEL_COLUMN_NAME).setCellRenderer(new ImageCellRenderer(SwingConstants.CENTER));
         eventTable.getColumnExt(EVENT_OUTCOME_COLUMN_NAME).setCellRenderer(new ImageCellRenderer(SwingConstants.CENTER));
 
@@ -831,9 +886,9 @@ public class EventBrowser extends javax.swing.JPanel {
         if (attributes == null || attributes.size() == 0) {
             tableData = new String[1][2];
             if (cleared) {
-                tableData[0][0] = "Please select an event to view its attributes.";
+                tableData[0][0] = I18n.t("eventBrowser.attributes.selectPrompt", "Please select an event to view its attributes.");
             } else {
-                tableData[0][0] = "There are no attributes for this event.";
+                tableData[0][0] = I18n.t("eventBrowser.attributes.none", "There are no attributes for this event.");
             }
             tableData[0][1] = "";
         } else {
