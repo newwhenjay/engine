@@ -8,6 +8,9 @@ import static com.mirth.connect.client.core.BrandingConstants.CHECK_FOR_NOTIFICA
 
 import java.awt.Color;
 import java.awt.Cursor;
+import java.net.ConnectException;
+import java.net.SocketTimeoutException;
+import java.net.UnknownHostException;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -19,9 +22,12 @@ import java.util.prefs.Preferences;
 
 import javax.swing.ImageIcon;
 import javax.swing.SwingWorker;
+import javax.net.ssl.SSLHandshakeException;
+import javax.net.ssl.SSLException;
 
 import org.apache.commons.lang3.BooleanUtils;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.http.conn.HttpHostConnectException;
 
 import com.mirth.connect.client.core.Client;
 import com.mirth.connect.client.core.ClientException;
@@ -420,6 +426,7 @@ public class LoginPanel extends javax.swing.JFrame {
 
             public Void doInBackground() {
                 boolean errorOccurred = false;
+                Throwable lastThrowable = null;
 
                 try {
                     String server = serverName.getText();
@@ -434,6 +441,7 @@ public class LoginPanel extends javax.swing.JFrame {
                         loginStatus = client.getServlet(UserServletInterface.class, null, customHeaders).login(username.getText(), String.valueOf(password.getPassword()));
                     } catch (ClientException ex) {
                         ex.printStackTrace();
+                        lastThrowable = ex;
 
                         if (ex instanceof UnauthorizedException) {
                             UnauthorizedException e2 = (UnauthorizedException) ex;
@@ -479,12 +487,12 @@ public class LoginPanel extends javax.swing.JFrame {
                         if (loginStatus != null) {
                             errorTextArea.setText(loginStatus.getMessage());
                         } else {
-                            errorTextArea.setText(ERROR_MESSAGE);
+                            errorTextArea.setText(buildConnectionErrorMessage(lastThrowable));
                         }
                     }
                 } catch (Throwable t) {
                     errorOccurred = true;
-                    errorTextArea.setText(ERROR_MESSAGE);
+                    errorTextArea.setText(buildConnectionErrorMessage(t));
                     t.printStackTrace();
                 }
 
@@ -655,6 +663,40 @@ public class LoginPanel extends javax.swing.JFrame {
 
     public void setStatus(String status) {
         this.status.setText("Please wait: " + status);
+    }
+
+    private static String buildConnectionErrorMessage(Throwable t) {
+        if (t == null) {
+            return ERROR_MESSAGE;
+        }
+
+        Throwable root = t;
+        int guard = 0;
+        while (root.getCause() != null && root.getCause() != root && guard++ < 20) {
+            root = root.getCause();
+        }
+
+        String technical = String.format("%s: %s", root.getClass().getSimpleName(), StringUtils.defaultString(root.getMessage(), ""));
+
+        if (root instanceof HttpHostConnectException || root instanceof ConnectException) {
+            return "连接被拒绝：服务端没启动，或端口/协议填错。\n"
+                    + "建议：先确认服务已启动，再试 http://127.0.0.1:8080 或 https://127.0.0.1:8443。\n\n"
+                    + technical;
+        }
+        if (root instanceof UnknownHostException) {
+            return "找不到服务器地址：请检查 Server 填写是否正确（比如 127.0.0.1）。\n\n" + technical;
+        }
+        if (root instanceof SocketTimeoutException) {
+            return "连接超时：可能是代理设置、网络限制，或服务端卡住。\n"
+                    + "建议：关闭系统代理/使用 -Djava.net.useSystemProxies=false 再试。\n\n"
+                    + technical;
+        }
+        if (root instanceof SSLHandshakeException || root instanceof SSLException) {
+            return "HTTPS 握手失败：通常是证书不被信任或协议/套件不兼容。\n"
+                    + "建议：优先试 http://127.0.0.1:8080（仅本机调试），或将服务端证书导入信任。\n\n"
+                    + technical;
+        }
+        return ERROR_MESSAGE + "\n\n" + technical;
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

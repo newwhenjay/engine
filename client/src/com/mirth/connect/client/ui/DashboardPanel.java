@@ -72,6 +72,7 @@ import com.mirth.connect.client.ui.components.tag.MirthTagField;
 import com.mirth.connect.client.ui.components.tag.SearchFilterListener;
 import com.mirth.connect.client.ui.components.tag.TagFilterCompletion;
 import com.mirth.connect.donkey.model.channel.DeployedState;
+import com.mirth.connect.client.ui.i18n.I18n;
 import com.mirth.connect.model.Channel;
 import com.mirth.connect.model.ChannelGroup;
 import com.mirth.connect.model.ChannelTag;
@@ -993,9 +994,9 @@ public class DashboardPanel extends JPanel {
 
         ButtonGroup showStatsButtonGroup = new ButtonGroup();
 
-        showCurrentStatsButton = new JRadioButton("Current Statistics");
+        showCurrentStatsButton = new JRadioButton(I18n.t("dashboard.stats.current", "Current Statistics"));
         showCurrentStatsButton.setSelected(true);
-        showCurrentStatsButton.setToolTipText("Show the statistics accumulated since the last time the statistics were reset");
+        showCurrentStatsButton.setToolTipText(I18n.t("dashboard.stats.current.tooltip", "Show the statistics accumulated since the last time the statistics were reset"));
         showCurrentStatsButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent evt) {
                 showCurrentStatsButtonActionPerformed();
@@ -1003,8 +1004,8 @@ public class DashboardPanel extends JPanel {
         });
         showStatsButtonGroup.add(showCurrentStatsButton);
 
-        showLifetimeStatsButton = new JRadioButton("Lifetime Statistics");
-        showLifetimeStatsButton.setToolTipText("Show the statistics accumulated over the entire lifetime of the channel");
+        showLifetimeStatsButton = new JRadioButton(I18n.t("dashboard.stats.lifetime", "Lifetime Statistics"));
+        showLifetimeStatsButton.setToolTipText(I18n.t("dashboard.stats.lifetime.tooltip", "Show the statistics accumulated over the entire lifetime of the channel"));
         showLifetimeStatsButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent evt) {
                 showLifetimeStatsButtonActionPerformed();
@@ -1017,7 +1018,7 @@ public class DashboardPanel extends JPanel {
         controlSeparator = new JSeparator(SwingConstants.VERTICAL);
 
         tagModeTextButton = new IconToggleButton(UIConstants.ICON_TEXT);
-        tagModeTextButton.setToolTipText("Display tags as names.");
+        tagModeTextButton.setToolTipText(I18n.t("dashboard.tags.mode.text.tooltip", "Display tags as names."));
         tagModeTextButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent evt) {
@@ -1027,7 +1028,7 @@ public class DashboardPanel extends JPanel {
         });
 
         tagModeIconButton = new IconToggleButton(UIConstants.ICON_TAG);
-        tagModeIconButton.setToolTipText("Display tags as icons.");
+        tagModeIconButton.setToolTipText(I18n.t("dashboard.tags.mode.icon.tooltip", "Display tags as icons."));
         tagModeIconButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent evt) {
@@ -1039,7 +1040,7 @@ public class DashboardPanel extends JPanel {
         ButtonGroup tableModeButtonGroup = new ButtonGroup();
 
         tableModeGroupsButton = new IconToggleButton(UIConstants.ICON_GROUP);
-        tableModeGroupsButton.setToolTipText("Groups");
+        tableModeGroupsButton.setToolTipText(I18n.t("dashboard.table.mode.groups.tooltip", "Groups"));
         tableModeGroupsButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent evt) {
@@ -1049,7 +1050,7 @@ public class DashboardPanel extends JPanel {
         tableModeButtonGroup.add(tableModeGroupsButton);
 
         tableModeChannelsButton = new IconToggleButton(UIConstants.ICON_CHANNEL);
-        tableModeChannelsButton.setToolTipText("Channels");
+        tableModeChannelsButton.setToolTipText(I18n.t("dashboard.table.mode.channels.tooltip", "Channels"));
         tableModeChannelsButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent evt) {
@@ -1071,7 +1072,7 @@ public class DashboardPanel extends JPanel {
         topPanel.add(dashboardTableScrollPane, "grow, push");
 
         controlPanel.setLayout(new MigLayout("insets 0 12 0 12, novisualpadding, hidemode 3, fill, gap 12"));
-        controlPanel.add(new JLabel("Filter:"), "split 3");
+        controlPanel.add(new JLabel(I18n.t("dashboard.filter", "Filter:")), "split 3");
         controlPanel.add(tagField, "gapbottom 3, w 195:500:500");
         controlPanel.add(tagsLabel, "gapleft 8, w 100:500:500");
         controlPanel.add(showCurrentStatsButton, "right, push, split 2");

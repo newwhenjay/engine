@@ -20,6 +20,7 @@ import javax.swing.TransferHandler;
 
 import org.jdesktop.swingx.JXList;
 
+import com.mirth.connect.client.ui.i18n.I18n;
 import com.mirth.connect.client.ui.panels.reference.ReferenceTable;
 import com.mirth.connect.model.Connector;
 import com.mirth.connect.model.util.DefaultMetaData;
@@ -53,54 +54,54 @@ public class VariableListHandler extends TransferHandler {
 
     static {
         staticVelocityReferences = new HashMap<String, String>();
-        staticVelocityReferences.put("Raw Data", "${message.rawData}");
-        staticVelocityReferences.put("Transformed Data", "${message.transformedData}");
-        staticVelocityReferences.put("Message ID", "${message.messageId}");
-        staticVelocityReferences.put("Encoded Data", "${message.encodedData}");
-        staticVelocityReferences.put("Message Source", "${" + DefaultMetaData.SOURCE_VARIABLE_MAPPING + "}");
-        staticVelocityReferences.put("Message Type", "${" + DefaultMetaData.TYPE_VARIABLE_MAPPING + "}");
-        staticVelocityReferences.put("Message Version", "${" + DefaultMetaData.VERSION_VARIABLE_MAPPING + "}");
-        staticVelocityReferences.put("Message Hash", "${HASH}");
-        staticVelocityReferences.put("Timestamp", "${SYSTIME}");
-        staticVelocityReferences.put("Unique ID", "${UUID}");
-        staticVelocityReferences.put("Date", "${DATE}");
-        staticVelocityReferences.put("Original File Name", "${originalFilename}");
-        staticVelocityReferences.put("Count", "${COUNT}");
-        staticVelocityReferences.put("DICOM Message Raw Data", "${DICOMMESSAGE}");
-        staticVelocityReferences.put("Formatted Date", "${date.get('yyyy-M-d H.m.s')}");
-        staticVelocityReferences.put("XML Entity Encoder", "${XmlUtil.encode()}");
-        staticVelocityReferences.put("XML Pretty Printer", "${XmlUtil.prettyPrint()}");
-        staticVelocityReferences.put("Escape JSON String", "${JsonUtil.escape()}");
-        staticVelocityReferences.put("JSON Pretty Printer", "${JsonUtil.prettyPrint()}");
+        staticVelocityReferences.put(I18n.t("reference.static.rawData", "Raw Data"), "${message.rawData}");
+        staticVelocityReferences.put(I18n.t("reference.static.transformedData", "Transformed Data"), "${message.transformedData}");
+        staticVelocityReferences.put(I18n.t("reference.static.messageId", "Message ID"), "${message.messageId}");
+        staticVelocityReferences.put(I18n.t("reference.static.encodedData", "Encoded Data"), "${message.encodedData}");
+        staticVelocityReferences.put(I18n.t("reference.static.messageSource", "Message Source"), "${" + DefaultMetaData.SOURCE_VARIABLE_MAPPING + "}");
+        staticVelocityReferences.put(I18n.t("reference.static.messageType", "Message Type"), "${" + DefaultMetaData.TYPE_VARIABLE_MAPPING + "}");
+        staticVelocityReferences.put(I18n.t("reference.static.messageVersion", "Message Version"), "${" + DefaultMetaData.VERSION_VARIABLE_MAPPING + "}");
+        staticVelocityReferences.put(I18n.t("reference.static.messageHash", "Message Hash"), "${HASH}");
+        staticVelocityReferences.put(I18n.t("reference.static.timestamp", "Timestamp"), "${SYSTIME}");
+        staticVelocityReferences.put(I18n.t("reference.static.uniqueId", "Unique ID"), "${UUID}");
+        staticVelocityReferences.put(I18n.t("reference.static.date", "Date"), "${DATE}");
+        staticVelocityReferences.put(I18n.t("reference.static.originalFileName", "Original File Name"), "${originalFilename}");
+        staticVelocityReferences.put(I18n.t("reference.static.count", "Count"), "${COUNT}");
+        staticVelocityReferences.put(I18n.t("reference.static.dicomMessageRawData", "DICOM Message Raw Data"), "${DICOMMESSAGE}");
+        staticVelocityReferences.put(I18n.t("reference.static.formattedDate", "Formatted Date"), "${date.get('yyyy-M-d H.m.s')}");
+        staticVelocityReferences.put(I18n.t("reference.static.xmlEntityEncoder", "XML Entity Encoder"), "${XmlUtil.encode()}");
+        staticVelocityReferences.put(I18n.t("reference.static.xmlPrettyPrinter", "XML Pretty Printer"), "${XmlUtil.prettyPrint()}");
+        staticVelocityReferences.put(I18n.t("reference.static.escapeJsonString", "Escape JSON String"), "${JsonUtil.escape()}");
+        staticVelocityReferences.put(I18n.t("reference.static.jsonPrettyPrinter", "JSON Pretty Printer"), "${JsonUtil.prettyPrint()}");
       
         // these are used in DataPrunerPanel
-        staticVelocityReferences.put("Server ID", "${message.serverId}");
-        staticVelocityReferences.put("Channel ID", "${message.channelId}");
-        staticVelocityReferences.put("Channel Name", "${message.channelName}");
-        staticVelocityReferences.put("Formatted Message Date", "${date.format('yyyy-MM-dd',$message.getConnectorMessages().get(0).getReceivedDate())}");
-        staticVelocityReferences.put("Formatted Current Date", "${date.get('yyyy-MM-dd')}");
+        staticVelocityReferences.put(I18n.t("reference.static.serverId", "Server ID"), "${message.serverId}");
+        staticVelocityReferences.put(I18n.t("reference.static.channelId", "Channel ID"), "${message.channelId}");
+        staticVelocityReferences.put(I18n.t("reference.static.channelName", "Channel Name"), "${message.channelName}");
+        staticVelocityReferences.put(I18n.t("reference.static.formattedMessageDate", "Formatted Message Date"), "${date.format('yyyy-MM-dd',$message.getConnectorMessages().get(0).getReceivedDate())}");
+        staticVelocityReferences.put(I18n.t("reference.static.formattedCurrentDate", "Formatted Current Date"), "${date.get('yyyy-MM-dd')}");
 
         staticJsReferences = new HashMap<String, String>();
-        staticJsReferences.put("Raw Data", "connectorMessage.getRawData()");
-        staticJsReferences.put("Transformed Data", "connectorMessage.getTransformedData()");
-        staticJsReferences.put("Message ID", "connectorMessage.getMessageId()");
-        staticJsReferences.put("Encoded Data", "connectorMessage.getEncodedData()");
-        staticJsReferences.put("Message Source", "$('" + DefaultMetaData.SOURCE_VARIABLE_MAPPING + "')");
-        staticJsReferences.put("Message Type", "$('" + DefaultMetaData.TYPE_VARIABLE_MAPPING + "')");
-        staticJsReferences.put("Message Hash", "HashUtil.generate(connectorMessage.getEncodedData())");
+        staticJsReferences.put(I18n.t("reference.static.rawData", "Raw Data"), "connectorMessage.getRawData()");
+        staticJsReferences.put(I18n.t("reference.static.transformedData", "Transformed Data"), "connectorMessage.getTransformedData()");
+        staticJsReferences.put(I18n.t("reference.static.messageId", "Message ID"), "connectorMessage.getMessageId()");
+        staticJsReferences.put(I18n.t("reference.static.encodedData", "Encoded Data"), "connectorMessage.getEncodedData()");
+        staticJsReferences.put(I18n.t("reference.static.messageSource", "Message Source"), "$('" + DefaultMetaData.SOURCE_VARIABLE_MAPPING + "')");
+        staticJsReferences.put(I18n.t("reference.static.messageType", "Message Type"), "$('" + DefaultMetaData.TYPE_VARIABLE_MAPPING + "')");
+        staticJsReferences.put(I18n.t("reference.static.messageHash", "Message Hash"), "HashUtil.generate(connectorMessage.getEncodedData())");
 
-        staticJsReferences.put("Message Version", "$('" + DefaultMetaData.VERSION_VARIABLE_MAPPING + "')");
-        staticJsReferences.put("Timestamp", "var dateString = DateUtil.getCurrentDate('yyyyMMddHHmmss');");
-        staticJsReferences.put("Unique ID", "var uuid = UUIDGenerator.getUUID();");
-        staticJsReferences.put("Date", "var date = DateUtil.getDate('pattern','date');");
-        staticJsReferences.put("Original File Name", "$('originalFilename')");
-        staticJsReferences.put("DICOM Message Raw Data", "var rawData = DICOMUtil.getDICOMRawData(connectorMessage);");
-        staticJsReferences.put("Message with Attachments", "var rawData = AttachmentUtil.reAttachMessage(connectorMessage)");
-        staticJsReferences.put("Formatted Date", "var dateString = DateUtil.getCurrentDate('yyyy-M-d H.m.s');");
-        staticJsReferences.put("XML Entity Encoder", "var encodedMessage = XmlUtil.encode('message');");
-        staticJsReferences.put("XML Pretty Printer", "var prettyPrintedMessage = XmlUtil.prettyPrint('message');");
-        staticJsReferences.put("Escape JSON String", "var escapedJSONString = JsonUtil.escape('message');");
-        staticJsReferences.put("JSON Pretty Printer", "var prettyPrintedMessage = JsonUtil.prettyPrint('message');");
+        staticJsReferences.put(I18n.t("reference.static.messageVersion", "Message Version"), "$('" + DefaultMetaData.VERSION_VARIABLE_MAPPING + "')");
+        staticJsReferences.put(I18n.t("reference.static.timestamp", "Timestamp"), "var dateString = DateUtil.getCurrentDate('yyyyMMddHHmmss');");
+        staticJsReferences.put(I18n.t("reference.static.uniqueId", "Unique ID"), "var uuid = UUIDGenerator.getUUID();");
+        staticJsReferences.put(I18n.t("reference.static.date", "Date"), "var date = DateUtil.getDate('pattern','date');");
+        staticJsReferences.put(I18n.t("reference.static.originalFileName", "Original File Name"), "$('originalFilename')");
+        staticJsReferences.put(I18n.t("reference.static.dicomMessageRawData", "DICOM Message Raw Data"), "var rawData = DICOMUtil.getDICOMRawData(connectorMessage);");
+        staticJsReferences.put(I18n.t("reference.static.messageWithAttachments", "Message with Attachments"), "var rawData = AttachmentUtil.reAttachMessage(connectorMessage)");
+        staticJsReferences.put(I18n.t("reference.static.formattedDate", "Formatted Date"), "var dateString = DateUtil.getCurrentDate('yyyy-M-d H.m.s');");
+        staticJsReferences.put(I18n.t("reference.static.xmlEntityEncoder", "XML Entity Encoder"), "var encodedMessage = XmlUtil.encode('message');");
+        staticJsReferences.put(I18n.t("reference.static.xmlPrettyPrinter", "XML Pretty Printer"), "var prettyPrintedMessage = XmlUtil.prettyPrint('message');");
+        staticJsReferences.put(I18n.t("reference.static.escapeJsonString", "Escape JSON String"), "var escapedJSONString = JsonUtil.escape('message');");
+        staticJsReferences.put(I18n.t("reference.static.jsonPrettyPrinter", "JSON Pretty Printer"), "var prettyPrintedMessage = JsonUtil.prettyPrint('message');");
     }
 
     public VariableListHandler(TransferMode transferMode) {

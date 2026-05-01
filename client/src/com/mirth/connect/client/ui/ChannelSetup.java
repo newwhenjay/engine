@@ -97,6 +97,7 @@ import com.mirth.connect.client.ui.editors.filter.FilterPane;
 import com.mirth.connect.client.ui.editors.transformer.TransformerPane;
 import com.mirth.connect.client.ui.panels.connectors.ConnectorPanel;
 import com.mirth.connect.client.ui.panels.connectors.ConnectorSettingsPanel;
+import com.mirth.connect.client.ui.i18n.I18n;
 import com.mirth.connect.client.ui.util.VariableListUtil;
 import com.mirth.connect.donkey.model.channel.ConnectorPluginProperties;
 import com.mirth.connect.donkey.model.channel.ConnectorProperties;
@@ -135,9 +136,9 @@ import net.miginfocom.swing.MigLayout;
 
 /** The channel editor panel. Majority of the client application */
 public class ChannelSetup extends JPanel {
-    private static final String METADATA_NAME_COLUMN_NAME = "Column Name";
-    private static final String METADATA_TYPE_COLUMN_NAME = "Type";
-    private static final String METADATA_MAPPING_COLUMN_NAME = "Variable Mapping";
+    private static final String METADATA_NAME_COLUMN_NAME = "Column Name"; // identifier (do not localize)
+    private static final String METADATA_TYPE_COLUMN_NAME = "Type"; // identifier (do not localize)
+    private static final String METADATA_MAPPING_COLUMN_NAME = "Variable Mapping"; // identifier (do not localize)
     private static final String DESTINATION_DEFAULT = "Channel Writer";
     private static final String SOURCE_DEFAULT = "Channel Reader";
     private static final String DATABASE_READER = "Database Reader";
@@ -714,15 +715,15 @@ public class ChannelSetup extends JPanel {
 	}
 
     private void updateChannelId() {
-        channelIdField.setText(" Id: " + currentChannel.getId());
+        channelIdField.setText(" " + I18n.t("channelsetup.label.id", "Id:") + " " + currentChannel.getId());
     }
 
     private void updateRevision() {
-        revisionLabel.setText("Revision: " + currentChannel.getRevision());
+        revisionLabel.setText(I18n.t("channelsetup.label.revision", "Revision:") + " " + currentChannel.getRevision());
     }
 
     private void updateLastModified() {
-        lastModifiedLabel.setText("Last Modified: " + new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(currentChannel.getExportData().getMetadata().getLastModified().getTime()));
+        lastModifiedLabel.setText(I18n.t("channelsetup.label.lastModified", "Last Modified:") + " " + new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(currentChannel.getExportData().getMetadata().getLastModified().getTime()));
     }
 
     /** Load all of the saved channel information into the channel editor */
@@ -730,7 +731,7 @@ public class ChannelSetup extends JPanel {
         boolean enabled = parent.isSaveEnabled();
         ChannelProperties properties = currentChannel.getProperties();
         ChannelMetadata metadata = currentChannel.getExportData().getMetadata();
-        parent.setPanelName("Edit Channel - " + currentChannel.getName());
+        parent.setPanelName(I18n.tf("channelsetup.title.editChannel", "Edit Channel - {0}", currentChannel.getName()));
         nameField.setText(currentChannel.getName());
         summaryDescriptionText.setText(currentChannel.getDescription());
         updateChannelId();
@@ -852,7 +853,10 @@ public class ChannelSetup extends JPanel {
             nonDefaultCount++;
         }
 
-        channelView.setTitleAt(SCRIPTS_TAB_INDEX, nonDefaultCount > 0 ? "Scripts (" + nonDefaultCount + ")" : "Scripts");
+        channelView.setTitleAt(SCRIPTS_TAB_INDEX,
+                nonDefaultCount > 0
+                        ? I18n.tf("channelsetup.scripts.titleWithCount", "Scripts ({0})", nonDefaultCount)
+                        : I18n.t("channelsetup.scripts.title", "Scripts"));
     }
 
     private boolean compareScripts(String savedScript, String defualtScript) {
@@ -930,10 +934,10 @@ public class ChannelSetup extends JPanel {
 
         switch (messageStorageMode) {
             case DEVELOPMENT:
-                storageModeLabel.setText("Development");
-                contentLabel.setText("Content: All");
-                metadataLabel.setText("Metadata: All");
-                durableStatusLabel.setText("On");
+                storageModeLabel.setText(I18n.t("channelsetup.storageMode.development", "Development"));
+                contentLabel.setText(I18n.t("channelsetup.label.content", "Content:") + " All");
+                metadataLabel.setText(I18n.t("channelsetup.label.metadata", "Metadata:") + " All");
+                durableStatusLabel.setText(I18n.t("channelsetup.durable.on", "On"));
                 durableStatusLabel.setForeground(new Color(0, 130, 0));
                 messageStorageProgressBar.setValue(20);
                 encryptMessagesCheckBox.setEnabled(true);
@@ -945,10 +949,10 @@ public class ChannelSetup extends JPanel {
                 break;
 
             case PRODUCTION:
-                storageModeLabel.setText("Production");
-                contentLabel.setText("Content: Raw, Encoded, Sent, Response, Maps");
-                metadataLabel.setText("Metadata: All");
-                durableStatusLabel.setText("On");
+                storageModeLabel.setText(I18n.t("channelsetup.storageMode.production", "Production"));
+                contentLabel.setText(I18n.t("channelsetup.label.content", "Content:") + " Raw, Encoded, Sent, Response, Maps");
+                metadataLabel.setText(I18n.t("channelsetup.label.metadata", "Metadata:") + " All");
+                durableStatusLabel.setText(I18n.t("channelsetup.durable.on", "On"));
                 durableStatusLabel.setForeground(new Color(0, 130, 0));
                 messageStorageProgressBar.setValue(25);
                 encryptMessagesCheckBox.setEnabled(true);
@@ -960,10 +964,10 @@ public class ChannelSetup extends JPanel {
                 break;
 
             case RAW:
-                storageModeLabel.setText("Raw");
-                contentLabel.setText("Content: Raw");
-                metadataLabel.setText("Metadata: All");
-                durableStatusLabel.setText("Reprocess only");
+                storageModeLabel.setText(I18n.t("channelsetup.storageMode.raw", "Raw"));
+                contentLabel.setText(I18n.t("channelsetup.label.content", "Content:") + " Raw");
+                metadataLabel.setText(I18n.t("channelsetup.label.metadata", "Metadata:") + " All");
+                durableStatusLabel.setText(I18n.t("channelsetup.durable.reprocessOnly", "Reprocess only"));
                 durableStatusLabel.setForeground(new Color(255, 102, 0));
                 messageStorageProgressBar.setValue(60);
                 encryptMessagesCheckBox.setEnabled(true);
@@ -975,10 +979,10 @@ public class ChannelSetup extends JPanel {
                 break;
 
             case METADATA:
-                storageModeLabel.setText("Metadata");
-                contentLabel.setText("Content: None");
-                metadataLabel.setText("Metadata: All");
-                durableStatusLabel.setText("Off");
+                storageModeLabel.setText(I18n.t("channelsetup.storageMode.metadata", "Metadata"));
+                contentLabel.setText(I18n.t("channelsetup.label.content", "Content:") + " None");
+                metadataLabel.setText(I18n.t("channelsetup.label.metadata", "Metadata:") + " All");
+                durableStatusLabel.setText(I18n.t("channelsetup.durable.off", "Off"));
                 durableStatusLabel.setForeground(new Color(130, 0, 0));
                 messageStorageProgressBar.setValue(65);
                 encryptMessagesCheckBox.setEnabled(false);
@@ -990,10 +994,10 @@ public class ChannelSetup extends JPanel {
                 break;
 
             case DISABLED:
-                storageModeLabel.setText("Disabled");
-                contentLabel.setText("Content: None");
-                metadataLabel.setText("Metadata: None");
-                durableStatusLabel.setText("Off");
+                storageModeLabel.setText(I18n.t("channelsetup.storageMode.disabled", "Disabled"));
+                contentLabel.setText(I18n.t("channelsetup.label.content", "Content:") + " None");
+                metadataLabel.setText(I18n.t("channelsetup.label.metadata", "Metadata:") + " None");
+                durableStatusLabel.setText(I18n.t("channelsetup.durable.off", "Off"));
                 durableStatusLabel.setForeground(new Color(130, 0, 0));
                 messageStorageProgressBar.setValue(100);
                 encryptMessagesCheckBox.setEnabled(false);
@@ -1155,12 +1159,12 @@ public class ChannelSetup extends JPanel {
         }
 
         if (metadataPruningOnRadio.isSelected() && metadataPruningDaysTextField.getText().equals("")) {
-            parent.alertWarning(parent, "If metadata pruning is enabled, the age of metadata to prune cannot be blank.");
+            parent.alertWarning(parent, I18n.t("channelsetup.warn.metadataPruningBlank", "If metadata pruning is enabled, the age of metadata to prune cannot be blank."));
             return false;
         }
 
         if (contentPruningDaysRadio.isSelected() && contentPruningDaysTextField.getText().equals("")) {
-            parent.alertWarning(parent, "If content pruning is enabled, the age of content to prune cannot be blank.");
+            parent.alertWarning(parent, I18n.t("channelsetup.warn.contentPruningBlank", "If content pruning is enabled, the age of content to prune cannot be blank."));
             return false;
         }
 
@@ -1169,7 +1173,7 @@ public class ChannelSetup extends JPanel {
             Integer contentPruningDays = Integer.parseInt(contentPruningDaysTextField.getText());
 
             if (contentPruningDays > metadataPruningDays) {
-                parent.alertWarning(parent, "The age of content to prune cannot be greater than the age of metadata to prune.");
+                parent.alertWarning(parent, I18n.t("channelsetup.warn.contentPruningGreaterThanMetadata", "The age of content to prune cannot be greater than the age of metadata to prune."));
                 return false;
             }
         }
@@ -1189,17 +1193,17 @@ public class ChannelSetup extends JPanel {
             // Do not allow metadata column names to be empty
             String columnName = (String) model.getValueAt(i, model.findColumn(METADATA_NAME_COLUMN_NAME));
             if (StringUtils.isEmpty(columnName)) {
-                parent.alertWarning(parent, "Empty column name detected in custom metadata table. Column names cannot be empty.");
+                parent.alertWarning(parent, I18n.t("channelsetup.warn.customMetadata.emptyColumnName", "Empty column name detected in custom metadata table. Column names cannot be empty."));
                 return false;
             } else {
                 // Do not allow duplicate column names
                 if (columnNames.contains(columnName)) {
-                    parent.alertWarning(parent, "Duplicate column name detected in custom metadata table. Column names must be unique.");
+                    parent.alertWarning(parent, I18n.t("channelsetup.warn.customMetadata.duplicateColumnName", "Duplicate column name detected in custom metadata table. Column names must be unique."));
                     return false;
                 }
 
                 if (columnName.equalsIgnoreCase("MESSAGE_ID") || columnName.equalsIgnoreCase("METADATA_ID")) {
-                    parent.alertWarning(parent, columnName + " is a reserved keyword and cannot be used as a column name in the custom metadata table.");
+                    parent.alertWarning(parent, I18n.tf("channelsetup.warn.customMetadata.reservedKeyword", "{0} is a reserved keyword and cannot be used as a column name in the custom metadata table.", columnName));
                     return false;
                 }
 
@@ -1217,7 +1221,7 @@ public class ChannelSetup extends JPanel {
 
         // Notify the user if an existing column was modified in a way such that it will be deleted on deploy
         if (!currentColumns.isEmpty()) {
-            if (!parent.alertOption(parent, "Renaming, deleting, or changing the type of existing custom metadata columns\nwill delete all existing data " + "for that column. Are you sure you want to do this?")) {
+            if (!parent.alertOption(parent, I18n.t("channelsetup.warn.customMetadata.dataWillBeDeleted", "Renaming, deleting, or changing the type of existing custom metadata columns\nwill delete all existing data for that column. Are you sure you want to do this?"))) {
                 return false;
             }
         }
@@ -1840,9 +1844,9 @@ public class ChannelSetup extends JPanel {
         // Channel Properties
         channelPropertiesPanel = new JPanel();
         channelPropertiesPanel.setBackground(summaryPanel.getBackground());
-        channelPropertiesPanel.setBorder(BorderFactory.createTitledBorder("Channel Properties"));
+        channelPropertiesPanel.setBorder(BorderFactory.createTitledBorder(I18n.t("channelsetup.section.channelProperties", "Channel Properties")));
 
-        nameLabel = new JLabel("Name:");
+        nameLabel = new JLabel(I18n.t("channelsetup.label.name", "Name:"));
 
         nameField = new MirthTextField();
         nameField.setDocument(new MirthFieldConstraints(40, false, true, true));
@@ -1853,20 +1857,20 @@ public class ChannelSetup extends JPanel {
             }
         });
 
-        summaryEnabledCheckBox = new MirthCheckBox("Enabled");
+        summaryEnabledCheckBox = new MirthCheckBox(I18n.t("channelsetup.checkbox.enabled", "Enabled"));
         summaryEnabledCheckBox.setBackground(channelPropertiesPanel.getBackground());
-        summaryEnabledCheckBox.setText("Enabled");
+        summaryEnabledCheckBox.setText(I18n.t("channelsetup.checkbox.enabled", "Enabled"));
 
-        channelIdField = new JTextField("Id: ");
+        channelIdField = new JTextField(I18n.t("channelsetup.label.id", "Id:") + " ");
         channelIdField.setEditable(false);
         channelIdField.setBackground(channelPropertiesPanel.getBackground());
         channelIdField.setHorizontalAlignment(JTextField.RIGHT);
-        channelIdField.setText("Id: ");
+        channelIdField.setText(I18n.t("channelsetup.label.id", "Id:") + " ");
         channelIdField.setBorder(null);
 
-        dataTypesLabel = new JLabel("Data Types:");
+        dataTypesLabel = new JLabel(I18n.t("channelsetup.label.dataTypes", "Data Types:"));
 
-        dataTypesButton = new JButton("Set Data Types");
+        dataTypesButton = new JButton(I18n.t("channelsetup.button.setDataTypes", "Set Data Types"));
         dataTypesButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent evt) {
@@ -1874,15 +1878,15 @@ public class ChannelSetup extends JPanel {
             }
         });
 
-        clearGlobalChannelMapCheckBox = new MirthCheckBox("Clear global channel map on deploy");
+        clearGlobalChannelMapCheckBox = new MirthCheckBox(I18n.t("channelsetup.checkbox.clearGlobalChannelMap", "Clear global channel map on deploy"));
         clearGlobalChannelMapCheckBox.setBackground(channelPropertiesPanel.getBackground());
 
-        revisionLabel = new JLabel("Revision: ");
+        revisionLabel = new JLabel(I18n.t("channelsetup.label.revision", "Revision:") + " ");
         revisionLabel.setHorizontalAlignment(SwingConstants.RIGHT);
 
-        dependenciesLabel = new JLabel("Dependencies:");
+        dependenciesLabel = new JLabel(I18n.t("channelsetup.label.dependencies", "Dependencies:"));
 
-        dependenciesButton = new JButton("Set Dependencies");
+        dependenciesButton = new JButton(I18n.t("channelsetup.button.setDependencies", "Set Dependencies"));
         dependenciesButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent evt) {
@@ -1890,15 +1894,15 @@ public class ChannelSetup extends JPanel {
             }
         });
 
-        lastModifiedLabel = new JLabel("Last Modified: ");
+        lastModifiedLabel = new JLabel(I18n.t("channelsetup.label.lastModified", "Last Modified:") + " ");
         lastModifiedLabel.setHorizontalAlignment(SwingConstants.RIGHT);
 
-        initialStateLabel = new JLabel("Initial State:");
+        initialStateLabel = new JLabel(I18n.t("channelsetup.label.initialState", "Initial State:"));
         initialStateComboBox = new MirthComboBox<DeployedState>();
         initialStateComboBox.setModel(new DefaultComboBoxModel<DeployedState>(new DeployedState[] {
                 DeployedState.STARTED, DeployedState.PAUSED, DeployedState.STOPPED }));
 
-        attachmentLabel = new JLabel("Attachment:");
+        attachmentLabel = new JLabel(I18n.t("channelsetup.label.attachment", "Attachment:"));
 
         attachmentComboBox = new MirthComboBox<AttachmentHandlerType>();
         attachmentComboBox.setModel(new DefaultComboBoxModel<AttachmentHandlerType>(AttachmentHandlerType.values()));
@@ -1909,7 +1913,7 @@ public class ChannelSetup extends JPanel {
             }
         });
 
-        attachmentPropertiesButton = new JButton("Properties");
+        attachmentPropertiesButton = new JButton(I18n.t("channelsetup.button.properties", "Properties"));
         attachmentPropertiesButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent evt) {
@@ -1917,7 +1921,7 @@ public class ChannelSetup extends JPanel {
             }
         });
 
-        attachmentStoreCheckBox = new MirthCheckBox("Store Attachments");
+        attachmentStoreCheckBox = new MirthCheckBox(I18n.t("channelsetup.checkbox.storeAttachments", "Store Attachments"));
         attachmentStoreCheckBox.setBackground(channelPropertiesPanel.getBackground());
         attachmentStoreCheckBox.addItemListener(new ItemListener() {
             @Override
@@ -1926,10 +1930,10 @@ public class ChannelSetup extends JPanel {
             }
         });
 
-        attachmentWarningLabel = new JLabel("Attachments will be extracted but not stored or reattached.");
+        attachmentWarningLabel = new JLabel(I18n.t("channelsetup.warning.attachmentsNotStored", "Attachments will be extracted but not stored or reattached."));
         attachmentWarningLabel.setForeground(new Color(255, 0, 0));
 
-        tagsLabel = new JLabel("Tags:");
+        tagsLabel = new JLabel(I18n.t("channelsetup.label.tags", "Tags:"));
 
         Set<FilterCompletion> tags = new HashSet<FilterCompletion>();
         for (ChannelTag tag : parent.getCachedChannelTags()) {
@@ -1950,7 +1954,7 @@ public class ChannelSetup extends JPanel {
         // Message Storage
         messageStoragePanel = new JPanel();
         messageStoragePanel.setBackground(summaryPanel.getBackground());
-        messageStoragePanel.setBorder(BorderFactory.createTitledBorder("Message Storage"));
+        messageStoragePanel.setBorder(BorderFactory.createTitledBorder(I18n.t("channelsetup.section.messageStorage", "Message Storage")));
         messageStoragePanel.setForeground(new Color(0, 102, 0));
 
         messageStorageSlider = new JSlider();
@@ -1968,24 +1972,24 @@ public class ChannelSetup extends JPanel {
             }
         });
 
-        storageModeLabel = new JLabel("Development");
+        storageModeLabel = new JLabel(I18n.t("channelsetup.storageMode.development", "Development"));
         storageModeLabel.setFont(new Font("Dialog", 1, 14));
 
-        contentLabel = new JLabel("Content: ");
+        contentLabel = new JLabel(I18n.t("channelsetup.label.content", "Content:") + " ");
 
-        metadataLabel = new JLabel("Metadata:");
+        metadataLabel = new JLabel(I18n.t("channelsetup.label.metadata", "Metadata:"));
 
-        durableLabel = new JLabel("Durable Message Delivery:");
+        durableLabel = new JLabel(I18n.t("channelsetup.label.durableMessageDelivery", "Durable Message Delivery:"));
 
-        durableStatusLabel = new JLabel("On");
+        durableStatusLabel = new JLabel(I18n.t("channelsetup.durable.on", "On"));
         durableStatusLabel.setForeground(new Color(0, 102, 0));
 
-        performanceLabel = new JLabel("Performance:");
+        performanceLabel = new JLabel(I18n.t("channelsetup.label.performance", "Performance:"));
 
         messageStorageProgressBar = new JProgressBar();
         messageStorageProgressBar.setValue(10);
 
-        encryptMessagesCheckBox = new MirthCheckBox("Encrypt message content");
+        encryptMessagesCheckBox = new MirthCheckBox(I18n.t("channelsetup.checkbox.encryptMessageContent", "Encrypt message content"));
         encryptMessagesCheckBox.setBackground(messageStoragePanel.getBackground());
         encryptMessagesCheckBox.addActionListener(new ActionListener() {
             @Override
@@ -1994,7 +1998,7 @@ public class ChannelSetup extends JPanel {
             }
         });
 
-        encryptAttachmentsCheckBox = new MirthCheckBox("Attachments");
+        encryptAttachmentsCheckBox = new MirthCheckBox(I18n.t("channelsetup.checkbox.encryptAttachments", "Attachments"));
         encryptAttachmentsCheckBox.setBackground(messageStoragePanel.getBackground());
         encryptAttachmentsCheckBox.addActionListener(new ActionListener() {
             @Override
@@ -2003,7 +2007,7 @@ public class ChannelSetup extends JPanel {
             }
         });
 
-        encryptCustomMetaDataCheckBox = new MirthCheckBox("Custom metadata");
+        encryptCustomMetaDataCheckBox = new MirthCheckBox(I18n.t("channelsetup.checkbox.encryptCustomMetadata", "Custom metadata"));
         encryptCustomMetaDataCheckBox.setBackground(messageStoragePanel.getBackground());
         encryptCustomMetaDataCheckBox.addActionListener(new ActionListener() {
             @Override
@@ -2012,7 +2016,7 @@ public class ChannelSetup extends JPanel {
             }
         });
 
-        removeContentCheckBox = new MirthCheckBox("Remove content on completion");
+        removeContentCheckBox = new MirthCheckBox(I18n.t("channelsetup.checkbox.removeContentOnCompletion", "Remove content on completion"));
         removeContentCheckBox.setBackground(messageStoragePanel.getBackground());
         removeContentCheckBox.addActionListener(new ActionListener() {
             @Override
@@ -2021,7 +2025,7 @@ public class ChannelSetup extends JPanel {
             }
         });
 
-        removeAttachmentsCheckBox = new MirthCheckBox("Remove attachments on completion");
+        removeAttachmentsCheckBox = new MirthCheckBox(I18n.t("channelsetup.checkbox.removeAttachmentsOnCompletion", "Remove attachments on completion"));
         removeAttachmentsCheckBox.setBackground(messageStoragePanel.getBackground());
         removeAttachmentsCheckBox.addActionListener(new ActionListener() {
             @Override
@@ -2030,10 +2034,10 @@ public class ChannelSetup extends JPanel {
             }
         });
 
-        removeOnlyFilteredCheckBox = new MirthCheckBox("Filtered only");
+        removeOnlyFilteredCheckBox = new MirthCheckBox(I18n.t("channelsetup.checkbox.filteredOnly", "Filtered only"));
         removeOnlyFilteredCheckBox.setBackground(messageStoragePanel.getBackground());
 
-        queueWarningLabel = new JLabel("<html>Disable source & destination queueing before using this mode</html>");
+        queueWarningLabel = new JLabel(I18n.t("channelsetup.warning.disableQueueing", "<html>Disable source & destination queueing before using this mode</html>"));
         queueWarningLabel.setFont(new Font("Dialog", 0, 11));
         queueWarningLabel.setForeground(new Color(255, 0, 0));
         queueWarningLabel.setVerticalAlignment(SwingConstants.TOP);
@@ -2041,12 +2045,12 @@ public class ChannelSetup extends JPanel {
         // Message Pruning
         messagePruningPanel = new JPanel();
         messagePruningPanel.setBackground(summaryPanel.getBackground());
-        messagePruningPanel.setBorder(BorderFactory.createTitledBorder("Message Pruning"));
+        messagePruningPanel.setBorder(BorderFactory.createTitledBorder(I18n.t("channelsetup.section.messagePruning", "Message Pruning")));
 
-        metadataPruningLabel = new JLabel("Metadata:");
+        metadataPruningLabel = new JLabel(I18n.t("channelsetup.label.metadata", "Metadata:"));
         ButtonGroup metadataPruningButtonGroup = new ButtonGroup();
 
-        metadataPruningOffRadio = new JRadioButton("Store indefinitely");
+        metadataPruningOffRadio = new JRadioButton(I18n.t("channelsetup.pruning.storeIndefinitely", "Store indefinitely"));
         metadataPruningOffRadio.setBackground(messagePruningPanel.getBackground());
         metadataPruningOffRadio.addActionListener(new ActionListener() {
             @Override
@@ -2056,7 +2060,7 @@ public class ChannelSetup extends JPanel {
         });
         metadataPruningButtonGroup.add(metadataPruningOffRadio);
 
-        metadataPruningOnRadio = new JRadioButton("Prune metadata older than");
+        metadataPruningOnRadio = new JRadioButton(I18n.t("channelsetup.pruning.pruneMetadataOlderThan", "Prune metadata older than"));
         metadataPruningOnRadio.setBackground(messagePruningPanel.getBackground());
         metadataPruningOnRadio.addActionListener(new ActionListener() {
             @Override
@@ -2069,12 +2073,12 @@ public class ChannelSetup extends JPanel {
         metadataPruningDaysTextField = new MirthTextField();
         metadataPruningDaysTextField.setDocument(new MirthFieldConstraints(3, false, false, true));
 
-        metadataDaysLabel = new JLabel("days");
+        metadataDaysLabel = new JLabel(I18n.t("channelsetup.label.days", "days"));
 
-        contentPruningLabel = new JLabel("Content:");
+        contentPruningLabel = new JLabel(I18n.t("channelsetup.label.content", "Content:"));
         ButtonGroup contentPruningButtonGroup = new ButtonGroup();
 
-        contentPruningMetadataRadio = new JRadioButton("Prune when message metadata is removed");
+        contentPruningMetadataRadio = new JRadioButton(I18n.t("channelsetup.pruning.pruneWhenMetadataRemoved", "Prune when message metadata is removed"));
         contentPruningMetadataRadio.setBackground(messagePruningPanel.getBackground());
         contentPruningMetadataRadio.addActionListener(new ActionListener() {
             @Override
@@ -2084,7 +2088,7 @@ public class ChannelSetup extends JPanel {
         });
         contentPruningButtonGroup.add(contentPruningMetadataRadio);
 
-        contentPruningDaysRadio = new JRadioButton("Prune content older than");
+        contentPruningDaysRadio = new JRadioButton(I18n.t("channelsetup.pruning.pruneContentOlderThan", "Prune content older than"));
         contentPruningDaysRadio.setBackground(messagePruningPanel.getBackground());
         contentPruningDaysRadio.addActionListener(new ActionListener() {
             @Override
@@ -2097,12 +2101,12 @@ public class ChannelSetup extends JPanel {
         contentPruningDaysTextField = new MirthTextField();
         contentPruningDaysTextField.setDocument(new MirthFieldConstraints(3, false, false, true));
 
-        contentDaysLabel = new JLabel("days");
+        contentDaysLabel = new JLabel(I18n.t("channelsetup.label.days", "days"));
 
-        archiveCheckBox = new MirthCheckBox("Allow message archiving");
+        archiveCheckBox = new MirthCheckBox(I18n.t("channelsetup.checkbox.allowMessageArchiving", "Allow message archiving"));
         archiveCheckBox.setBackground(messagePruningPanel.getBackground());
         
-        pruneErroredMessagesCheckBox = new MirthCheckBox("Prune Errored Messages");
+        pruneErroredMessagesCheckBox = new MirthCheckBox(I18n.t("channelsetup.checkbox.pruneErroredMessages", "Prune Errored Messages"));
         pruneErroredMessagesCheckBox.setBackground(messagePruningPanel.getBackground());
         pruneErroredMessagesCheckBox.addActionListener((evt) -> {
         	pruneErroredMessagesCheckBoxActionPerformed(evt);
@@ -2113,7 +2117,7 @@ public class ChannelSetup extends JPanel {
         // Custom Metadata
         customMetadataPanel = new JPanel();
         customMetadataPanel.setBackground(summaryPanel.getBackground());
-        customMetadataPanel.setBorder(BorderFactory.createTitledBorder("Custom Metadata"));
+        customMetadataPanel.setBorder(BorderFactory.createTitledBorder(I18n.t("channelsetup.section.customMetadata", "Custom Metadata")));
 
         metaDataTable = new MirthTable();
 
@@ -2188,9 +2192,20 @@ public class ChannelSetup extends JPanel {
         column.setMinWidth(100);
         column.setMaxWidth(100);
 
+        // Localize visible column headers (keep underlying identifiers stable)
+        metaDataTable.getColumnModel().getColumn(metaDataTable.getColumnModel().getColumnIndex(METADATA_NAME_COLUMN_NAME))
+                .setHeaderValue(I18n.t("channelsetup.customMetadata.column.name", "Column Name"));
+        metaDataTable.getColumnModel().getColumn(metaDataTable.getColumnModel().getColumnIndex(METADATA_TYPE_COLUMN_NAME))
+                .setHeaderValue(I18n.t("channelsetup.customMetadata.column.type", "Type"));
+        metaDataTable.getColumnModel().getColumn(metaDataTable.getColumnModel().getColumnIndex(METADATA_MAPPING_COLUMN_NAME))
+                .setHeaderValue(I18n.t("channelsetup.customMetadata.column.variableMapping", "Variable Mapping"));
+        if (metaDataTable.getTableHeader() != null) {
+            metaDataTable.getTableHeader().repaint();
+        }
+
         metaDataScrollPane = new JScrollPane(metaDataTable);
 
-        addMetaDataButton = new JButton("Add");
+        addMetaDataButton = new JButton(I18n.t("channelsetup.button.add", "Add"));
         addMetaDataButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent evt) {
@@ -2198,7 +2213,7 @@ public class ChannelSetup extends JPanel {
             }
         });
 
-        deleteMetaDataButton = new JButton("Delete");
+        deleteMetaDataButton = new JButton(I18n.t("channelsetup.button.delete", "Delete"));
         deleteMetaDataButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent evt) {
@@ -2206,7 +2221,7 @@ public class ChannelSetup extends JPanel {
             }
         });
 
-        revertMetaDataButton = new JButton("Revert");
+        revertMetaDataButton = new JButton(I18n.t("channelsetup.button.revert", "Revert"));
         revertMetaDataButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent evt) {
@@ -2217,7 +2232,7 @@ public class ChannelSetup extends JPanel {
         // Channel Description
         descriptionPanel = new JPanel();
         descriptionPanel.setBackground(summaryPanel.getBackground());
-        descriptionPanel.setBorder(BorderFactory.createTitledBorder("Channel Description"));
+        descriptionPanel.setBorder(BorderFactory.createTitledBorder(I18n.t("channelsetup.section.channelDescription", "Channel Description")));
 
         summaryDescriptionText = new MirthTextPane();
 
@@ -2233,7 +2248,7 @@ public class ChannelSetup extends JPanel {
             }
         });
 
-        sourceConnectorTypeLabel = new JLabel("Connector Type:");
+        sourceConnectorTypeLabel = new JLabel(I18n.t("channelsetup.source.connectorType", "Connector Type:"));
 
         sourceConnectorTypeComboBox = new MirthComboBox<String>();
         sourceConnectorTypeComboBox.setMaximumRowCount(20);
@@ -2276,28 +2291,42 @@ public class ChannelSetup extends JPanel {
 
         destinationTable.putClientProperty("terminateEditOnFocusLost", Boolean.TRUE);
 
+        // Configure columns by index to avoid identifier mismatch on startup
+        final int DEST_COL_STATUS = 0;
+        final int DEST_COL_DESTINATION = 1;
+        final int DEST_COL_METADATA_ID = 2;
+        final int DEST_COL_CONNECTOR_TYPE = 3;
+        final int DEST_COL_CHAIN = 4;
+
+        // Localize visible column headers (keep underlying identifiers stable)
+        destinationTable.getColumnExt(DEST_COL_STATUS).setTitle(I18n.t("channelsetup.destinations.column.status", "Status"));
+        destinationTable.getColumnExt(DEST_COL_DESTINATION).setTitle(I18n.t("channelsetup.destinations.column.destination", "Destination"));
+        destinationTable.getColumnExt(DEST_COL_METADATA_ID).setTitle(I18n.t("channelsetup.destinations.column.id", "Id"));
+        destinationTable.getColumnExt(DEST_COL_CONNECTOR_TYPE).setTitle(I18n.t("channelsetup.destinations.column.connectorType", "Connector Type"));
+        destinationTable.getColumnExt(DEST_COL_CHAIN).setTitle(I18n.t("channelsetup.destinations.column.chain", "Chain"));
+
         // Set the custom cell editor for the Destination Name column.
-        destinationTable.getColumnModel().getColumn(destinationTable.getColumnModel().getColumnIndex(DESTINATION_COLUMN_NAME)).setCellEditor(new DestinationTableCellEditor());
+        destinationTable.getColumnExt(DEST_COL_DESTINATION).setCellEditor(new DestinationTableCellEditor());
         destinationTable.setCustomEditorControls(true);
 
         // Must set the maximum width on columns that should be packed.
-        destinationTable.getColumnExt(STATUS_COLUMN_NAME).setMaxWidth(UIConstants.MAX_WIDTH);
-        destinationTable.getColumnExt(STATUS_COLUMN_NAME).setMinWidth(UIConstants.MIN_WIDTH);
+        destinationTable.getColumnExt(DEST_COL_STATUS).setMaxWidth(UIConstants.MAX_WIDTH);
+        destinationTable.getColumnExt(DEST_COL_STATUS).setMinWidth(UIConstants.MIN_WIDTH);
 
         // Set the cell renderer for the status column.
-        destinationTable.getColumnExt(STATUS_COLUMN_NAME).setCellRenderer(new ImageCellRenderer());
+        destinationTable.getColumnExt(DEST_COL_STATUS).setCellRenderer(new ImageCellRenderer());
 
         // Set the maximum width and cell renderer for the metadata ID column
-        destinationTable.getColumnExt(METADATA_COLUMN_NAME).setMaxWidth(UIConstants.METADATA_ID_COLUMN_WIDTH);
-        destinationTable.getColumnExt(METADATA_COLUMN_NAME).setMinWidth(UIConstants.METADATA_ID_COLUMN_WIDTH);
-        destinationTable.getColumnExt(METADATA_COLUMN_NAME).setCellRenderer(new NumberCellRenderer(SwingConstants.CENTER, false));
+        destinationTable.getColumnExt(DEST_COL_METADATA_ID).setMaxWidth(UIConstants.METADATA_ID_COLUMN_WIDTH);
+        destinationTable.getColumnExt(DEST_COL_METADATA_ID).setMinWidth(UIConstants.METADATA_ID_COLUMN_WIDTH);
+        destinationTable.getColumnExt(DEST_COL_METADATA_ID).setCellRenderer(new NumberCellRenderer(SwingConstants.CENTER, false));
 
         // Set the cell renderer for the destination connector type
-        destinationTable.getColumnExt(CONNECTOR_TYPE_COLUMN_NAME).setCellRenderer(new ConnectorTypeCellRenderer());
+        destinationTable.getColumnExt(DEST_COL_CONNECTOR_TYPE).setCellRenderer(new ConnectorTypeCellRenderer());
 
         // Set the cell renderer and the max width for the destination chain column
-        destinationTable.getColumnExt(DESTINATION_CHAIN_COLUMN_NAME).setCellRenderer(new NumberCellRenderer(SwingConstants.CENTER, false));
-        destinationTable.getColumnExt(DESTINATION_CHAIN_COLUMN_NAME).setMaxWidth(50);
+        destinationTable.getColumnExt(DEST_COL_CHAIN).setCellRenderer(new NumberCellRenderer(SwingConstants.CENTER, false));
+        destinationTable.getColumnExt(DEST_COL_CHAIN).setMaxWidth(50);
 
         destinationTable.setSelectionMode(0);
         destinationTable.setRowSelectionAllowed(true);
@@ -2530,10 +2559,10 @@ public class ChannelSetup extends JPanel {
         destinationsPanel.add(destinationConnectorScrollPane, "newline, grow, pushx");
         destinationsPanel.add(destinationVariableList, "w 185!, growy");
 
-        channelView.addTab("Summary", summaryPanel);
-        channelView.addTab("Source", sourcePanel);
-        channelView.addTab("Destinations", destinationsPanel);
-        channelView.addTab("Scripts", scriptsPanel);
+        channelView.addTab(I18n.t("channelsetup.tab.summary", "Summary"), summaryPanel);
+        channelView.addTab(I18n.t("channelsetup.tab.source", "Source"), sourcePanel);
+        channelView.addTab(I18n.t("channelsetup.tab.destinations", "Destinations"), destinationsPanel);
+        channelView.addTab(I18n.t("channelsetup.tab.scripts", "Scripts"), scriptsPanel);
         add(channelView, "grow, h 600, w 600");
     }
 
@@ -2790,7 +2819,7 @@ public class ChannelSetup extends JPanel {
 
     private void summaryNameFieldKeyReleased(KeyEvent evt) {
         currentChannel.setName(nameField.getText());
-        parent.setPanelName("Edit Channel - " + currentChannel.getName());
+        parent.setPanelName(I18n.tf("channelsetup.title.editChannel", "Edit Channel - {0}", currentChannel.getName()));
     }
 
     private void addMetaDataButtonActionPerformed(ActionEvent evt) {
@@ -3045,7 +3074,7 @@ public class ChannelSetup extends JPanel {
         concatenatedRuleVariables.addAll(concatenatedStepVariables);
         destinationVariableList.setVariableListInbound(concatenatedRuleVariables);
         destinationVariableList.populateConnectors(currentChannel.getDestinationConnectors());
-        destinationVariableList.setBorder("Destination Mappings", new Color(0, 0, 0));
+        destinationVariableList.setBorder(I18n.t("channelsetup.destinations.mappings.title", "Destination Mappings"), new Color(0, 0, 0));
         destinationVariableList.repaint();
     }
 

@@ -8,6 +8,7 @@ import java.awt.Toolkit;
 import java.awt.event.InputEvent;
 import java.awt.event.KeyEvent;
 import java.io.IOException;
+import java.util.Locale;
 import java.util.prefs.Preferences;
 
 import javax.imageio.ImageIO;
@@ -253,6 +254,38 @@ public class Mirth {
      *            String[]
      */
     public static void main(String[] args) {
+        Thread.setDefaultUncaughtExceptionHandler((t, e) -> {
+            DebugLog.error("Uncaught exception on thread: " + t.getName(), e);
+        });
+
+        // Capture AWT/Swing exceptions that may be swallowed by the EDT
+        System.setProperty("sun.awt.exception.handler", "com.mirth.connect.client.ui.AwtExceptionHandler");
+
+        // Guardrail for i18n: column preferences were historically stored using English column names.
+        // After translating column titles, those stored preferences can hide all columns / collapse widths,
+        // resulting in a blank table. Reset once for zh locales.
+        try {
+            Locale locale = Locale.getDefault();
+            boolean isZh = locale != null && "zh".equalsIgnoreCase(locale.getLanguage());
+            if (isZh) {
+                Preferences prefs = Preferences.userNodeForPackage(Mirth.class);
+                String markerKey = "i18n.columns.reset.v1.done";
+                if (!prefs.getBoolean(markerKey, false)) {
+                    String[] prefixes = new String[] { "channelPanel", "dashboardPanel", "messageBrowser", "eventBrowser", "templateTreeTable" };
+                    String[] suffixes = new String[] { "TreeColumnOrderMap", "TreeSortOrder", "TreeSortOrderColumn" };
+                    for (String prefix : prefixes) {
+                        for (String suffix : suffixes) {
+                            prefs.remove(prefix + suffix);
+                        }
+                    }
+                    prefs.putBoolean(markerKey, true);
+                    DebugLog.info("Reset legacy column preferences for zh locale: " + locale);
+                }
+            }
+        } catch (Exception e) {
+            DebugLog.error("Failed to reset legacy column preferences", e);
+        }
+
         CommandLineOptions opts = new CommandLineOptions(args);
 
         if (StringUtils.isNotBlank(opts.getProtocols())) {

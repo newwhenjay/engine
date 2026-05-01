@@ -1,0 +1,83 @@
+#!/usr/bin/env bash
+#
+# SPDX-License-Identifier: MPL-2.0
+#
+# Open Integration Engine Administrator launcher.
+#
+# Runs the Swing/JavaFX Administrator client from the server `setup` directory,
+# automatically building a classpath that includes `client-lib` and all
+# extension client jars under `extensions/**`.
+#
+# Java selection priority:
+#   1) OIE_ADMIN_JAVA_PATH (path to java executable)
+#   2) OIE_JAVA_PATH (path to java executable)
+#   3) JAVA_HOME (uses $JAVA_HOME/bin/java)
+#   4) java on PATH
+#
+
+set -euo pipefail
+
+APP_ARGS=("$@")
+
+OIE_HOME="$( cd "$( dirname "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )"
+cd "$OIE_HOME"
+
+JAVA_CMD=""
+if [[ -n "${OIE_ADMIN_JAVA_PATH:-}" ]]; then
+  JAVA_CMD="$OIE_ADMIN_JAVA_PATH"
+elif [[ -n "${OIE_JAVA_PATH:-}" ]]; then
+  JAVA_CMD="$OIE_JAVA_PATH"
+elif [[ -n "${JAVA_HOME:-}" ]]; then
+  JAVA_CMD="$JAVA_HOME/bin/java"
+else
+  JAVA_CMD="java"
+fi
+
+if ! command -v "$JAVA_CMD" >/dev/null 2>&1; then
+  echo "Error: java command not found: $JAVA_CMD" >&2
+  exit 1
+fi
+
+VMOPTIONS=()
+VMOPTIONS_FILE="$OIE_HOME/oieadmin.vmoptions"
+if [[ -f "$VMOPTIONS_FILE" ]]; then
+  while IFS= read -r line; do
+    line="${line#"${line%%[![:space:]]*}"}"
+    line="${line%"${line##*[![:space:]]}"}"
+    [[ -z "$line" || "$line" =~ ^# ]] && continue
+    VMOPTIONS+=("$line")
+  done < "$VMOPTIONS_FILE"
+fi
+
+# Build classpath. Use globs so the shell expands to concrete jar paths.
+CP_ENTRIES=()
+for p in "$OIE_HOME"/client-lib/*.jar; do
+  [[ -f "$p" ]] && CP_ENTRIES+=("$p")
+done
+for p in "$OIE_HOME"/extensions/*/*.jar "$OIE_HOME"/extensions/*/*/*.jar; do
+  [[ -f "$p" ]] && CP_ENTRIES+=("$p")
+done
+
+if [[ ${#CP_ENTRIES[@]} -eq 0 ]]; then
+  echo "Error: no jars found under client-lib/ or extensions/; did you run from server/setup?" >&2
+  exit 1
+fi
+
+CLASSPATH="$(IFS=:; echo "${CP_ENTRIES[*]}")"
+
+# Defaults (can be overridden by command line args)
+DEFAULT_SERVER_URL="http://127.0.0.1:8080"
+DEFAULT_VERSION="4.5.2"
+
+SERVER_URL="${1:-$DEFAULT_SERVER_URL}"
+VERSION="${2:-$DEFAULT_VERSION}"
+USERNAME="${3:-}"
+PASSWORD="${4:-}"
+
+echo "Starting OIE Administrator..."
+exec "$JAVA_CMD" \
+  "${VMOPTIONS[@]}" \
+  -cp "$CLASSPATH" \
+  com.mirth.connect.client.ui.Mirth \
+  "$SERVER_URL" "$VERSION" "$USERNAME" "$PASSWORD"
+

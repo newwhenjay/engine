@@ -19,7 +19,7 @@ public class DataPrunerClient extends SettingsPanelPlugin {
     public DataPrunerClient(String name) {
         super(name);
 
-        settingsPanel = new DataPrunerPanel("Data Pruner", this);
+        settingsPanel = new DataPrunerPanel(DataPrunerPanel.TAB_NAME, this);
     }
 
     @Override

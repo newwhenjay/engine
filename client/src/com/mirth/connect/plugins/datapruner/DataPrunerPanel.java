@@ -42,6 +42,7 @@ import com.mirth.connect.client.ui.UIConstants;
 import com.mirth.connect.client.ui.components.MirthFieldConstraints;
 import com.mirth.connect.client.ui.components.MirthRadioButton;
 import com.mirth.connect.client.ui.components.MirthTextField;
+import com.mirth.connect.client.ui.i18n.I18n;
 import com.mirth.connect.client.ui.panels.connectors.PollingSettingsPanel;
 import com.mirth.connect.client.ui.panels.export.MessageExportPanel;
 import com.mirth.connect.donkey.model.channel.PollConnectorProperties;
@@ -51,6 +52,7 @@ import com.mirth.connect.plugins.SettingsPanelPlugin;
 import com.mirth.connect.util.messagewriter.MessageWriterOptions;
 
 public class DataPrunerPanel extends AbstractSettingsPanel {
+    public static final String TAB_NAME = "Data Pruner";
     private static final int MIN_PRUNING_BLOCK_SIZE = 50;
     private static final int MAX_PRUNING_BLOCK_SIZE = 10000;
     private final static Color ACTIVE_STATUS_COLOR = new Color(200, 0, 0);
@@ -69,9 +71,21 @@ public class DataPrunerPanel extends AbstractSettingsPanel {
         this.plugin = plugin;
         this.parent = PlatformUI.MIRTH_FRAME;
 
-        addTask("doViewEvents", "View Events", "View the Data Pruner events.", "", new ImageIcon(com.mirth.connect.client.ui.Frame.class.getResource("images/table.png")));
-        startIndex = addTask(TASK_START, "Prune Now", "Start the Data Pruner now.", "", new ImageIcon(com.mirth.connect.client.ui.Frame.class.getResource("images/control_play_blue.png")));
-        stopIndex = addTask(TASK_STOP, "Stop Pruner", "Stop the current Data Pruner process.", "", new ImageIcon(com.mirth.connect.client.ui.Frame.class.getResource("images/stop.png")));
+        addTask("doViewEvents",
+                I18n.t("settings.dataPruner.task.viewEvents.title", "View Events"),
+                I18n.t("settings.dataPruner.task.viewEvents.desc", "View the Data Pruner events."),
+                "",
+                new ImageIcon(com.mirth.connect.client.ui.Frame.class.getResource("images/table.png")));
+        startIndex = addTask(TASK_START,
+                I18n.t("settings.dataPruner.task.pruneNow.title", "Prune Now"),
+                I18n.t("settings.dataPruner.task.pruneNow.desc", "Start the Data Pruner now."),
+                "",
+                new ImageIcon(com.mirth.connect.client.ui.Frame.class.getResource("images/control_play_blue.png")));
+        stopIndex = addTask(TASK_STOP,
+                I18n.t("settings.dataPruner.task.stop.title", "Stop Pruner"),
+                I18n.t("settings.dataPruner.task.stop.desc", "Stop the current Data Pruner process."),
+                "",
+                new ImageIcon(com.mirth.connect.client.ui.Frame.class.getResource("images/stop.png")));
 
         setStartTaskVisible(false);
         setStopTaskVisible(false);
@@ -84,12 +98,17 @@ public class DataPrunerPanel extends AbstractSettingsPanel {
     }
 
     @Override
+    public String getTabDisplayName() {
+        return I18n.t("settings.tab.dataPruner", TAB_NAME);
+    }
+
+    @Override
     public void doRefresh() {
         if (PlatformUI.MIRTH_FRAME.alertRefresh()) {
             return;
         }
 
-        final String workingId = getFrame().startWorking("Loading " + getTabName() + " properties...");
+        final String workingId = getFrame().startWorking(I18n.tf("settings.dataPruner.working.loadingProps", "Loading {0} properties...", getTabName()));
 
         final Properties serverProperties = new Properties();
 
@@ -136,7 +155,7 @@ public class DataPrunerPanel extends AbstractSettingsPanel {
                 if (frequency < 3600000 || frequency >= 86400000) {
                     valid = false;
                     pollingSettingsPanel.setInvalidProperties(!valid, false);
-                    builder.append("Frequency must be between 1 and 24 hours when converted to milliseconds.");
+                    builder.append(I18n.t("settings.dataPruner.error.frequencyRange", "Frequency must be between 1 and 24 hours when converted to milliseconds."));
                 }
             }
         }
@@ -145,7 +164,7 @@ public class DataPrunerPanel extends AbstractSettingsPanel {
         if (StringUtils.isEmpty(prunerBlockSize) || Integer.parseInt(prunerBlockSize) < MIN_PRUNING_BLOCK_SIZE || Integer.parseInt(prunerBlockSize) > MAX_PRUNING_BLOCK_SIZE) {
             blockSizeTextField.setBackground(UIConstants.INVALID_COLOR);
             builder.append("\n");
-            builder.append("Pruner Block size must be between 50 and 10000. The recommended value for most servers is 1000.");
+            builder.append(I18n.t("settings.dataPruner.error.blockSizeRange", "Pruner Block size must be between 50 and 10000. The recommended value for most servers is 1000."));
 
             valid = false;
         }
@@ -153,7 +172,7 @@ public class DataPrunerPanel extends AbstractSettingsPanel {
         if (pruneEventsYes.isSelected() && StringUtils.isBlank(pruneEventAgeTextField.getText())) {
             pruneEventAgeTextField.setBackground(UIConstants.INVALID_COLOR);
             builder.append("\n");
-            builder.append("Event Age is required when pruning events.");
+            builder.append(I18n.t("settings.dataPruner.error.eventAgeRequired", "Event Age is required when pruning events."));
 
             valid = false;
         }
@@ -178,7 +197,7 @@ public class DataPrunerPanel extends AbstractSettingsPanel {
             return false;
         }
 
-        final String workingId = getFrame().startWorking("Saving " + getTabName() + " properties...");
+        final String workingId = getFrame().startWorking(I18n.tf("settings.dataPruner.working.savingProps", "Saving {0} properties...", getTabName()));
 
         SwingWorker<Void, Void> worker = new SwingWorker<Void, Void>() {
 
@@ -212,7 +231,10 @@ public class DataPrunerPanel extends AbstractSettingsPanel {
         final MutableBoolean saveChanges = new MutableBoolean(false);
 
         if (isSaveEnabled()) {
-            if (JOptionPane.YES_OPTION == JOptionPane.showConfirmDialog(this, "Settings changes must be saved first, would you like to save the settings and prune now?", "Select an Option", JOptionPane.OK_CANCEL_OPTION)) {
+            if (JOptionPane.YES_OPTION == JOptionPane.showConfirmDialog(this,
+                    I18n.t("settings.dataPruner.confirm.saveBeforePrune", "Settings changes must be saved first, would you like to save the settings and prune now?"),
+                    I18n.t("common.selectOptionTitle", "Select an Option"),
+                    JOptionPane.OK_CANCEL_OPTION)) {
                 if (!validateFields()) {
                     return;
                 }
@@ -224,7 +246,7 @@ public class DataPrunerPanel extends AbstractSettingsPanel {
         }
 
         setStartTaskVisible(false);
-        final String workingId = parent.startWorking("Starting the data pruner...");
+        final String workingId = parent.startWorking(I18n.t("settings.dataPruner.working.starting", "Starting the data pruner..."));
 
         SwingWorker<Void, Void> worker = new SwingWorker<Void, Void>() {
             @Override
@@ -241,7 +263,7 @@ public class DataPrunerPanel extends AbstractSettingsPanel {
                 try {
                     parent.mirthClient.getServlet(DataPrunerServletInterface.class).start();
                 } catch (Exception e) {
-                    parent.alertThrowable(parent, e, "An error occurred while attempting to start the data pruner.");
+                    parent.alertThrowable(parent, e, I18n.t("settings.dataPruner.error.startFailed", "An error occurred while attempting to start the data pruner."));
                     return null;
                 }
 
@@ -264,7 +286,7 @@ public class DataPrunerPanel extends AbstractSettingsPanel {
 
     public void doStop() {
         setStopTaskVisible(false);
-        final String workingId = parent.startWorking("Stopping the data pruner...");
+        final String workingId = parent.startWorking(I18n.t("settings.dataPruner.working.stopping", "Stopping the data pruner..."));
 
         SwingWorker<Void, Void> worker = new SwingWorker<Void, Void>() {
             @Override
@@ -272,7 +294,7 @@ public class DataPrunerPanel extends AbstractSettingsPanel {
                 try {
                     parent.mirthClient.getServlet(DataPrunerServletInterface.class).stop();
                 } catch (Exception e) {
-                    parent.alertThrowable(parent, e, "An error occurred while attempting to stop the data pruner.");
+                    parent.alertThrowable(parent, e, I18n.t("settings.dataPruner.error.stopFailed", "An error occurred while attempting to stop the data pruner."));
                     return null;
                 }
 
@@ -384,7 +406,7 @@ public class DataPrunerPanel extends AbstractSettingsPanel {
     }
 
     private void updateStatus() {
-        final String workingId = parent.startWorking("Refreshing status...");
+        final String workingId = parent.startWorking(I18n.t("settings.dataPruner.working.refreshingStatus", "Refreshing status..."));
 
         SwingWorker<Void, Void> worker = new SwingWorker<Void, Void>() {
             @Override
@@ -395,7 +417,7 @@ public class DataPrunerPanel extends AbstractSettingsPanel {
                     currentProcessTextLabel.setText(status.get("currentProcess"));
                     lastProcessTextLabel.setText(status.get("lastProcess"));
 
-                    String nextProcess = "Not scheduled";
+                    String nextProcess = I18n.t("settings.dataPruner.status.notScheduled", "Not scheduled");
                     if (yesEnabledRadio.isSelected()) {
                         nextProcess = status.get("nextProcess");
                     }
@@ -411,14 +433,14 @@ public class DataPrunerPanel extends AbstractSettingsPanel {
                         setStopTaskVisible(true);
                     }
                 } catch (ClientException e) {
-                    currentStateTextLabel.setText("Unknown");
+                    currentStateTextLabel.setText(I18n.t("settings.dataPruner.status.unknown", "Unknown"));
                     currentStateTextLabel.setForeground(UNKNOWN_STATUS_COLOR);
                     currentProcessTextLabel.setText("");
                     lastProcessTextLabel.setText("");
                     nextProcessTextLabel.setText("");
                     setStartTaskVisible(false);
                     setStopTaskVisible(false);
-                    parent.alertThrowable(parent, e, "An error occurred while attempting to retrieve the status of the data pruner.");
+                    parent.alertThrowable(parent, e, I18n.t("settings.dataPruner.error.statusFailed", "An error occurred while attempting to retrieve the status of the data pruner."));
                 }
 
                 return null;
@@ -439,27 +461,31 @@ public class DataPrunerPanel extends AbstractSettingsPanel {
 
         statusPanel = new JPanel();
         statusPanel.setBackground(UIConstants.BACKGROUND_COLOR);
-        statusPanel.setBorder(BorderFactory.createTitledBorder(BorderFactory.createMatteBorder(1, 0, 0, 0, new Color(204, 204, 204)), "Status", TitledBorder.DEFAULT_JUSTIFICATION, TitledBorder.DEFAULT_POSITION, new Font("Tahoma", 1, 11)));
+        statusPanel.setBorder(BorderFactory.createTitledBorder(BorderFactory.createMatteBorder(1, 0, 0, 0, new Color(204, 204, 204)),
+                I18n.t("settings.dataPruner.section.status", "Status"),
+                TitledBorder.DEFAULT_JUSTIFICATION, TitledBorder.DEFAULT_POSITION, new Font("Tahoma", 1, 11)));
 
-        currentStateLabel = new JLabel("Current State:");
-        currentStateTextLabel = new JLabel("Unknown");
+        currentStateLabel = new JLabel(I18n.t("settings.dataPruner.label.currentState", "Current State:"));
+        currentStateTextLabel = new JLabel(I18n.t("settings.dataPruner.status.unknown", "Unknown"));
 
-        currentProcessLabel = new JLabel("Current Process:");
-        currentProcessTextLabel = new JLabel("Unknown");
+        currentProcessLabel = new JLabel(I18n.t("settings.dataPruner.label.currentProcess", "Current Process:"));
+        currentProcessTextLabel = new JLabel(I18n.t("settings.dataPruner.status.unknown", "Unknown"));
 
-        lastProcessLabel = new JLabel("Last Process:");
-        lastProcessTextLabel = new JLabel("Unknown");
+        lastProcessLabel = new JLabel(I18n.t("settings.dataPruner.label.lastProcess", "Last Process:"));
+        lastProcessTextLabel = new JLabel(I18n.t("settings.dataPruner.status.unknown", "Unknown"));
 
-        nextProcessLabel = new JLabel("Next Process:");
-        nextProcessTextLabel = new JLabel("Unknown");
+        nextProcessLabel = new JLabel(I18n.t("settings.dataPruner.label.nextProcess", "Next Process:"));
+        nextProcessTextLabel = new JLabel(I18n.t("settings.dataPruner.status.unknown", "Unknown"));
 
         pruningSchedulePanel = new JPanel();
         pruningSchedulePanel.setBackground(UIConstants.BACKGROUND_COLOR);
-        pruningSchedulePanel.setBorder(BorderFactory.createTitledBorder(BorderFactory.createMatteBorder(1, 0, 0, 0, new Color(204, 204, 204)), "Schedule", TitledBorder.DEFAULT_JUSTIFICATION, TitledBorder.DEFAULT_POSITION, new java.awt.Font("Tahoma", 1, 11)));
+        pruningSchedulePanel.setBorder(BorderFactory.createTitledBorder(BorderFactory.createMatteBorder(1, 0, 0, 0, new Color(204, 204, 204)),
+                I18n.t("settings.dataPruner.section.schedule", "Schedule"),
+                TitledBorder.DEFAULT_JUSTIFICATION, TitledBorder.DEFAULT_POSITION, new java.awt.Font("Tahoma", 1, 11)));
 
-        enabledLabel = new JLabel("Enable:");
+        enabledLabel = new JLabel(I18n.t("settings.dataPruner.label.enable", "Enable:"));
 
-        yesEnabledRadio = new MirthRadioButton("Yes");
+        yesEnabledRadio = new MirthRadioButton(I18n.t("connectors.sourceSettings.yes", "Yes"));
         yesEnabledRadio.setFocusable(false);
         yesEnabledRadio.setBackground(Color.white);
         yesEnabledRadio.addActionListener(new ActionListener() {
@@ -469,7 +495,7 @@ public class DataPrunerPanel extends AbstractSettingsPanel {
             }
         });
 
-        noEnabledRadio = new MirthRadioButton("No");
+        noEnabledRadio = new MirthRadioButton(I18n.t("connectors.sourceSettings.no", "No"));
         noEnabledRadio.setFocusable(false);
         noEnabledRadio.setBackground(Color.white);
         noEnabledRadio.setSelected(true);
@@ -488,26 +514,31 @@ public class DataPrunerPanel extends AbstractSettingsPanel {
 
         pruneSettingsPanel = new JPanel();
         pruneSettingsPanel.setBackground(UIConstants.BACKGROUND_COLOR);
-        pruneSettingsPanel.setBorder(BorderFactory.createTitledBorder(BorderFactory.createMatteBorder(1, 0, 0, 0, new Color(204, 204, 204)), "Prune Settings", TitledBorder.DEFAULT_JUSTIFICATION, TitledBorder.DEFAULT_POSITION, new Font("Tahoma", 1, 11))); // NOI18N
+        pruneSettingsPanel.setBorder(BorderFactory.createTitledBorder(BorderFactory.createMatteBorder(1, 0, 0, 0, new Color(204, 204, 204)),
+                I18n.t("settings.dataPruner.section.pruneSettings", "Prune Settings"),
+                TitledBorder.DEFAULT_JUSTIFICATION, TitledBorder.DEFAULT_POSITION, new Font("Tahoma", 1, 11))); // NOI18N
 
-        blockSizeLabel = new JLabel("Block Size:");
+        blockSizeLabel = new JLabel(I18n.t("settings.dataPruner.label.blockSize", "Block Size:"));
         blockSizeTextField = new MirthTextField();
-        blockSizeTextField.setToolTipText("<html>The number of messages that will be pruned at a time. This value must<br/>be between 50 and 10000. The recommended value for most servers is 1000.</html>");
+        blockSizeTextField.setToolTipText(I18n.t("settings.dataPruner.tooltip.blockSize",
+                "<html>The number of messages that will be pruned at a time. This value must<br/>be between 50 and 10000. The recommended value for most servers is 1000.</html>"));
 
-        pruneEventsLabel = new JLabel("Prune Events:");
+        pruneEventsLabel = new JLabel(I18n.t("settings.dataPruner.label.pruneEvents", "Prune Events:"));
 
-        pruneEventsYes = new MirthRadioButton("Yes");
+        pruneEventsYes = new MirthRadioButton(I18n.t("connectors.sourceSettings.yes", "Yes"));
         pruneEventsYes.setBackground(UIConstants.BACKGROUND_COLOR);
-        pruneEventsYes.setToolTipText("<html>If Yes, event records older than the Event Age will be pruned. If No, event records will not be pruned.</html>");
+        pruneEventsYes.setToolTipText(I18n.t("settings.dataPruner.tooltip.pruneEventsYes",
+                "<html>If Yes, event records older than the Event Age will be pruned. If No, event records will not be pruned.</html>"));
         pruneEventsYes.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent evt) {
                 pruneEventsActionPerformed(evt);
             }
         });
 
-        pruneEventsNo = new MirthRadioButton("No");
+        pruneEventsNo = new MirthRadioButton(I18n.t("connectors.sourceSettings.no", "No"));
         pruneEventsNo.setBackground(UIConstants.BACKGROUND_COLOR);
-        pruneEventsNo.setToolTipText("<html>If Yes, event records will be pruned in addition to messages. If No, event records will not be pruned.</html>");
+        pruneEventsNo.setToolTipText(I18n.t("settings.dataPruner.tooltip.pruneEventsNo",
+                "<html>If Yes, event records will be pruned in addition to messages. If No, event records will not be pruned.</html>"));
         pruneEventsNo.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent evt) {
                 pruneEventsActionPerformed(evt);
@@ -518,17 +549,20 @@ public class DataPrunerPanel extends AbstractSettingsPanel {
         pruneEventsButtonGroup.add(pruneEventsYes);
         pruneEventsButtonGroup.add(pruneEventsNo);
 
-        pruneEventAgeLabel = new JLabel("Prune Event Age:");
+        pruneEventAgeLabel = new JLabel(I18n.t("settings.dataPruner.label.pruneEventAge", "Prune Event Age:"));
 
         pruneEventAgeTextField = new MirthTextField();
-        pruneEventAgeTextField.setToolTipText("<html>Events older than this number of days will be pruned if Prune Events is set to Yes.</html>");
+        pruneEventAgeTextField.setToolTipText(I18n.t("settings.dataPruner.tooltip.pruneEventAge",
+                "<html>Events older than this number of days will be pruned if Prune Events is set to Yes.</html>"));
 
-        eventDaysLabel = new JLabel("days");
+        eventDaysLabel = new JLabel(I18n.t("settings.dataPruner.unit.days", "days"));
         eventDaysLabel.setEnabled(false);
 
         archiverContainerPanel = new JPanel();
         archiverContainerPanel.setBackground(UIConstants.BACKGROUND_COLOR);
-        archiverContainerPanel.setBorder(BorderFactory.createTitledBorder(BorderFactory.createMatteBorder(1, 0, 0, 0, new Color(204, 204, 204)), "Archive Settings", TitledBorder.DEFAULT_JUSTIFICATION, TitledBorder.DEFAULT_POSITION, new Font("Tahoma", 1, 11))); // NOI18N
+        archiverContainerPanel.setBorder(BorderFactory.createTitledBorder(BorderFactory.createMatteBorder(1, 0, 0, 0, new Color(204, 204, 204)),
+                I18n.t("settings.dataPruner.section.archiveSettings", "Archive Settings"),
+                TitledBorder.DEFAULT_JUSTIFICATION, TitledBorder.DEFAULT_POSITION, new Font("Tahoma", 1, 11))); // NOI18N
         archiverContainerPanel.setLayout(null);
 
         archiverPanel = new MessageExportPanel(Frame.userPreferences, true, false);

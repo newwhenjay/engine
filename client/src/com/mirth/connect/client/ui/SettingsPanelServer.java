@@ -53,6 +53,7 @@ import com.mirth.connect.client.ui.components.MirthPasswordField;
 import com.mirth.connect.client.ui.components.MirthRadioButton;
 import com.mirth.connect.client.ui.components.MirthTextField;
 import com.mirth.connect.client.ui.components.MirthTextPane;
+import com.mirth.connect.client.ui.i18n.I18n;
 import com.mirth.connect.client.ui.util.DisplayUtil;
 import com.mirth.connect.donkey.model.channel.MetaDataColumn;
 import com.mirth.connect.model.Channel;
@@ -79,9 +80,21 @@ public class SettingsPanelServer extends AbstractSettingsPanel {
         initComponents();
         initLayout();
 
-        addTask(TaskConstants.SETTINGS_SERVER_BACKUP, "Backup Config", "Backup your server configuration to an XML file. The backup includes channels, alerts, code templates, server properties, global scripts, and plugin properties.", "", new ImageIcon(com.mirth.connect.client.ui.Frame.class.getResource("images/report_disk.png")));
-        addTask(TaskConstants.SETTINGS_SERVER_RESTORE, "Restore Config", "Restore your server configuration from a server configuration XML file. This will remove and restore your channels, alerts, code templates, server properties, global scripts, and plugin properties.", "", new ImageIcon(com.mirth.connect.client.ui.Frame.class.getResource("images/report_go.png")));
-        addTask(TaskConstants.SETTINGS_CLEAR_ALL_STATS, "Clear All Statistics", "Reset the current and lifetime statistics for all channels.", "", new ImageIcon(com.mirth.connect.client.ui.Frame.class.getResource("images/chart_bar_delete.png")));
+        addTask(TaskConstants.SETTINGS_SERVER_BACKUP,
+                I18n.t("settings.server.task.backup.title", "Backup Config"),
+                I18n.t("settings.server.task.backup.desc", "Backup your server configuration to an XML file. The backup includes channels, alerts, code templates, server properties, global scripts, and plugin properties."),
+                "",
+                new ImageIcon(com.mirth.connect.client.ui.Frame.class.getResource("images/report_disk.png")));
+        addTask(TaskConstants.SETTINGS_SERVER_RESTORE,
+                I18n.t("settings.server.task.restore.title", "Restore Config"),
+                I18n.t("settings.server.task.restore.desc", "Restore your server configuration from a server configuration XML file. This will remove and restore your channels, alerts, code templates, server properties, global scripts, and plugin properties."),
+                "",
+                new ImageIcon(com.mirth.connect.client.ui.Frame.class.getResource("images/report_go.png")));
+        addTask(TaskConstants.SETTINGS_CLEAR_ALL_STATS,
+                I18n.t("settings.server.task.clearStats.title", "Clear All Statistics"),
+                I18n.t("settings.server.task.clearStats.desc", "Reset the current and lifetime statistics for all channels."),
+                "",
+                new ImageIcon(com.mirth.connect.client.ui.Frame.class.getResource("images/chart_bar_delete.png")));
 
         if (!SEND_USAGE_STATISTICS) {
             provideUsageStatsLabel.setVisible(false);
@@ -96,12 +109,17 @@ public class SettingsPanelServer extends AbstractSettingsPanel {
         defaultMetaDataColumns = new ArrayList<MetaDataColumn>();
     }
 
+    @Override
+    public String getTabDisplayName() {
+        return I18n.t("settings.tab.server", TAB_NAME);
+    }
+
     public void doRefresh() {
         if (PlatformUI.MIRTH_FRAME.alertRefresh()) {
             return;
         }
 
-        final String workingId = getFrame().startWorking("Loading " + getTabName() + " settings...");
+        final String workingId = getFrame().startWorking(I18n.tf("settings.server.working.loading", "Loading {0} settings...", getTabName()));
 
         SwingWorker<Void, Void> worker = new SwingWorker<Void, Void>() {
 
@@ -139,14 +157,14 @@ public class SettingsPanelServer extends AbstractSettingsPanel {
         
         if (serverSettings.getAdministratorAutoLogoutIntervalEnabled()) {
             if (serverSettings.getAdministratorAutoLogoutIntervalField() == null) {
-                getFrame().alertWarning(this, "Please enter a valid auto logout interval time.");
+                getFrame().alertWarning(this, I18n.t("settings.server.error.autoLogoutInterval.invalid", "Please enter a valid auto logout interval time."));
                 return false;
             }
             
             int autoLogoutInterval = serverSettings.getAdministratorAutoLogoutIntervalField();
         
             if (autoLogoutInterval <= 0 || autoLogoutInterval >= 61) {
-                getFrame().alertWarning(this, "Please enter an auto logout interval time that is between 1 and 60.");
+                getFrame().alertWarning(this, I18n.t("settings.server.error.autoLogoutInterval.range", "Please enter an auto logout interval time that is between 1 and 60."));
                 return false;
             }
             
@@ -157,7 +175,7 @@ public class SettingsPanelServer extends AbstractSettingsPanel {
         queueBufferSizeField.setBackground(null);
         if (serverSettings.getQueueBufferSize() == null) {
             queueBufferSizeField.setBackground(UIConstants.INVALID_COLOR);
-            getFrame().alertWarning(this, "Please enter a valid queue buffer size.");
+            getFrame().alertWarning(this, I18n.t("settings.server.error.queueBufferSize.invalid", "Please enter a valid queue buffer size."));
             return false;
         }
 
@@ -167,11 +185,12 @@ public class SettingsPanelServer extends AbstractSettingsPanel {
                 new InternetAddress(emailAddress).validate();
             }
         } catch (Exception e) {
-            PlatformUI.MIRTH_FRAME.alertWarning(PlatformUI.MIRTH_FRAME, "The Default From Address is invalid: " + e.getMessage());
+            PlatformUI.MIRTH_FRAME.alertWarning(PlatformUI.MIRTH_FRAME,
+                    I18n.tf("settings.server.error.defaultFromAddress.invalidWithReason", "The Default From Address is invalid: {0}", e.getMessage()));
             return false;
         }
 
-        final String workingId = getFrame().startWorking("Saving " + getTabName() + " settings...");
+        final String workingId = getFrame().startWorking(I18n.tf("settings.server.working.saving", "Saving {0} settings...", getTabName()));
 
         SwingWorker<Void, Void> worker = new SwingWorker<Void, Void>() {
 
@@ -185,7 +204,7 @@ public class SettingsPanelServer extends AbstractSettingsPanel {
                     String serverName = serverNameField.getText();
                     StringBuilder titleText = new StringBuilder();
                     StringBuilder statusBarText = new StringBuilder();
-                    statusBarText.append("Connected to: ");
+                    statusBarText.append(I18n.t("settings.server.status.connectedTo", "Connected to: "));
 
                     if (!StringUtils.isBlank(environmentName)) {
                         titleText.append(environmentName + " - ");
@@ -212,7 +231,7 @@ public class SettingsPanelServer extends AbstractSettingsPanel {
                     titleText.append(" - (" + PlatformUI.SERVER_VERSION + ")");
                     getFrame().setTitle(titleText.toString());
                     User currentUser = getFrame().mirthClient.getCurrentUser();
-                    statusBarText.append(" as " + currentUser.getUsername());
+                    statusBarText.append(I18n.tf("settings.server.status.asUser", " as {0}", currentUser.getUsername()));
                     if (!StringUtils.isBlank(currentUser.getFirstName()) || !StringUtils.isBlank(currentUser.getLastName())) {
                         if (!StringUtils.isBlank(currentUser.getFirstName())) {                     // first name is not blank
                             statusBarText.append(" (" + currentUser.getFirstName());                // add first name
@@ -510,7 +529,8 @@ public class SettingsPanelServer extends AbstractSettingsPanel {
 
     public void doBackup() {
         if (isSaveEnabled()) {
-            int option = JOptionPane.showConfirmDialog(this, "Would you like to save the settings first?");
+            int option = JOptionPane.showConfirmDialog(this,
+                    I18n.t("settings.server.confirm.saveFirst", "Would you like to save the settings first?"));
 
             if (option == JOptionPane.YES_OPTION) {
                 if (!doSave()) {
@@ -525,7 +545,7 @@ public class SettingsPanelServer extends AbstractSettingsPanel {
         final File exportFile = getFrame().createFileForExport(backupDate.substring(0, 10) + " Mirth Backup.xml", "XML");
 
         if (exportFile != null) {
-            final String workingId = getFrame().startWorking("Exporting server config...");
+            final String workingId = getFrame().startWorking(I18n.t("settings.server.working.exportingConfig", "Exporting server config..."));
 
             SwingWorker<Void, Void> worker = new SwingWorker<Void, Void>() {
 
@@ -547,7 +567,7 @@ public class SettingsPanelServer extends AbstractSettingsPanel {
                     configuration.setDate(backupDate);
                     String backupXML = ObjectXMLSerializer.getInstance().serialize(configuration);
 
-                    getFrame().exportFile(backupXML, exportFile, "Server Configuration");
+                    getFrame().exportFile(backupXML, exportFile, I18n.t("settings.server.backup.exportType", "Server Configuration"));
                     return null;
                 }
 
@@ -562,7 +582,7 @@ public class SettingsPanelServer extends AbstractSettingsPanel {
 
     public void doRestore() {
         if (getFrame().isSaveEnabled()) {
-            if (!getFrame().alertOkCancel(this, "Your new settings will first be saved.  Continue?")) {
+            if (!getFrame().alertOkCancel(this, I18n.t("settings.server.confirm.saveBeforeRestore", "Your new settings will first be saved.  Continue?"))) {
                 return;
             }
             if (!doSave()) {
@@ -580,14 +600,18 @@ public class SettingsPanelServer extends AbstractSettingsPanel {
 
                 final ServerConfiguration configuration = ObjectXMLSerializer.getInstance().deserialize(content, ServerConfiguration.class);
 
-                final JCheckBox deployChannelsCheckBox = new JCheckBox("Deploy all channels after import");
+                final JCheckBox deployChannelsCheckBox = new JCheckBox(I18n.t("settings.server.restore.deployAfterImport", "Deploy all channels after import"));
                 deployChannelsCheckBox.setSelected(true);
-                final JCheckBox overwriteConfigMap = new JCheckBox("Overwrite Configuration Map");
+                final JCheckBox overwriteConfigMap = new JCheckBox(I18n.t("settings.server.restore.overwriteConfigMap", "Overwrite Configuration Map"));
                 overwriteConfigMap.setSelected(false);
-                String warningMessage = "Import configuration from " + configuration.getDate() + "?\nWARNING: This will overwrite all current channels,\nalerts, server properties, and plugin properties.\n";
+                String warningMessage = I18n.tf("settings.server.restore.confirmWithDateAndWarning",
+                        "Import configuration from {0}?\nWARNING: This will overwrite all current channels,\nalerts, server properties, and plugin properties.\n",
+                        configuration.getDate());
                 Object[] params = { warningMessage, new JLabel(" "), deployChannelsCheckBox,
                         overwriteConfigMap };
-                int option = JOptionPane.showConfirmDialog(this, params, "Select an Option", JOptionPane.YES_NO_OPTION);
+                int option = JOptionPane.showConfirmDialog(this, params,
+                        I18n.t("common.selectOptionTitle", "Select an Option"),
+                        JOptionPane.YES_NO_OPTION);
 
                 if (option == JOptionPane.YES_OPTION) {
                     final Set<String> alertIds = new HashSet<String>();
@@ -595,7 +619,7 @@ public class SettingsPanelServer extends AbstractSettingsPanel {
                         alertIds.add(alertStatus.getId());
                     }
 
-                    final String workingId = getFrame().startWorking("Restoring server config...");
+                    final String workingId = getFrame().startWorking(I18n.t("settings.server.working.restoringConfig", "Restoring server config..."));
 
                     SwingWorker<Void, Void> worker = new SwingWorker<Void, Void>() {
 
@@ -606,7 +630,7 @@ public class SettingsPanelServer extends AbstractSettingsPanel {
                                 getFrame().mirthClient.setServerConfiguration(configuration, deployChannelsCheckBox.isSelected(), overwriteConfigMap.isSelected());
                                 getFrame().channelPanel.clearChannelCache();
                                 doRefresh();
-                                getFrame().alertInformation(SettingsPanelServer.this, "Your configuration was successfully restored.");
+                                getFrame().alertInformation(SettingsPanelServer.this, I18n.t("settings.server.restore.success", "Your configuration was successfully restored."));
                                 updateAlerts = true;
                             } catch (ClientException e) {
                                 getFrame().alertThrowable(SettingsPanelServer.this, e);
@@ -629,21 +653,25 @@ public class SettingsPanelServer extends AbstractSettingsPanel {
                     worker.execute();
                 }
             } catch (Exception e) {
-                getFrame().alertError(this, "Invalid server configuration file.");
+                getFrame().alertError(this, I18n.t("settings.server.restore.invalidConfigFile", "Invalid server configuration file."));
             }
         }
     }
 
     public void doClearAllStats() {
-        String result = DisplayUtil.showInputDialog(this, "<html>This will reset all channel statistics (including lifetime statistics) for<br>all channels (including undeployed channels).<br><font size='1'><br></font>Type CLEAR and click the OK button to continue.</html>", "Clear All Statistics", JOptionPane.WARNING_MESSAGE);
+        String result = DisplayUtil.showInputDialog(this,
+                I18n.t("settings.server.clearStats.promptHtml",
+                        "<html>This will reset all channel statistics (including lifetime statistics) for<br>all channels (including undeployed channels).<br><font size='1'><br></font>Type CLEAR and click the OK button to continue.</html>"),
+                I18n.t("settings.server.task.clearStats.title", "Clear All Statistics"),
+                JOptionPane.WARNING_MESSAGE);
 
         if (result != null) {
             if (!result.equals("CLEAR")) {
-                getFrame().alertWarning(SettingsPanelServer.this, "You must type CLEAR to clear all statistics.");
+                getFrame().alertWarning(SettingsPanelServer.this, I18n.t("settings.server.clearStats.mustTypeClear", "You must type CLEAR to clear all statistics."));
                 return;
             }
 
-            final String workingId = getFrame().startWorking("Clearing all statistics...");
+            final String workingId = getFrame().startWorking(I18n.t("settings.server.working.clearingStats", "Clearing all statistics..."));
 
             SwingWorker<Void, Void> worker = new SwingWorker<Void, Void>() {
 
@@ -663,7 +691,7 @@ public class SettingsPanelServer extends AbstractSettingsPanel {
                     getFrame().stopWorking(workingId);
 
                     if (exception == null) {
-                        getFrame().alertInformation(SettingsPanelServer.this, "All current and lifetime statistics have been cleared for all channels.");
+                        getFrame().alertInformation(SettingsPanelServer.this, I18n.t("settings.server.clearStats.cleared", "All current and lifetime statistics have been cleared for all channels."));
                     }
                 }
             };
@@ -687,26 +715,34 @@ public class SettingsPanelServer extends AbstractSettingsPanel {
 
         generalPanel = new JPanel();
         generalPanel.setBackground(getBackground());
-        generalPanel.setBorder(BorderFactory.createTitledBorder(BorderFactory.createMatteBorder(1, 0, 0, 0, new Color(204, 204, 204)), "General", TitledBorder.DEFAULT_JUSTIFICATION, TitledBorder.DEFAULT_POSITION, new Font("Tahoma", 1, 11)));
+        generalPanel.setBorder(BorderFactory.createTitledBorder(BorderFactory.createMatteBorder(1, 0, 0, 0, new Color(204, 204, 204)),
+                I18n.t("settings.server.section.general", "General"),
+                TitledBorder.DEFAULT_JUSTIFICATION, TitledBorder.DEFAULT_POSITION, new Font("Tahoma", 1, 11)));
 
-        environmentNameLabel = new JLabel("Environment name:");
+        environmentNameLabel = new JLabel(I18n.t("settings.server.label.environmentName", "Environment name:"));
         environmentNameField = new MirthTextField();
-        environmentNameField.setToolTipText(String.format("<html>The name of this environment. There is one environment name per %s database.</html>", BrandingConstants.PRODUCT_NAME));
+        environmentNameField.setToolTipText(I18n.tf("settings.server.tooltip.environmentName",
+                "<html>The name of this environment. There is one environment name per {0} database.</html>",
+                BrandingConstants.PRODUCT_NAME));
 
-        serverNameLabel = new JLabel("Server name:");
+        serverNameLabel = new JLabel(I18n.t("settings.server.label.serverName", "Server name:"));
         serverNameField = new MirthTextField();
-        serverNameField.setToolTipText("<html>The server name which will appear in the Administrator title, taskbar/dock<br>and desktop shortcut. This setting applies for all users on this server.</html>");
+        serverNameField.setToolTipText(I18n.t("settings.server.tooltip.serverName",
+                "<html>The server name which will appear in the Administrator title, taskbar/dock<br>and desktop shortcut. This setting applies for all users on this server.</html>"));
 
-        defaultAdministratorColorLabel = new JLabel("Default Background Color:");
+        defaultAdministratorColorLabel = new JLabel(I18n.t("settings.server.label.defaultBackgroundColor", "Default Background Color:"));
 
         defaultAdministratorColorButton = new JButton();
         defaultAdministratorColorButton.setBackground(ServerSettings.DEFAULT_COLOR);
-        defaultAdministratorColorButton.setToolTipText("<html>The default Administrator GUI background color this server should use.<br/>Users can override this with their own custom background color.</html>");
+        defaultAdministratorColorButton.setToolTipText(I18n.t("settings.server.tooltip.defaultBackgroundColor",
+                "<html>The default Administrator GUI background color this server should use.<br/>Users can override this with their own custom background color.</html>"));
         defaultAdministratorColorButton.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
         defaultAdministratorColorButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent evt) {
-                Color color = JColorChooser.showDialog(PlatformUI.MIRTH_FRAME, "Edit Background Color", defaultAdministratorColorButton.getBackground());
+                Color color = JColorChooser.showDialog(PlatformUI.MIRTH_FRAME,
+                        I18n.t("settings.server.dialog.editBackgroundColor", "Edit Background Color"),
+                        defaultAdministratorColorButton.getBackground());
                 if (color != null) {
                     defaultAdministratorColorButton.setBackground(color);
                     getFrame().setSaveEnabled(true);
@@ -714,26 +750,28 @@ public class SettingsPanelServer extends AbstractSettingsPanel {
             }
         });
 
-        provideUsageStatsLabel = new JLabel("Provide usage statistics:");
+        provideUsageStatsLabel = new JLabel(I18n.t("settings.server.label.provideUsageStats", "Provide usage statistics:"));
         provideUsageStatsButtonGroup = new ButtonGroup();
 
-        provideUsageStatsYesRadio = new MirthRadioButton("Yes");
+        provideUsageStatsYesRadio = new MirthRadioButton(I18n.t("connectors.sourceSettings.yes", "Yes"));
         provideUsageStatsYesRadio.setBackground(getBackground());
         provideUsageStatsYesRadio.setToolTipText(String.format(
-            "<html>Toggles sending usage statistics to %s. These statistics <br>do not contain any PHI or channel/script implementations.</html>",
+            I18n.t("settings.server.tooltip.provideUsageStats",
+                    "<html>Toggles sending usage statistics to %s. These statistics <br>do not contain any PHI or channel/script implementations.</html>"),
             BrandingConstants.COMPANY_NAME
         ));
         provideUsageStatsButtonGroup.add(provideUsageStatsYesRadio);
 
-        provideUsageStatsNoRadio = new MirthRadioButton("No");
+        provideUsageStatsNoRadio = new MirthRadioButton(I18n.t("connectors.sourceSettings.no", "No"));
         provideUsageStatsNoRadio.setBackground(getBackground());
         provideUsageStatsNoRadio.setToolTipText(String.format(
-            "<html>Toggles sending usage statistics to %s. These statistics <br>do not contain any PHI or channel/script implementations.</html>",
+            I18n.t("settings.server.tooltip.provideUsageStats",
+                    "<html>Toggles sending usage statistics to %s. These statistics <br>do not contain any PHI or channel/script implementations.</html>"),
             BrandingConstants.COMPANY_NAME
         ));
         provideUsageStatsButtonGroup.add(provideUsageStatsNoRadio);
 
-        provideUsageStatsMoreInfoLabel = new JLabel("<html><font color=blue><u>More Info</u></font></html>");
+        provideUsageStatsMoreInfoLabel = new JLabel(I18n.t("settings.server.label.moreInfoHtml", "<html><font color=blue><u>More Info</u></font></html>"));
         provideUsageStatsMoreInfoLabel.setToolTipText(BrandingConstants.PRIVACY_TOOLTIP);
         provideUsageStatsMoreInfoLabel.setCursor(new Cursor(Cursor.HAND_CURSOR));
         provideUsageStatsMoreInfoLabel.addMouseListener(new MouseAdapter() {
@@ -742,12 +780,12 @@ public class SettingsPanelServer extends AbstractSettingsPanel {
             }
         });
         
-        administratorAutoLogoutIntervalLabel = new JLabel("Enable Auto Logout:");
+        administratorAutoLogoutIntervalLabel = new JLabel(I18n.t("settings.server.label.enableAutoLogout", "Enable Auto Logout:"));
         administratorAutoLogoutIntervalButtonGroup = new ButtonGroup();
         
-        administratorAutoLogoutIntervalYesRadio = new MirthRadioButton("Yes");
+        administratorAutoLogoutIntervalYesRadio = new MirthRadioButton(I18n.t("connectors.sourceSettings.yes", "Yes"));
         administratorAutoLogoutIntervalYesRadio.setBackground(getBackground());
-        administratorAutoLogoutIntervalYesRadio.setToolTipText("<html>Toggles automatically logging out the user due to inactivity.</html>");
+        administratorAutoLogoutIntervalYesRadio.setToolTipText(I18n.t("settings.server.tooltip.autoLogoutEnabled", "<html>Toggles automatically logging out the user due to inactivity.</html>"));
         administratorAutoLogoutIntervalYesRadio.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent evt) {
                 requireAdministratorAutoLogoutIntervalYesRadioActionPerformed(evt);
@@ -755,9 +793,9 @@ public class SettingsPanelServer extends AbstractSettingsPanel {
         });
         administratorAutoLogoutIntervalButtonGroup.add(administratorAutoLogoutIntervalYesRadio);
 
-        administratorAutoLogoutIntervalNoRadio = new MirthRadioButton("No");
+        administratorAutoLogoutIntervalNoRadio = new MirthRadioButton(I18n.t("connectors.sourceSettings.no", "No"));
         administratorAutoLogoutIntervalNoRadio.setBackground(getBackground());
-        administratorAutoLogoutIntervalNoRadio.setToolTipText("<html>Toggles automatically logging out the user due to inactivity.</html>");
+        administratorAutoLogoutIntervalNoRadio.setToolTipText(I18n.t("settings.server.tooltip.autoLogoutEnabled", "<html>Toggles automatically logging out the user due to inactivity.</html>"));
         administratorAutoLogoutIntervalNoRadio.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent evt) {
                 requireAdministratorAutoLogoutIntervalNoRadioActionPerformed(evt);
@@ -765,99 +803,106 @@ public class SettingsPanelServer extends AbstractSettingsPanel {
         });
         administratorAutoLogoutIntervalButtonGroup.add(administratorAutoLogoutIntervalNoRadio);
         
-        administratorAutoLogoutIntervalTimeLabel = new JLabel("Auto Logout Interval (minutes):");
+        administratorAutoLogoutIntervalTimeLabel = new JLabel(I18n.t("settings.server.label.autoLogoutIntervalMinutes", "Auto Logout Interval (minutes):"));
         administratorAutoLogoutIntervalField = new MirthTextField();
-        administratorAutoLogoutIntervalField.setToolTipText("<html>Interval in minutes to automatically logout the user due to inactivity.</html>");
+        administratorAutoLogoutIntervalField.setToolTipText(I18n.t("settings.server.tooltip.autoLogoutIntervalMinutes", "<html>Interval in minutes to automatically logout the user due to inactivity.</html>"));
         
         channelPanel = new JPanel();
         channelPanel.setBackground(getBackground());
-        channelPanel.setBorder(BorderFactory.createTitledBorder(BorderFactory.createMatteBorder(1, 0, 0, 0, new Color(204, 204, 204)), "Channel", TitledBorder.DEFAULT_JUSTIFICATION, TitledBorder.DEFAULT_POSITION, new Font("Tahoma", 1, 11)));
+        channelPanel.setBorder(BorderFactory.createTitledBorder(BorderFactory.createMatteBorder(1, 0, 0, 0, new Color(204, 204, 204)),
+                I18n.t("settings.server.section.channels", "Channel"),
+                TitledBorder.DEFAULT_JUSTIFICATION, TitledBorder.DEFAULT_POSITION, new Font("Tahoma", 1, 11)));
 
-        clearGlobalMapLabel = new JLabel("Clear global map on redeploy:");
+        clearGlobalMapLabel = new JLabel(I18n.t("settings.server.label.clearGlobalMapOnRedeploy", "Clear global map on redeploy:"));
         clearGlobalMapButtonGroup = new ButtonGroup();
 
-        clearGlobalMapYesRadio = new MirthRadioButton("Yes");
+        clearGlobalMapYesRadio = new MirthRadioButton(I18n.t("connectors.sourceSettings.yes", "Yes"));
         clearGlobalMapYesRadio.setBackground(getBackground());
         clearGlobalMapYesRadio.setSelected(true);
-        clearGlobalMapYesRadio.setToolTipText("Toggles clearing the global map when redeploying all channels.");
+        clearGlobalMapYesRadio.setToolTipText(I18n.t("settings.server.tooltip.clearGlobalMapOnRedeploy", "Toggles clearing the global map when redeploying all channels."));
         clearGlobalMapButtonGroup.add(clearGlobalMapYesRadio);
 
-        clearGlobalMapNoRadio = new MirthRadioButton("No");
+        clearGlobalMapNoRadio = new MirthRadioButton(I18n.t("connectors.sourceSettings.no", "No"));
         clearGlobalMapNoRadio.setBackground(getBackground());
-        clearGlobalMapNoRadio.setToolTipText("Toggles clearing the global map when redeploying all channels.");
+        clearGlobalMapNoRadio.setToolTipText(I18n.t("settings.server.tooltip.clearGlobalMapOnRedeploy", "Toggles clearing the global map when redeploying all channels."));
         clearGlobalMapButtonGroup.add(clearGlobalMapNoRadio);
 
-        queueBufferSizeLabel = new JLabel("Default Queue Buffer Size:");
+        queueBufferSizeLabel = new JLabel(I18n.t("settings.server.label.defaultQueueBufferSize", "Default Queue Buffer Size:"));
         queueBufferSizeField = new MirthTextField();
-        queueBufferSizeField.setToolTipText("The default source/destination queue buffer size to use for new channels.");
+        queueBufferSizeField.setToolTipText(I18n.t("settings.server.tooltip.defaultQueueBufferSize", "The default source/destination queue buffer size to use for new channels."));
 
-        defaultMetaDataLabel = new JLabel("Default Metadata Columns:");
+        defaultMetaDataLabel = new JLabel(I18n.t("settings.server.label.defaultMetadataColumns", "Default Metadata Columns:"));
 
-        defaultMetaDataSourceCheckBox = new MirthCheckBox("Source");
+        defaultMetaDataSourceCheckBox = new MirthCheckBox(I18n.t("settings.server.metadataColumn.source", "Source"));
         defaultMetaDataSourceCheckBox.setBackground(getBackground());
-        defaultMetaDataSourceCheckBox.setToolTipText("<html>If checked, the Source metadata column will be added by<br/>default when a user creates a new channel. The user can<br/>choose to remove the column on the channel's Summary tab.</html>");
+        defaultMetaDataSourceCheckBox.setToolTipText(I18n.t("settings.server.tooltip.metadataColumn.source",
+                "<html>If checked, the Source metadata column will be added by<br/>default when a user creates a new channel. The user can<br/>choose to remove the column on the channel's Summary tab.</html>"));
 
-        defaultMetaDataTypeCheckBox = new MirthCheckBox("Type");
+        defaultMetaDataTypeCheckBox = new MirthCheckBox(I18n.t("settings.server.metadataColumn.type", "Type"));
         defaultMetaDataTypeCheckBox.setBackground(getBackground());
-        defaultMetaDataTypeCheckBox.setToolTipText("<html>If checked, the Type metadata column will be added by<br/>default when a user creates a new channel. The user can<br/>choose to remove the column on the channel's Summary tab.</html>");
+        defaultMetaDataTypeCheckBox.setToolTipText(I18n.t("settings.server.tooltip.metadataColumn.type",
+                "<html>If checked, the Type metadata column will be added by<br/>default when a user creates a new channel. The user can<br/>choose to remove the column on the channel's Summary tab.</html>"));
 
-        defaultMetaDataVersionCheckBox = new MirthCheckBox("Version");
+        defaultMetaDataVersionCheckBox = new MirthCheckBox(I18n.t("settings.server.metadataColumn.version", "Version"));
         defaultMetaDataVersionCheckBox.setBackground(getBackground());
-        defaultMetaDataVersionCheckBox.setToolTipText("<html>If checked, the Version metadata column will be added by<br/>default when a user creates a new channel. The user can<br/>choose to remove the column on the channel's Summary tab.</html>");
+        defaultMetaDataVersionCheckBox.setToolTipText(I18n.t("settings.server.tooltip.metadataColumn.version",
+                "<html>If checked, the Version metadata column will be added by<br/>default when a user creates a new channel. The user can<br/>choose to remove the column on the channel's Summary tab.</html>"));
 
         emailPanel = new JPanel();
         emailPanel.setBackground(getBackground());
-        emailPanel.setBorder(BorderFactory.createTitledBorder(BorderFactory.createMatteBorder(1, 0, 0, 0, new Color(204, 204, 204)), "Email", TitledBorder.DEFAULT_JUSTIFICATION, TitledBorder.DEFAULT_POSITION, new Font("Tahoma", 1, 11)));
+        emailPanel.setBorder(BorderFactory.createTitledBorder(BorderFactory.createMatteBorder(1, 0, 0, 0, new Color(204, 204, 204)),
+                I18n.t("settings.server.section.email", "Email"),
+                TitledBorder.DEFAULT_JUSTIFICATION, TitledBorder.DEFAULT_POSITION, new Font("Tahoma", 1, 11)));
 
-        smtpHostLabel = new JLabel("SMTP Host:");
+        smtpHostLabel = new JLabel(I18n.t("settings.server.label.smtpHost", "SMTP Host:"));
         smtpHostField = new MirthTextField();
-        smtpHostField.setToolTipText("SMTP host used for global SMTP settings.");
+        smtpHostField.setToolTipText(I18n.t("settings.server.tooltip.smtpHost", "SMTP host used for global SMTP settings."));
 
-        testEmailButton = new JButton("Send Test Email");
+        testEmailButton = new JButton(I18n.t("settings.server.button.sendTestEmail", "Send Test Email"));
         testEmailButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent evt) {
                 testEmailButtonActionPerformed(evt);
             }
         });
 
-        smtpPortLabel = new JLabel("SMTP Port:");
+        smtpPortLabel = new JLabel(I18n.t("settings.server.label.smtpPort", "SMTP Port:"));
         smtpPortField = new MirthTextField();
-        smtpPortField.setToolTipText("SMTP port used for global SMTP settings.");
+        smtpPortField.setToolTipText(I18n.t("settings.server.tooltip.smtpPort", "SMTP port used for global SMTP settings."));
 
-        smtpTimeoutLabel = new JLabel("Send Timeout (ms):");
+        smtpTimeoutLabel = new JLabel(I18n.t("settings.server.label.smtpTimeoutMs", "Send Timeout (ms):"));
         smtpTimeoutField = new MirthTextField();
-        smtpTimeoutField.setToolTipText("SMTP socket connection timeout in milliseconds used for global SMTP settings.");
+        smtpTimeoutField.setToolTipText(I18n.t("settings.server.tooltip.smtpTimeoutMs", "SMTP socket connection timeout in milliseconds used for global SMTP settings."));
 
-        defaultFromAddressLabel = new JLabel("Default From Address:");
+        defaultFromAddressLabel = new JLabel(I18n.t("settings.server.label.defaultFromAddress", "Default From Address:"));
         defaultFromAddressField = new MirthTextField();
-        defaultFromAddressField.setToolTipText("Default \"from\" email address used for global SMTP settings.");
+        defaultFromAddressField.setToolTipText(I18n.t("settings.server.tooltip.defaultFromAddress", "Default \"from\" email address used for global SMTP settings."));
 
-        secureConnectionLabel = new JLabel("Secure Connection:");
+        secureConnectionLabel = new JLabel(I18n.t("settings.server.label.secureConnection", "Secure Connection:"));
         secureConnectionButtonGroup = new ButtonGroup();
 
-        secureConnectionNoneRadio = new MirthRadioButton("None");
+        secureConnectionNoneRadio = new MirthRadioButton(I18n.t("settings.server.secureConnection.none", "None"));
         secureConnectionNoneRadio.setBackground(getBackground());
         secureConnectionNoneRadio.setSelected(true);
-        secureConnectionNoneRadio.setToolTipText("Toggles STARTTLS and SSL connections for global SMTP settings.");
+        secureConnectionNoneRadio.setToolTipText(I18n.t("settings.server.tooltip.secureConnection", "Toggles STARTTLS and SSL connections for global SMTP settings."));
         secureConnectionButtonGroup.add(secureConnectionNoneRadio);
 
-        secureConnectionTLSRadio = new MirthRadioButton("STARTTLS");
+        secureConnectionTLSRadio = new MirthRadioButton(I18n.t("settings.server.secureConnection.starttls", "STARTTLS"));
         secureConnectionTLSRadio.setBackground(getBackground());
-        secureConnectionTLSRadio.setToolTipText("Toggles STARTTLS and SSL connections for global SMTP settings.");
+        secureConnectionTLSRadio.setToolTipText(I18n.t("settings.server.tooltip.secureConnection", "Toggles STARTTLS and SSL connections for global SMTP settings."));
         secureConnectionButtonGroup.add(secureConnectionTLSRadio);
 
-        secureConnectionSSLRadio = new MirthRadioButton("SSL");
+        secureConnectionSSLRadio = new MirthRadioButton(I18n.t("settings.server.secureConnection.ssl", "SSL"));
         secureConnectionSSLRadio.setBackground(getBackground());
-        secureConnectionSSLRadio.setToolTipText("Toggles STARTTLS and SSL connections for global SMTP settings.");
+        secureConnectionSSLRadio.setToolTipText(I18n.t("settings.server.tooltip.secureConnection", "Toggles STARTTLS and SSL connections for global SMTP settings."));
         secureConnectionButtonGroup.add(secureConnectionSSLRadio);
 
-        requireAuthenticationLabel = new JLabel("Require Authentication:");
+        requireAuthenticationLabel = new JLabel(I18n.t("settings.server.label.requireAuthentication", "Require Authentication:"));
         requireAuthenticationButtonGroup = new ButtonGroup();
 
-        requireAuthenticationYesRadio = new MirthRadioButton("Yes");
+        requireAuthenticationYesRadio = new MirthRadioButton(I18n.t("connectors.sourceSettings.yes", "Yes"));
         requireAuthenticationYesRadio.setBackground(getBackground());
         requireAuthenticationYesRadio.setSelected(true);
-        requireAuthenticationYesRadio.setToolTipText("Toggles authentication for global SMTP settings.");
+        requireAuthenticationYesRadio.setToolTipText(I18n.t("settings.server.tooltip.requireAuthentication", "Toggles authentication for global SMTP settings."));
         requireAuthenticationYesRadio.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent evt) {
                 requireAuthenticationYesRadioActionPerformed(evt);
@@ -865,9 +910,9 @@ public class SettingsPanelServer extends AbstractSettingsPanel {
         });
         requireAuthenticationButtonGroup.add(requireAuthenticationYesRadio);
 
-        requireAuthenticationNoRadio = new MirthRadioButton("No");
+        requireAuthenticationNoRadio = new MirthRadioButton(I18n.t("connectors.sourceSettings.no", "No"));
         requireAuthenticationNoRadio.setBackground(getBackground());
-        requireAuthenticationNoRadio.setToolTipText("Toggles authentication for global SMTP settings.");
+        requireAuthenticationNoRadio.setToolTipText(I18n.t("settings.server.tooltip.requireAuthentication", "Toggles authentication for global SMTP settings."));
         requireAuthenticationNoRadio.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent evt) {
                 requireAuthenticationNoRadioActionPerformed(evt);
@@ -875,25 +920,27 @@ public class SettingsPanelServer extends AbstractSettingsPanel {
         });
         requireAuthenticationButtonGroup.add(requireAuthenticationNoRadio);
 
-        usernameLabel = new JLabel("Username:");
+        usernameLabel = new JLabel(I18n.t("settings.server.label.username", "Username:"));
         usernameField = new MirthTextField();
-        usernameField.setToolTipText("Username for global SMTP settings.");
+        usernameField.setToolTipText(I18n.t("settings.server.tooltip.username", "Username for global SMTP settings."));
 
-        passwordLabel = new JLabel("Password:");
+        passwordLabel = new JLabel(I18n.t("settings.server.label.password", "Password:"));
         passwordField = new MirthPasswordField();
-        passwordField.setToolTipText("Password for global SMTP settings.");
+        passwordField.setToolTipText(I18n.t("settings.server.tooltip.password", "Password for global SMTP settings."));
         
         notificationPanel = new JPanel();
         notificationPanel.setBackground(getBackground());
-        notificationPanel.setBorder(BorderFactory.createTitledBorder(BorderFactory.createMatteBorder(1, 0, 0, 0, new Color(204, 204, 204)), "Notification", TitledBorder.DEFAULT_JUSTIFICATION, TitledBorder.DEFAULT_POSITION, new Font("Tahoma", 1, 11)));
+        notificationPanel.setBorder(BorderFactory.createTitledBorder(BorderFactory.createMatteBorder(1, 0, 0, 0, new Color(204, 204, 204)),
+                I18n.t("settings.server.section.notification", "Notification"),
+                TitledBorder.DEFAULT_JUSTIFICATION, TitledBorder.DEFAULT_POSITION, new Font("Tahoma", 1, 11)));
 
-        requireNotificationLabel = new JLabel("Require Login Notification and Consent:");
+        requireNotificationLabel = new JLabel(I18n.t("settings.server.label.requireLoginNotificationConsent", "Require Login Notification and Consent:"));
         requireNotificationButtonGroup = new ButtonGroup();
 
-        requireNotificationYesRadio = new MirthRadioButton("Yes");
+        requireNotificationYesRadio = new MirthRadioButton(I18n.t("connectors.sourceSettings.yes", "Yes"));
         requireNotificationYesRadio.setBackground(getBackground());
         requireNotificationYesRadio.setSelected(true);
-        requireNotificationYesRadio.setToolTipText("Require login notification.");
+        requireNotificationYesRadio.setToolTipText(I18n.t("settings.server.tooltip.requireLoginNotification", "Require login notification."));
         requireNotificationYesRadio.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent evt) {
                 requireNotificationYesRadioActionPerformed(evt);
@@ -901,9 +948,9 @@ public class SettingsPanelServer extends AbstractSettingsPanel {
         });
         requireNotificationButtonGroup.add(requireNotificationYesRadio);
 
-        requireNotificationNoRadio = new MirthRadioButton("No");
+        requireNotificationNoRadio = new MirthRadioButton(I18n.t("connectors.sourceSettings.no", "No"));
         requireNotificationNoRadio.setBackground(getBackground());
-        requireNotificationNoRadio.setToolTipText("Do not require login notification.");
+        requireNotificationNoRadio.setToolTipText(I18n.t("settings.server.tooltip.doNotRequireLoginNotification", "Do not require login notification."));
         requireNotificationNoRadio.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent evt) {
                 requireNotificationNoRadioActionPerformed(evt);
@@ -911,7 +958,7 @@ public class SettingsPanelServer extends AbstractSettingsPanel {
         });
         requireNotificationButtonGroup.add(requireNotificationNoRadio);
         
-        notificationLabel = new JLabel("Login Notification:");
+        notificationLabel = new JLabel(I18n.t("settings.server.label.loginNotification", "Login Notification:"));
         notificationTextPane = new MirthTextPane();
         notificationScrollPane = new JScrollPane(notificationTextPane);
     }
@@ -1027,49 +1074,54 @@ public class SettingsPanelServer extends AbstractSettingsPanel {
 
         if (StringUtils.isBlank(serverSettings.getSmtpHost())) {
             smtpHostField.setBackground(UIConstants.INVALID_COLOR);
-            invalidFields.append("\"SMTP Host\" is required\n");
+            invalidFields.append(I18n.t("settings.server.testEmail.error.smtpHostRequired", "\"SMTP Host\" is required\n"));
         }
 
         if (StringUtils.isBlank(serverSettings.getSmtpPort())) {
             smtpPortField.setBackground(UIConstants.INVALID_COLOR);
-            invalidFields.append("\"SMTP Port\" is required\n");
+            invalidFields.append(I18n.t("settings.server.testEmail.error.smtpPortRequired", "\"SMTP Port\" is required\n"));
         }
 
         if (StringUtils.isBlank(serverSettings.getSmtpTimeout())) {
             smtpTimeoutField.setBackground(UIConstants.INVALID_COLOR);
-            invalidFields.append("\"Send Timeout\" is required\n");
+            invalidFields.append(I18n.t("settings.server.testEmail.error.smtpTimeoutRequired", "\"Send Timeout\" is required\n"));
         }
 
         if (StringUtils.isBlank(serverSettings.getSmtpFrom())) {
             defaultFromAddressField.setBackground(UIConstants.INVALID_COLOR);
-            invalidFields.append("\"Default From Address\" is required\n");
+            invalidFields.append(I18n.t("settings.server.testEmail.error.defaultFromRequired", "\"Default From Address\" is required\n"));
         }
 
         if (serverSettings.getSmtpAuth()) {
             if (StringUtils.isBlank(serverSettings.getSmtpUsername())) {
                 usernameField.setBackground(UIConstants.INVALID_COLOR);
-                invalidFields.append("\"Username\" is required\n");
+                invalidFields.append(I18n.t("settings.server.testEmail.error.usernameRequired", "\"Username\" is required\n"));
             }
 
             if (StringUtils.isBlank(serverSettings.getSmtpPassword())) {
                 passwordField.setBackground(UIConstants.INVALID_COLOR);
-                invalidFields.append("\"Password\" is required\n");
+                invalidFields.append(I18n.t("settings.server.testEmail.error.passwordRequired", "\"Password\" is required\n"));
             }
         }
 
         String errors = invalidFields.toString();
         if (StringUtils.isNotBlank(errors)) {
-            PlatformUI.MIRTH_FRAME.alertCustomError(PlatformUI.MIRTH_FRAME, errors, "Please fix the following errors before sending a test email:");
+            PlatformUI.MIRTH_FRAME.alertCustomError(PlatformUI.MIRTH_FRAME, errors,
+                    I18n.t("settings.server.testEmail.error.fixBeforeSending", "Please fix the following errors before sending a test email:"));
             return;
         }
 
-        String sendToEmail = (String) DisplayUtil.showInputDialog(PlatformUI.MIRTH_FRAME, "Send test email to:", "Send Test Email", JOptionPane.INFORMATION_MESSAGE, null, null, serverSettings.getSmtpFrom());
+        String sendToEmail = (String) DisplayUtil.showInputDialog(PlatformUI.MIRTH_FRAME,
+                I18n.t("settings.server.testEmail.prompt.sendTo", "Send test email to:"),
+                I18n.t("settings.server.testEmail.title", "Send Test Email"),
+                JOptionPane.INFORMATION_MESSAGE, null, null, serverSettings.getSmtpFrom());
 
         if (StringUtils.isNotBlank(sendToEmail)) {
             try {
                 new InternetAddress(sendToEmail).validate();
             } catch (Exception error) {
-                PlatformUI.MIRTH_FRAME.alertWarning(PlatformUI.MIRTH_FRAME, "The Send To Address is invalid: " + error.getMessage());
+                PlatformUI.MIRTH_FRAME.alertWarning(PlatformUI.MIRTH_FRAME,
+                        I18n.tf("settings.server.testEmail.error.sendToInvalidWithReason", "The Send To Address is invalid: {0}", error.getMessage()));
                 return;
             }
 
@@ -1084,7 +1136,7 @@ public class SettingsPanelServer extends AbstractSettingsPanel {
             properties.put("toAddress", sendToEmail);
             properties.put("fromAddress", serverSettings.getSmtpFrom());
 
-            final String workingId = PlatformUI.MIRTH_FRAME.startWorking("Sending test email...");
+            final String workingId = PlatformUI.MIRTH_FRAME.startWorking(I18n.t("settings.server.working.sendingTestEmail", "Sending test email..."));
 
             SwingWorker worker = new SwingWorker<Void, Void>() {
 
@@ -1094,7 +1146,7 @@ public class SettingsPanelServer extends AbstractSettingsPanel {
                         ConnectionTestResponse response = (ConnectionTestResponse) PlatformUI.MIRTH_FRAME.mirthClient.sendTestEmail(properties);
 
                         if (response == null) {
-                            PlatformUI.MIRTH_FRAME.alertError(PlatformUI.MIRTH_FRAME, "Failed to send email.");
+                            PlatformUI.MIRTH_FRAME.alertError(PlatformUI.MIRTH_FRAME, I18n.t("settings.server.testEmail.error.failedToSend", "Failed to send email."));
                         } else if (response.getType().equals(ConnectionTestResponse.Type.SUCCESS)) {
                             PlatformUI.MIRTH_FRAME.alertInformation(PlatformUI.MIRTH_FRAME, response.getMessage());
                         } else {

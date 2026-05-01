@@ -11,6 +11,8 @@ package com.mirth.connect.client.ui;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.swing.DefaultSingleSelectionModel;
 import javax.swing.SingleSelectionModel;
@@ -24,6 +26,7 @@ public class SettingsPane extends javax.swing.JPanel {
     private Frame parent;
     private AbstractSettingsPanel currentSettingsPanel = null;
     private Map<String, AbstractSettingsPanel> settingsPanelMap = new HashMap<String, AbstractSettingsPanel>();
+    private List<String> tabKeys = new ArrayList<String>();
 
     /** Creates new form PluginPanel */
     public SettingsPane() {
@@ -65,14 +68,15 @@ public class SettingsPane extends javax.swing.JPanel {
             parent.taskPaneContainer.add(settingsPanel.getTaskPane(), parent.taskPaneContainer.getComponentCount() - 1);
 
             // Add the tab
-            tabbedPane.addTab(settingsPanel.getTabName(), settingsPanel);
+            tabbedPane.addTab(settingsPanel.getTabDisplayName(), settingsPanel);
+            tabKeys.add(settingsPanel.getTabName());
 
             settingsPanelMap.put(settingsPanel.getTabName(), settingsPanel);
         }
     }
 
     private void setCurrentSettingsPanel(int index) {
-        String tabName = tabbedPane.getTitleAt(index);
+        String tabName = tabKeys.get(index);
         currentSettingsPanel = settingsPanelMap.get(tabName);
         parent.setFocus(currentSettingsPanel.getTaskPane());
         currentSettingsPanel.doRefresh();
